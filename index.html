@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройРадар — только те заказы на ремонт, которые вам подходят</title>
+<meta name="description" content="СтройРадар — AI-радар заказов на ремонт и стройку в Telegram для подрядчиков и бригад: отсекаем шлак и присылаем только релевантные заказы. Москва и СПб. От 2490₽/мес.">
+<meta property="og:title" content="СтройРадар — заказы на ремонт без шлака">
+<meta property="og:description" content="Только те заказы, которые вам подходят. AI-фильтр Telegram, скоринг 0-100 и уведомления за секунды.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand" style="text-decoration:none">
+      <div class="brand-mark">◈</div>
+      <div class="brand-name">СТРОЙ<br>РАДАР<small>TELEGRAM · AI · LEADS</small></div>
+    </a>
+    <nav class="site-nav">
+      <a href="#problem">Проблема</a>
+      <a href="#how">Как работает</a>
+      <a href="#plans">Тарифы</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="scanner.html" class="btn header-cta btn-primary" data-cta="header">Бесплатный сканер</a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="kicker">СтройРадар · Москва · СПб · Live из Telegram</div>
+    <h1><span class="text-glow">Получайте только те заказы,</span><br>которые вам подходят</h1>
+    <p class="hero-sub">
+      AI-сервис для подрядчиков и бригад: мониторим чаты Telegram 24/7, отсекаем рекламу и посредников, считаем скоринг 0–100 и присылаем горячее за секунды.
+      Без холодных звонков. Без плат за каждый лид.
+    </p>
+    <div class="hero-actions">
+      <a href="scanner.html" class="btn btn-primary btn-lg" data-cta="hero-main">Проверить свою нишу — бесплатно</a>
+      <a href="#how" class="btn btn-ghost">Как это работает — 60 сек</a>
+    </div>
+    <div class="hero-note">За 2 минуты поймёте, сколько заказов проходит мимо вас каждый день · Без карты</div>
+
+    <!-- плейсхолдер соцдоказательство → заменить живыми цифрами пайплайна -->
+    <div class="stats-strip">
+      <div class="stat-cell"><div class="num">47+</div><div class="lbl">заказов в неделю на одну нишу (МСК)</div></div>
+      <div class="stat-cell"><div class="num">82<span style="font-size:14px;color:var(--muted)">/100</span></div><div class="lbl">средний скоринг горячих лидов</div></div>
+      <div class="stat-cell"><div class="num">~40 <span style="font-size:12px;color:var(--muted)">сек</span></div><div class="lbl">от публикации в TG до уведомления</div></div>
+      <div class="stat-cell"><div class="num">1,8 млн ₽</div><div class="lbl">средний бюджет закрытых сделок</div></div>
+    </div>
+    <div class="placeholder-tag" style="margin-top:14px">Цифры — плейсхолдер, подключатся к живым данным пайплайна SOURCE→AI→SCORE</div>
+  </section>
+
+  <!-- ПРОБЛЕМА -->
+  <section id="problem" class="section" style="background:linear-gradient(180deg, transparent, rgba(13,19,38,0.45)); border-top:1px solid var(--border); border-bottom:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker" style="color:var(--red); border-color:rgba(255,59,59,0.4); background:rgba(255,59,59,0.06)">Почему 80% бригад сидят без заказов</div>
+        <h2>Заказы есть. Но вы их не видите</h2>
+        <p>Каждый день в Telegram-чатах Москвы и СПб публикуют десятки запросов: «нужна бригада, 82 м², под ключ, бюджет 1,2 млн». Большинство уходит тем, кто ответил первым.</p>
+      </div>
+      <div class="cards cards--3">
+        <div class="card card--red">
+          <div class="icon">⬡</div>
+          <h3>Заказы разбросаны</h3>
+          <p>20+ чатов, каждый со своим темпом. Листать вручную — часы в день. Пока листаете — заказ уже забрали.</p>
+        </div>
+        <div class="card card--amber">
+          <div class="icon">⟁</div>
+          <h3>90% — шум</h3>
+          <p>Реклама материалов, вакансии, посредники «ищу за %», мастера-одиночки. Настоящий заказ — 1 из 10 сообщений.</p>
+        </div>
+        <div class="card card--mag">
+          <div class="icon">◎</div>
+          <h3>Опаздываете на 30–120 минут</h3>
+          <p>Чаты без фильтров = вы видите заказ когда на него уже 15 откликов. Нужен первый контакт за секунды.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- РЕШЕНИЕ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Решение</div>
+        <h2>Радар, а не доска объявлений</h2>
+        <p>Один тонкий срез: TG-парсер → нормализация → AI-фильтр (YandexGPT) → скоринг → TG-бот. Новый продукт = конфиг, не новый SaaS.</p>
+      </div>
+      <div class="cards">
+        <div class="card card--cyan">
+          <div class="icon">◈</div>
+          <h3>Смотрим только вашу нишу</h3>
+          <p>Задаёте: ниша (ремонт квартир / кровля / электрика …), регион (МСК/СПб/МО/ЛО), тип работ, минимальный бюджет. Остальное просто не приходит.</p>
+        </div>
+        <div class="card card--green">
+          <div class="icon">⬣</div>
+          <h3>AI понимает смысл, а не ключевые слова</h3>
+          <p>Отличает «ищу бригаду на ремонт 80 м²» от «продам ламинат» и «требуется мастер на зарплату». 94% точности матчинга.</p>
+        </div>
+        <div class="card card--amber">
+          <div class="icon">⬔</div>
+          <h3>Присылаем только горячее — и учимся на ваших 👍/👎</h3>
+          <p>Карточка: бюджет, площадь, адрес, срок + кнопки. Чем больше фидбека — тем точнее профиль.</p>
+        </div>
+        <div class="card card--mag">
+          <div class="icon">✦</div>
+          <h3>За секунды, 24/7</h3>
+          <p>Среднее время от публикации в TG до уведомления — около 40 секунд. Пока другие листают — вы уже пишете клиенту.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КАК РАБОТАЕТ -->
+  <section id="how" class="section" style="border-top:1px solid var(--border); background:rgba(13,19,38,0.35)">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Как работает — 3 шага</div>
+        <h2>От «интересно» до первого лида — 5 минут</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Проверьте нишу бесплатным сканером</h3>
+            <p>Выбираете: ремонт квартир / строительство домов / кровля / фундамент / электрика / вентиляция / коммерческий ремонт + регион. Сканер показывает — сколько заказов было за 7 дней, сколько горячих и средний бюджет. 3 примера бесплатно.</p>
+            <a href="scanner.html" class="btn btn-ghost" style="margin-top:14px; padding:10px 14px; font-size:12px" data-cta="step1">Открыть сканер — 30 сек</a>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Подключите TG-бота — задайте профиль</h3>
+            <p>За 2 минуты: ниша, регион, бюджет от/до, тип объекта. Бот сразу даёт тестовые уведомления. Оплата — после триала, когда увидите ценность.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Получайте горячее и закрывайте сделки</h3>
+            <p>Только релевантные карточки в Telegram. Нажали «Беру» → пишете клиенту первым. Нажали «Не подходит» → профиль учится и больше такое не шлёт.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- соцдоказательство плейсхолдер -->
+      <div style="max-width:720px; margin:36px auto 0; border:1px solid var(--border); background:var(--panel); border-radius:6px; padding:22px">
+        <div class="quote">«Раньше сидел в 12 чатах сам, теперь приходит 3–5 нормальных заказов в неделю. Один закрыл на 1,4 млн — подписка отбилась за день.»</div>
+        <div class="quote-author">
+          <div class="quote-avatar">АМ</div>
+          <div class="who">Алексей М., бригада 8 чел., Москва <small>Ремонт квартир под ключ · Клиент Hunters (плейсхолдер)</small></div>
+        </div>
+        <div class="placeholder-tag">Заменить на реальные отзывы после первых 10 платящих — сейчас плейсхолдер</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ТАРИФЫ -->
+  <section id="plans" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker" style="color:var(--gold); border-color:rgba(255,204,0,0.35)">Тарифы — без плат за лид</div>
+        <h2>Фикс в месяц, а не «500₽ за контакт»</h2>
+        <p>Платите за доступ к радару, а не за каждый лид. Чем больше закрываете — тем дешевле лид. Триал — покажите ценность, потом оплата.</p>
+      </div>
+      <div class="plans">
+        <div class="plan">
+          <div class="plan-name">Старт</div>
+          <div class="plan-desc">Одному мастеру / малой бригаде. Одна ниша, один регион.</div>
+          <div class="plan-price">2 490₽<small>/мес</small></div>
+          <ul>
+            <li>1 ниша + 1 регион (МСК или СПб)</li>
+            <li>AI-фильтр и скоринг 0–100</li>
+            <li>До 30 релевантных лидов / мес</li>
+            <li>Уведомления в Telegram</li>
+            <li class="off">Приоритет скорости (секунды)</li>
+            <li class="off">2 ниши / 2 региона</li>
+          </ul>
+          <a href="scanner.html" class="btn btn-ghost btn-block" data-cta="plan-start">Начать — 2 490₽</a>
+        </div>
+        <div class="plan plan--hot">
+          <div class="plan-badge">★ Популярный — 80% выбирают</div>
+          <div class="plan-name" style="margin-top:8px">Профи</div>
+          <div class="plan-desc">Бригаде / компании. Две ниши, два региона, приоритет.</div>
+          <div class="plan-price">4 900₽<small>/мес</small></div>
+          <ul>
+            <li><b>2 ниши + 2 региона</b> (МСК + МО или СПб + ЛО)</li>
+            <li>AI-фильтр, скоринг, гео-матчинг</li>
+            <li>До 100 лидов / мес</li>
+            <li>Уведомления TG + email-дайджест</li>
+            <li>Приоритет скорости — первым</li>
+            <li>Обучение профиля на 👍/👎</li>
+          </ul>
+          <a href="scanner.html" class="btn btn-primary btn-block" data-cta="plan-pro">Выбрать Профи — 4 900₽</a>
+        </div>
+        <div class="plan">
+          <div class="plan-name">Бизнес</div>
+          <div class="plan-desc">Для компаний с потоком. Без лимитов, с API.</div>
+          <div class="plan-price">7 900₽<small>/мес</small></div>
+          <ul>
+            <li>До 4 ниш + все регионы МСК/СПб/МО/ЛО</li>
+            <li>Без лимита на лидов</li>
+            <li>Приоритет скорости + API/webhook</li>
+            <li>Выгрузка в CRM / таблицу</li>
+            <li>Персональный фильтр «только от X млн»</li>
+            <li>Поддержка в Telegram — день в день</li>
+          </ul>
+          <a href="scanner.html" class="btn btn-ghost btn-block" data-cta="plan-biz">Выбрать Бизнес — 7 900₽</a>
+        </div>
+      </div>
+      <div class="plans-note">Все тарифы — помесячно, без годовых обязательств. Триал покажет 3 лида бесплатно до оплаты. Оплата — ЮKassa / CloudPayments (подключим).</div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section" style="border-top:1px solid var(--border); background:rgba(13,19,38,0.30)">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">FAQ</div>
+        <h2>Отвечаем честно</h2>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>Откуда берутся заказы?</summary>
+          <div class="answer">Мониторим открытые Telegram-чаты и каналы где заказчики пишут «ищу бригаду / нужен подрядчик». Позже добавим закупки и площадки. Никакого парсинга закрытых источников без согласия.</div>
+        </details>
+        <details>
+          <summary>Чем лучше Авито / Профи.ру / Яндекс Услуг?</summary>
+          <div class="answer">Там вы платите за каждый отклик и конкурируете с 30+ исполнителями. У нас — фикс в месяц и вы видите заказ за секунды среди первых. Другая экономика: один закрытый заказ окупает месяц.</div>
+        </details>
+        <details>
+          <summary>А если в моей нише мало заказов?</summary>
+          <div class="answer">Сканер покажет честно: если за 7 дней 5 заказов — мы так и напишем, и не будем продавать. Смысл только там где есть объём — кровля, ремонт, электрика в МСК/СПб им есть.</div>
+        </details>
+        <details>
+          <summary>Можно ли вернуть деньги?</summary>
+          <div class="answer">Да — 7 дней без вопросов, если радар не подошёл. Мы заинтересованы в retention 60%+, а не в удержании любой ценой.</div>
+        </details>
+        <details>
+          <summary>Работаете только по Москве и СПб?</summary>
+          <div class="answer">На старте — да: Москва, МО, СПб, ЛО. Там плотность заказов максимальна. Другие города — по мере набора данных (см. DATA SEO страницы ниша×город).</div>
+        </details>
+        <details>
+          <summary>Это парсинг — нет ли рисков?</summary>
+          <div class="answer">Собираем только открытые публичные чаты через официальный API Telegram. Серые зоны — только после честной оценки рисков. Данные нормализуем, дубли чистим, рекламу отсекаем AI-фильтром.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ФИНАЛЬНЫЙ CTA -->
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-banner">
+        <div class="kicker" style="margin-bottom:16px">Начните со сканера — это бесплатно</div>
+        <h2>Узнайте, сколько заказов в вашей нише было за последние 7 дней</h2>
+        <p>Выберите нишу и регион — покажем число заказов, сколько из них горячих и средний бюджет. 3 примера — сразу. Остальное — в подписке.</p>
+        <a href="scanner.html" class="btn btn-primary btn-lg" data-cta="final">Открыть бесплатный сканер</a>
+        <div style="margin-top:12px; font-size:11.5px; color:var(--muted2)">Без карты · 30 секунд · Сканер станет лид-магнитом + SEO + онбордингом</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <div style="font-family:'Orbitron',sans-serif; font-weight:800; font-size:12px; letter-spacing:1.4px; color:#fff">СТРОЙРАДАР</div>
+        <div class="footer-copy">Команда продукта · Москва · <a href="scanner.html">Сканер</a> · <a href="data-seo-template.html">DATA-шаблон</a></div>
+      </div>
+      <div class="footer-links">
+        <a href="scanner.html">Бесплатный сканер</a>
+        <a href="#plans">Тарифы</a>
+        <a href="#faq">FAQ</a>
+        <a href="data-seo-template.html">Пример DATA-страницы</a>
+      </div>
+    </div>
+    <div class="footer-disclaimer" style="margin-top:18px">
+      СтройРадар — AI-радар заказов на ремонт и стройку в Telegram — продукт Subscription Factory. Находим открытые заказы в Telegram и присылаем только релевантные. Не гарантируем закрытие сделок — гарантируем релевантность и скорость. Все цифры на лендинге до подключения пайплайна — плейсхолдеры и будут заменены живыми данными.
+    </div>
+  </div>
+</footer>
+
+<script>
+// Проброс UTM на ссылки сканера (чтобы attribution не терялась при переходе с лендинга)
+(function(){
+  try{
+    var p = new URLSearchParams(location.search);
+    var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+    var hasUtm = utmKeys.some(function(k){ return p.get(k); });
+    // сохраняем UTM с лендинга — продублирует scanner.js, но тут ещё пробрасываем в href
+    if(hasUtm){
+      try{
+        utmKeys.forEach(function(k){
+          var v = p.get(k);
+          if(v) localStorage.setItem(k, v);
+        });
+      }catch(e){}
+      document.querySelectorAll('a[href^="scanner.html"]').forEach(function(a){
+        var u = new URL(a.getAttribute('href'), location.href);
+        utmKeys.forEach(function(k){
+          var v = p.get(k);
+          if(v) u.searchParams.set(k, v);
+        });
+        a.setAttribute('href', u.pathname + u.search);
+      });
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
