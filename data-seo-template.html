@@ -6,33 +6,9 @@
 <title>Заказы на {{NICHE}} в {{CITY}} — {{COUNT_7D}} за 7 дней, средний бюджет {{AVG_BUDGET}} | СтройРадар</title>
 <meta name="description" content="Живые данные: за 7 дней найдено {{COUNT_7D}} заказов на {{NICHE}} в {{CITY}}, средний бюджет {{AVG_BUDGET}}. Горячих {{HOT_COUNT}}. Обновление из Telegram — платный доступ от 2490₽/мес.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<style>
-  /* узкие правки только для DATA-страницы — общий стиль в styles.css */
-  .data-hero{padding:52px 0 36px}
-  .data-grid{display:grid; grid-template-columns:1fr; gap:10px; max-width:860px; margin:22px auto 0}
-  .data-cell{
-    border:1px solid var(--border); background:var(--panel); border-radius:6px;
-    padding:18px; text-align:center; position:relative; overflow:hidden;
-  }
-  .data-cell::after{content:""; position:absolute; top:0;left:0;right:0;height:1px; background:linear-gradient(90deg, transparent, var(--cyan), transparent); opacity:0.5}
-  .data-cell .num{font-family:'Orbitron',sans-serif; font-weight:900; font-size:26px; color:#fff}
-  .data-cell .lbl{font-size:11px; color:var(--muted); margin-top:6px; letter-spacing:0.4px}
-  .data-examples{max-width:860px; margin:22px auto 0}
-  .data-examples li{font-size:13px; color:#c9d4e8; padding:10px 12px; border:1px solid var(--border); background:var(--bg2); border-radius:6px; margin-top:8px; list-style: none; margin-left:0}
-  .data-examples ul{list-style:none; padding:0}
-  .meta-line{margin-top:14px; font-size:11px; color:var(--muted2); text-align:center}
-  .placeholder-banner{
-    max-width:860px; margin:18px auto 0; border:1px dashed var(--border2); background:rgba(13,19,38,0.5);
-    border-radius:6px; padding:14px 16px; font-size:12px; color:var(--muted2); line-height:1.5;
-  }
-  .placeholder-banner code{color:var(--cyan); background:rgba(0,229,255,0.08); padding:1px 5px; border-radius:2px}
-  .slug{max-width:860px; margin:14px auto 0; display:flex; flex-wrap:wrap; gap:8px}
-  .slug a{font-size:11px; letter-spacing:0.6px; border:1px solid var(--border); background:var(--bg2); padding:6px 10px; border-radius:2px; color:var(--muted)}
-  .slug a:hover{color:var(--cyan); text-decoration:none; border-color:rgba(0,229,255,0.4)}
-  @media(min-width:720px){ .data-grid{grid-template-columns:repeat(3, 1fr)} }
-</style>
 </head>
 <body>
 
@@ -107,9 +83,9 @@
 
 <main>
   <section class="data-hero wrap" style="text-align:center">
-    <div class="kicker" style="color:var(--green); border-color:rgba(0,255,136,0.35)">DATA SEO · Живые данные пайплайна · Обновлено {{UPDATED_AT}}</div>
+    <div class="kicker">DATA SEO · Живые данные пайплайна · Обновлено {{UPDATED_AT}}</div>
     <h1>Заказы на {{NICHE}} в {{CITY}}</h1>
-    <p style="margin-top:12px; color:#aebbd4; max-width:640px; margin-left:auto; margin-right:auto; font-size:14px">
+    <p style="margin-top:12px; color:var(--muted); max-width:640px; margin-left:auto; margin-right:auto; font-size:14px">
       Реальные заказы из Telegram-чатов, отфильтрованные AI. Показываем агрегаты за 7 дней и примеры — полный поток в подписке.
     </p>
     <div class="slug">
@@ -121,10 +97,10 @@
 
     <div class="data-grid">
       <div class="data-cell"><div class="num">{{COUNT_7D}}</div><div class="lbl">найдено за 7 дней<br>после AI-фильтра</div></div>
-      <div class="data-cell" style="border-color:rgba(0,255,136,0.35)"><div class="num" style="color:var(--green)">{{HOT_COUNT}}</div><div class="lbl">горячих (скоринг ≥ 75)<br>высокая релевантность</div></div>
-      <div class="data-cell"><div class="num" style="color:var(--gold)">{{AVG_BUDGET}}</div><div class="lbl">средний бюджет<br>известных заказов</div></div>
+      <div class="data-cell" style="border-color:rgba(156,175,136,0.30)"><div class="num" style="color:var(--sage-dark)">{{HOT_COUNT}}</div><div class="lbl">горячих (скоринг ≥ 75)<br>высокая релевантность</div></div>
+      <div class="data-cell"><div class="num" style="color:var(--caramel-dark)">{{AVG_BUDGET}}</div><div class="lbl">средний бюджет<br>известных заказов</div></div>
     </div>
-    <div class="meta-line">Новых сегодня: <b style="color:#fff">{{COUNT_TODAY}}</b> · Скоринг считается по: регион · бюджет · тип работ · квалификация (раздел 23) · Обновлено {{UPDATED_AT}}</div>
+    <div class="meta-line">Новых сегодня: <b style="color:var(--text)">{{COUNT_TODAY}}</b> · Скоринг считается по: регион · бюджет · тип работ · квалификация (раздел 23) · Обновлено {{UPDATED_AT}}</div>
 
     <div class="data-examples">
       <div style="font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); margin-bottom:8px">Примеры заказов на {{NICHE}} в {{CITY}}</div>
@@ -138,7 +114,7 @@
     </div>
 
     <div class="placeholder-banner">
-      Это <b style="color:#fff">шаблон</b>, не готовая страница. При генерации замени <code>{{COUNT_7D}}</code>, <code>{{HOT_COUNT}}</code>, <code>{{AVG_BUDGET}}</code> и список <code>{{EXAMPLES}}</code> на агрегаты пайплайна.
+      Это <b style="color:var(--text)">шаблон</b>, не готовая страница. При генерации замени <code>{{COUNT_7D}}</code>, <code>{{HOT_COUNT}}</code>, <code>{{AVG_BUDGET}}</code> и список <code>{{EXAMPLES}}</code> на агрегаты пайплайна.
       Страница создаётся только если данных достаточно (раздел 23 — не создавать пустышки).
       Canonical: <code>{{CANONICAL}}</code> · <a href="scanner.html?niche={{NICHE_SLUG}}&region={{CITY_SLUG}}">CTA → сканер</a> с презаполнением ниши/региона.
     </div>
@@ -150,8 +126,8 @@
 
     <!-- Перелинковка кластера -->
     <div style="max-width:860px; margin:28px auto 0; display:grid; grid-template-columns:1fr; gap:10px; text-align:left">
-      <div style="border:1px solid var(--border); background:var(--panel); border-radius:6px; padding:16px">
-        <div style="font-size:10px; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted)">Другие ниши в {{CITY}}</div>
+      <div style="border:1px solid rgba(255,255,255,0.60); background:rgba(255,255,255,0.68); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:20px; padding:18px">
+        <div style="font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted)">Другие ниши в {{CITY}}</div>
         <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px">
           <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/{{CITY_SLUG}}/remont-kvartir">Ремонт квартир</a>
           <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/{{CITY_SLUG}}/ventilyaciya">Вентиляция</a>
@@ -159,8 +135,8 @@
           <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/{{CITY_SLUG}}/electrika">Электрика</a>
         </div>
       </div>
-      <div style="border:1px solid var(--border); background:var(--panel); border-radius:6px; padding:16px">
-        <div style="font-size:10px; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted)">Эта ниша в других городах</div>
+      <div style="border:1px solid rgba(255,255,255,0.60); background:rgba(255,255,255,0.68); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:20px; padding:18px">
+        <div style="font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted)">Эта ниша в других городах</div>
         <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px">
           <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/moskva/{{NICHE_SLUG}}">Москва</a>
           <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/spb/{{NICHE_SLUG}}">СПб</a>
@@ -188,7 +164,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-inner">
-      <div style="font-family:'Orbitron',sans-serif; font-weight:800; font-size:11px; letter-spacing:1.2px; color:#fff">СТРОЙРАДАР</div>
+      <div style="font-family:'Inter',sans-serif; font-weight:800; font-size:11px; letter-spacing:1.2px; color:var(--text)">СТРОЙРАДАР</div>
       <div class="footer-links">
         <a href="index.html">Лендинг</a>
         <a href="scanner.html">Сканер</a>
