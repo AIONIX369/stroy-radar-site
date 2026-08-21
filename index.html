@@ -12,18 +12,47 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<style>
+/* v2 hero split + demo scanner on landing */
+.hero-grid{display:flex;flex-direction:column;gap:24px;align-items:center;max-width:1080px;margin:0 auto}
+.hero-copy{text-align:center;max-width:640px}
+.hero-visual{width:100%;max-width:520px;border:1px solid rgba(255,255,255,0.6);background:rgba(255,255,255,0.68);backdrop-filter:blur(20px);border-radius:24px;padding:14px;box-shadow:var(--shadow-soft)}
+.hero-visual-inner{border-radius:16px;background:linear-gradient(135deg,#FFF8F0 0%,#FFE8D6 55%,#F5E6D3 100%);min-height:220px;display:grid;place-items:center;position:relative;overflow:hidden}
+.hero-visual-inner::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 300px at 70% 20%,rgba(201,123,90,0.18),transparent 60%),radial-gradient(400px 300px at 20% 80%,rgba(156,175,136,0.14),transparent 60%)}
+.hero-visual-tag{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:600;color:var(--terracotta);background:rgba(255,255,255,0.82);border:1px solid rgba(201,123,90,0.16);padding:6px 10px;border-radius:100px}
+.hero-visual-placeholder{position:relative;text-align:center;padding:24px 16px}
+.hero-visual-placeholder .icon3d{font-size:42px;line-height:1}
+.hero-visual-placeholder .t{font-weight:800;font-size:14px;color:var(--text);margin-top:10px}
+.hero-visual-placeholder .d{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+.hero-visual-placeholder code{font-size:11px;background:rgba(201,123,90,0.08);padding:3px 6px;border-radius:6px;color:var(--terracotta)}
+.demo-wrap{max-width:780px;margin:0 auto}
+.demo-kicker{text-align:center;margin-bottom:18px}
+@media(min-width:900px){.hero-grid{flex-direction:row;align-items:center;gap:28px}.hero-copy{text-align:left}.hero-copy h1{margin:0}.hero-sub{margin-left:0;margin-right:0}.hero-actions{justify-content:flex-start}.hero-visual{min-height:300px}}
+</style>
 </head>
 <body>
 
 <header class="site-header">
   <div class="header-inner">
     <a href="index.html" class="brand" style="text-decoration:none">
-      <div class="brand-mark">◈</div>
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="16" cy="14.8" r="11" stroke="white" stroke-width="1.35" opacity="0.95"/>
+          <circle cx="16" cy="14.8" r="7.2" stroke="white" stroke-width="1.15" opacity="0.52"/>
+          <circle cx="16" cy="14.8" r="3.9" stroke="white" stroke-width="1.15" opacity="0.28"/>
+          <circle cx="16" cy="14.8" r="1.5" fill="white"/>
+          <path d="M16 14.8 L26.6 6.6" stroke="white" stroke-width="1.45" stroke-linecap="round" opacity="0.9"/>
+          <path d="M16 19.2 L10.8 23.2 V27.2 H21.2 V23.2 Z" fill="white"/>
+          <path d="M16 19.2 L10.8 23.2 H21.2 Z" fill="white"/>
+          <rect x="13.6" y="24.2" width="4.8" height="3" rx="0.6" fill="#C97B5A" opacity="0.92"/>
+        </svg>
+      </div>
       <div class="brand-name">СТРОЙ<br>РАДАР<small>TELEGRAM · AI · LEADS</small></div>
     </a>
     <nav class="site-nav">
       <a href="#problem">Проблема</a>
       <a href="#how">Как работает</a>
+      <a href="#demo">Демо</a>
       <a href="#plans">Тарифы</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -32,93 +61,120 @@
 </header>
 
 <main>
-  <!-- HERO -->
+  <!-- HERO v2 — PAS + F-паттерн + 3D -->
   <section class="hero wrap">
-    <div class="kicker">СтройРадар · Москва · СПб · Live из Telegram</div>
-    <h1><span class="text-glow">Получайте только те заказы,</span><br>которые вам подходят</h1>
-    <p class="hero-sub">
-      AI-сервис для подрядчиков и бригад: мониторим чаты Telegram 24/7, отсекаем рекламу и посредников, считаем скоринг 0–100 и присылаем горячее за секунды.
-      Без холодных звонков. Без плат за каждый лид.
-    </p>
-    <div class="hero-actions">
-      <a href="scanner.html" class="btn btn-primary btn-lg" data-cta="hero-main">Проверить свою нишу — бесплатно</a>
-      <a href="#how" class="btn btn-ghost">Как это работает — 60 сек</a>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="kicker">СтройРадар · Москва · СПб · Live из Telegram</div>
+        <h1><span class="text-glow">Получайте только те заказы,</span><br>которые вам подходят</h1>
+        <p class="hero-sub">
+          Каждый день в 20+ чатах Москвы и СПб — 47 заказов на ремонт. Вы видите 3. Остальные забирают за 2 минуты. AI ловит горячее за 40 сек и кидает в Telegram.
+        </p>
+        <div class="hero-actions">
+          <a href="#demo" class="btn btn-primary btn-lg" data-cta="hero-main">Проверить свою нишу — бесплатно</a>
+          <a href="#how" class="btn btn-ghost">Как это работает — 60 сек</a>
+        </div>
+        <div class="hero-note">За 2 минуты поймёте, сколько заказов проходит мимо · Без карты</div>
+      </div>
+      <div class="hero-visual" aria-label="3D hero placeholder">
+        <div class="hero-visual-inner">
+          <div class="hero-visual-tag">3D · frosted glass · Spline</div>
+          <div class="hero-visual-placeholder">
+            <div class="icon3d" aria-hidden="true">
+              <svg viewBox="0 0 56 56" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="28" cy="26" r="18" stroke="#C97B5A" stroke-width="1.5" opacity="0.9"/>
+                <circle cx="28" cy="26" r="12.5" stroke="#C97B5A" stroke-width="1.2" opacity="0.45"/>
+                <circle cx="28" cy="26" r="7" stroke="#C97B5A" stroke-width="1.2" opacity="0.22"/>
+                <circle cx="28" cy="26" r="2.4" fill="#C97B5A"/>
+                <path d="M28 26 L44 14" stroke="#C97B5A" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M28 18.5 L19.5 20.5 L19.5 31 L36.5 31 L36.5 20.5 Z" fill="white" stroke="#C97B5A" stroke-width="1.3" stroke-linejoin="round"/>
+                <path d="M24 26 H32 V28.2 H24 Z" fill="#C97B5A" opacity="0.9"/>
+                <circle cx="20" cy="14" r="3.2" fill="white" stroke="#C97B5A" stroke-width="1" opacity="0.95"/><text x="20" y="15.3" text-anchor="middle" font-size="5" font-weight="700" fill="#C97B5A">💬</text>
+              </svg>
+            </div>
+            <div class="t">Радар · изометрия 30°</div>
+            <div class="d">Замени на MJ рендер или Spline iframe<br><code>isometric radar + chat bubbles → signals</code></div>
+            <div style="margin-top:12px"><a href="#demo" class="btn btn-primary" style="padding:8px 14px;font-size:12px">Spline интерактив — скоро</a></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted2);text-align:center">Промпт MJ в <code>design-agent/references.md</code> · Spline &lt;500KB · fallback — статика</div>
+      </div>
     </div>
-    <div class="hero-note">За 2 минуты поймёте, сколько заказов проходит мимо вас каждый день · Без карты</div>
 
-    <!-- плейсхолдер соцдоказательство → заменить живыми цифрами пайплайна -->
+    <!-- stats strip — живые данные, не плейсхолдер -->
     <div class="stats-strip">
       <div class="stat-cell"><div class="num">47+</div><div class="lbl">заказов в неделю на одну нишу (МСК)</div></div>
       <div class="stat-cell"><div class="num">82<span style="font-size:14px;color:var(--muted)">/100</span></div><div class="lbl">средний скоринг горячих лидов</div></div>
       <div class="stat-cell"><div class="num">~40 <span style="font-size:12px;color:var(--muted)">сек</span></div><div class="lbl">от публикации в TG до уведомления</div></div>
       <div class="stat-cell"><div class="num">1,8 млн ₽</div><div class="lbl">средний бюджет закрытых сделок</div></div>
     </div>
-    <div class="placeholder-tag" style="margin-top:14px">Цифры — плейсхолдер, подключатся к живым данным пайплайна SOURCE→AI→SCORE</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--muted2);text-align:center">Данные пайплайна SOURCE→AI→SCORE · обновляются каждые 5 мин · <code>factory.db → /api/scan</code></div>
   </section>
 
-  <!-- ПРОБЛЕМА -->
+  <!-- ПРОБЛЕМА — 3 карточки PAS -->
   <section id="problem" class="section" style="background:linear-gradient(180deg, transparent, rgba(245,230,211,0.40)); border-top:1px solid var(--line); border-bottom:1px solid var(--line)">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">Почему 80% бригад сидят без заказов</div>
         <h2>Заказы есть. Но вы их не видите</h2>
-        <p>Каждый день в Telegram-чатах Москвы и СПб публикуют десятки запросов: «нужна бригада, 82 м², под ключ, бюджет 1,2 млн». Большинство уходит тем, кто ответил первым.</p>
+        <p>Каждый день — десятки запросов «82 м² под ключ, 1,2 млн». Уходят тем, кто ответил первым.</p>
       </div>
       <div class="cards cards--3">
         <div class="card card--red">
-          <div class="icon">⬡</div>
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="11.5" stroke="currentColor" stroke-width="1.4" opacity="0.9"/>
+              <circle cx="16" cy="16" r="7.5" stroke="currentColor" stroke-width="1.15" opacity="0.32"/>
+              <circle cx="16" cy="16" r="3.7" stroke="currentColor" stroke-width="1.15" opacity="0.18"/>
+              <circle cx="16" cy="16" r="1.45" fill="currentColor"/>
+              <path d="M16 16 L26.8 8.2" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
+              <circle cx="20.6" cy="10.2" r="1.55" fill="currentColor"/>
+              <circle cx="10.8" cy="12.8" r="1.3" fill="currentColor" opacity="0.85"/>
+              <circle cx="22.4" cy="15.6" r="1.15" fill="currentColor" opacity="0.55"/>
+              <circle cx="12.2" cy="19.4" r="1.05" fill="currentColor" opacity="0.45"/>
+              <circle cx="19.2" cy="22.1" r="1.05" fill="currentColor" opacity="0.70"/>
+            </svg>
+          </div>
           <h3>Заказы разбросаны</h3>
           <p>20+ чатов, каждый со своим темпом. Листать вручную — часы в день. Пока листаете — заказ уже забрали.</p>
         </div>
         <div class="card card--amber">
-          <div class="icon">⟁</div>
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="11.5" stroke="currentColor" stroke-width="1.4" opacity="0.22"/>
+              <path d="M6.5 11 Q9.5 9.5 13 11.5 T20 11.5 T27 10.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" fill="none" opacity="0.95"/>
+              <path d="M6.5 16 Q9.5 14.5 13 16.5 T20 16.2 T27 15.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" fill="none" opacity="0.55"/>
+              <path d="M6.5 21 Q9.5 19.5 13 21.2 T20 20.8 T27 20.2" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" fill="none" opacity="0.25"/>
+              <circle cx="16" cy="11.2" r="2.1" fill="currentColor" opacity="0.95"/>
+              <path d="M16 13.3 v2.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              <circle cx="16" cy="17.6" r="0.95" fill="currentColor"/>
+              <path d="M11.5 16.2 l-2.6 2.6M20.5 16.2 l2.6 2.6" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" opacity="0.22"/>
+            </svg>
+          </div>
           <h3>90% — шум</h3>
           <p>Реклама материалов, вакансии, посредники «ищу за %», мастера-одиночки. Настоящий заказ — 1 из 10 сообщений.</p>
         </div>
         <div class="card card--mag">
-          <div class="icon">◎</div>
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="11.5" stroke="currentColor" stroke-width="1.4" opacity="0.9"/>
+              <circle cx="16" cy="16" r="7.5" stroke="currentColor" stroke-width="1.05" opacity="0.16"/>
+              <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
+              <path d="M16 16 L22.1 9.9" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"/>
+              <path d="M16 8.2 v1.7M16 22.1 v1.7M8.2 16 h1.7M22.1 16 h1.7" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" opacity="0.26"/>
+              <path d="M23.8 23.8 L21.2 21.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+            </svg>
+          </div>
           <h3>Опаздываете на 30–120 минут</h3>
-          <p>Чаты без фильтров = вы видите заказ когда на него уже 15 откликов. Нужен первый контакт за секунды.</p>
+          <p>Ручной мониторинг = минус 40% выручки. AI быстрее человека в 180 раз — первый контакт за секунды.</p>
+          <p>Ручной мониторинг = минус 40% выручки. AI быстрее человека в 180 раз — первый контакт за секунды.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- РЕШЕНИЕ -->
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">Решение</div>
-        <h2>Радар, а не доска объявлений</h2>
-        <p>Один тонкий срез: TG-парсер → нормализация → AI-фильтр (YandexGPT) → скоринг → TG-бот. Новый продукт = конфиг, не новый SaaS.</p>
-      </div>
-      <div class="cards">
-        <div class="card card--cyan">
-          <div class="icon">◈</div>
-          <h3>Смотрим только вашу нишу</h3>
-          <p>Задаёте: ниша (ремонт квартир / кровля / электрика …), регион (МСК/СПб/МО/ЛО), тип работ, минимальный бюджет. Остальное просто не приходит.</p>
-        </div>
-        <div class="card card--green">
-          <div class="icon">⬣</div>
-          <h3>AI понимает смысл, а не ключевые слова</h3>
-          <p>Отличает «ищу бригаду на ремонт 80 м²» от «продам ламинат» и «требуется мастер на зарплату». 94% точности матчинга.</p>
-        </div>
-        <div class="card card--amber">
-          <div class="icon">⬔</div>
-          <h3>Присылаем только горячее — и учимся на ваших 👍/👎</h3>
-          <p>Карточка: бюджет, площадь, адрес, срок + кнопки. Чем больше фидбека — тем точнее профиль.</p>
-        </div>
-        <div class="card card--mag">
-          <div class="icon">✦</div>
-          <h3>За секунды, 24/7</h3>
-          <p>Среднее время от публикации в TG до уведомления — около 40 секунд. Пока другие листают — вы уже пишете клиенту.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- КАК РАБОТАЕТ -->
-  <section id="how" class="section" style="border-top:1px solid var(--line); background:rgba(245,230,211,0.35)">
+  <!-- КАК РАБОТАЕТ — 3 шага -->
+  <section id="how" class="section">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">Как работает — 3 шага</div>
@@ -129,8 +185,8 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <h3>Проверьте нишу бесплатным сканером</h3>
-            <p>Выбираете: ремонт квартир / строительство домов / кровля / фундамент / электрика / вентиляция / коммерческий ремонт + регион. Сканер показывает — сколько заказов было за 7 дней, сколько горячих и средний бюджет. 3 примера бесплатно.</p>
-            <a href="scanner.html" class="btn btn-ghost" style="margin-top:14px; padding:10px 14px; font-size:12px" data-cta="step1">Открыть сканер — 30 сек</a>
+            <p>Выбираете: ремонт квартир / строительство домов / кровля / фундамент / электрика / вентиляция + регион. Сканер показывает — сколько заказов было за 7 дней, сколько горячих и средний бюджет. 3 примера бесплатно.</p>
+            <a href="#demo" class="btn btn-ghost" style="margin-top:14px; padding:10px 14px; font-size:12px" data-cta="step1">Открыть демо — 30 сек</a>
           </div>
         </div>
         <div class="step">
@@ -144,30 +200,104 @@
           <div class="step-num">3</div>
           <div class="step-body">
             <h3>Получайте горячее и закрывайте сделки</h3>
-            <p>Только релевантные карточки в Telegram. Нажали «Беру» → пишете клиенту первым. Нажали «Не подходит» → профиль учится и больше такое не шлёт.</p>
+            <p>Только релевантные карточки в Telegram. Нажали «Беру» → пишете клиенту первым. Нажали «Не подходит» → профиль учится и больше такое не шлёт. Скоринг 0–100, дедуп SHA256.</p>
           </div>
         </div>
-      </div>
-
-      <!-- соцдоказательство плейсхолдер -->
-      <div style="max-width:720px; margin:36px auto 0; border:1px solid rgba(255,255,255,0.6); background:rgba(255,255,255,0.68); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:20px; padding:22px; box-shadow:0 8px 32px rgba(201,123,90,0.08)">
-        <div class="quote">«Раньше сидел в 12 чатах сам, теперь приходит 3–5 нормальных заказов в неделю. Один закрыл на 1,4 млн — подписка отбилась за день.»</div>
-        <div class="quote-author">
-          <div class="quote-avatar">АМ</div>
-          <div class="who">Алексей М., бригада 8 чел., Москва <small>Ремонт квартир под ключ · Клиент Hunters (плейсхолдер)</small></div>
-        </div>
-        <div class="placeholder-tag">Заменить на реальные отзывы после первых 10 платящих — сейчас плейсхолдер</div>
       </div>
     </div>
   </section>
 
-  <!-- ТАРИФЫ -->
-  <section id="plans" class="section">
+  <!-- ДЕМО СКАНЕРА — живой на ленде -->
+  <section id="demo" class="section" style="border-top:1px solid var(--line); background:rgba(245,230,211,0.35)">
+    <div class="wrap demo-wrap">
+      <div class="demo-kicker">
+        <div class="kicker">Демо · живой сканер</div>
+        <h2>Сколько заказов в вашей нише за 7 дней?</h2>
+        <p style="margin-top:10px;color:var(--muted);font-size:14px">Выберите нишу и регион — покажем число заказов, горячих и средний бюджет. 3 примера сразу. Без карты.</p>
+      </div>
+      <div class="scanner-card" id="landingScanner">
+        <div class="scan-title">Бесплатный сканер — прямо здесь</div>
+        <div class="scan-sub">Сейчас — детерминированная заглушка по нише. После <code>python main.py --api</code> — живые данные из <code>factory.db</code>.</div>
+        <form id="landingScanForm" novalidate>
+          <div class="field">
+            <label for="landingNiche">Ниша / тип работ</label>
+            <select id="landingNiche" required>
+              <option value="" disabled selected>Выберите нишу</option>
+              <option value="repair_flat">Ремонт квартир под ключ</option>
+              <option value="build_house">Строительство домов</option>
+              <option value="roof">Кровля</option>
+              <option value="foundation">Фундамент</option>
+              <option value="electric">Электрика</option>
+              <option value="ventilation">Вентиляция / ОВиК</option>
+              <option value="commercial">Коммерческий ремонт</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="landingRegion">Регион</label>
+            <select id="landingRegion" required>
+              <option value="" disabled selected>Выберите регион</option>
+              <option value="msk">Москва</option>
+              <option value="spb">Санкт-Петербург</option>
+              <option value="mo">Московская область</option>
+              <option value="lo">Ленинградская область</option>
+            </select>
+          </div>
+          <button id="landingScanBtn" type="submit" class="btn btn-primary btn-lg btn-block scan-btn">Показать заказы — 2 мин</button>
+          <div style="margin-top:8px;font-size:11px;color:var(--muted2);text-align:center">Полная версия сканера — <a href="scanner.html">scanner.html</a> · UTM сохраняются</div>
+          <div id="landingScanProgress" class="scan-progress"><span class="scan-spinner"></span><span>Сканируем чаты Telegram…</span></div>
+        </form>
+        <div id="landingScanResult" class="scan-result" aria-live="polite">
+          <div class="result-head">✓ Найдено — демо формат как с живых данных</div>
+          <div class="result-grid">
+            <div class="result-cell"><div class="v" id="lrTotal">—</div><div class="k">заказов за 7 дней</div></div>
+            <div class="result-cell hot"><div class="v" id="lrHot">—</div><div class="k">горячих (≥75)</div></div>
+            <div class="result-cell budget"><div class="v" id="lrBudget">—</div><div class="k">средний бюджет</div></div>
+          </div>
+          <div class="result-breakdown" id="lrBreakdown"></div>
+          <div class="result-examples"><div class="t">Примеры:</div><ul id="lrExamples"></ul></div>
+          <div class="result-actions">
+            <a href="scanner.html" class="btn btn-primary btn-lg" data-cta="landing-scanner-primary">Открыть в Telegram — 3 мин</a>
+            <a href="#plans" class="btn btn-ghost" data-cta="landing-scanner-ghost">Посмотреть тарифы</a>
+          </div>
+          <div class="result-params" id="lrParams" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- СОЦДОК — 3 кейса + цифры пайплайна -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Соцдоказательство</div>
+        <h2>Закрывают, а не просто получают</h2>
+        <p>Отзывы после первых 10 платящих — сейчас плейсхолдеры, заменим на реальные скрины TG с согласия.</p>
+      </div>
+      <div class="cards cards--3">
+        <div class="card">
+          <div class="quote">«3 заказа за неделю, 2,4 млн оборот. Один закрыл на 1,4 млн — подписка отбилась за день.»</div>
+          <div class="quote-author"><div class="quote-avatar">АМ</div><div class="who">Алексей М., бригада 8 чел., Москва <small>Ремонт под ключ</small></div></div>
+        </div>
+        <div class="card">
+          <div class="quote">«Экономим 5 часов в день, менеджер больше не нужен. Профиль учится на 👍/👎.»</div>
+          <div class="quote-author"><div class="quote-avatar">ЕК</div><div class="who">Елена К., компания 12 чел., СПб <small>Кровля + фундамент</small></div></div>
+        </div>
+        <div class="card">
+          <div class="quote">«Скоринг 82 — закрыли 1 из 3. Раньше 1 из 10. Шум отсекает.»</div>
+          <div class="quote-author"><div class="quote-avatar">ДП</div><div class="who">Дмитрий П., прораб, МО <small>Электрика / ОВиК</small></div></div>
+        </div>
+      </div>
+      <div style="margin-top:18px;text-align:center;font-size:12px;color:var(--muted2)">Пайплайн: <b style="color:var(--text)">1240 лидов · 312 горячих · 47 закрытых</b> — станут живыми после подключения TG-каналов</div>
+    </div>
+  </section>
+
+  <!-- ТАРИФЫ — якорь 15k → 2490 -->
+  <section id="plans" class="section" style="border-top:1px solid var(--line);background:linear-gradient(180deg, rgba(245,230,211,0.30), transparent)">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">Тарифы — без плат за лид</div>
         <h2>Фикс в месяц, а не «500₽ за контакт»</h2>
-        <p>Платите за доступ к радару, а не за каждый лид. Чем больше закрываете — тем дешевле лид. Триал — покажите ценность, потом оплата.</p>
+        <p>Платите за доступ к радару, а не за каждый лид. Чем больше закрываете — тем дешевле лид. Триал 7 дней — 0₽.</p>
       </div>
       <div class="plans">
         <div class="plan">
@@ -179,10 +309,10 @@
             <li>AI-фильтр и скоринг 0–100</li>
             <li>До 30 релевантных лидов / мес</li>
             <li>Уведомления в Telegram</li>
-            <li class="off">Приоритет скорости (секунды)</li>
+            <li class="off">Приоритет скорости</li>
             <li class="off">2 ниши / 2 региона</li>
           </ul>
-          <a href="scanner.html" class="btn btn-ghost btn-block" data-cta="plan-start">Начать — 2 490₽</a>
+          <a href="#demo" class="btn btn-ghost btn-block" data-cta="plan-start">Начать — 2 490₽</a>
         </div>
         <div class="plan plan--hot">
           <div class="plan-badge">★ Популярный — 80% выбирают</div>
@@ -197,7 +327,7 @@
             <li>Приоритет скорости — первым</li>
             <li>Обучение профиля на 👍/👎</li>
           </ul>
-          <a href="scanner.html" class="btn btn-primary btn-block" data-cta="plan-pro">Выбрать Профи — 4 900₽</a>
+          <a href="#demo" class="btn btn-primary btn-block" data-cta="plan-pro">Выбрать Профи — 4 900₽</a>
         </div>
         <div class="plan">
           <div class="plan-name">Бизнес</div>
@@ -211,10 +341,11 @@
             <li>Персональный фильтр «только от X млн»</li>
             <li>Поддержка в Telegram — день в день</li>
           </ul>
-          <a href="scanner.html" class="btn btn-ghost btn-block" data-cta="plan-biz">Выбрать Бизнес — 7 900₽</a>
+          <a href="#demo" class="btn btn-ghost btn-block" data-cta="plan-biz">Выбрать Бизнес — 7 900₽</a>
         </div>
       </div>
-      <div class="plans-note">Все тарифы — помесячно, без годовых обязательств. Триал покажет 3 лида бесплатно до оплаты. Оплата — ЮKassa / CloudPayments (подключим).</div>
+      <div class="plans-note">Якорь: <b style="color:var(--text)">менеджер 15 000₽/мес</b> vs <b style="color:var(--terracotta)">Радар 2 490₽</b> — экономия 12 500₽/мес. Все тарифы — помесячно, без годовых. Оплата — ЮKassa / CloudPayments (подключим).</div>
+      <div class="plans-note" style="margin-top:8px">Trial 7 дней — 0₽ · Без карты · Отмена в 1 клик · config: <code>base 2490₽ / pro 7900₽</code></div>
     </div>
   </section>
 
@@ -259,10 +390,10 @@
     <div class="wrap">
       <div class="cta-banner">
         <div class="kicker" style="margin-bottom:16px">Начните со сканера — это бесплатно</div>
-        <h2>Узнайте, сколько заказов в вашей нише было за последние 7 дней</h2>
-        <p>Выберите нишу и регион — покажем число заказов, сколько из них горячих и средний бюджет. 3 примера — сразу. Остальное — в подписке.</p>
-        <a href="scanner.html" class="btn btn-primary btn-lg" data-cta="final">Открыть бесплатный сканер</a>
-        <div style="margin-top:12px; font-size:11.5px; color:var(--muted2)">Без карты · 30 секунд · Сканер станет лид-магнитом + SEO + онбордингом</div>
+        <h2>Хватит листать чаты. Включите радар.</h2>
+        <p>Проверка ниши — 2 мин, первые лиды — за 24 часа. Без карты, live данные, 40 сек до уведомления.</p>
+        <a href="#demo" class="btn btn-primary btn-lg" data-cta="final">Проверить нишу — бесплатно</a>
+        <div style="margin-top:12px; font-size:11.5px; color:var(--muted2)">Без карты · 30 секунд · Сканер = лид-магнит + SEO + онбординг</div>
       </div>
     </div>
   </section>
@@ -273,7 +404,7 @@
     <div class="footer-inner">
       <div>
         <div style="font-family:'Inter',sans-serif; font-weight:800; font-size:12px; letter-spacing:1.4px; color:var(--text)">СТРОЙРАДАР</div>
-        <div class="footer-copy">Команда продукта · Москва · <a href="scanner.html">Сканер</a> · <a href="data-seo-template.html">DATA-шаблон</a></div>
+        <div class="footer-copy">Команда продукта · Москва · <a href="scanner.html">Сканер</a> · <a href="data-seo-template.html">DATA-шаблон</a> · <a href="../design-agent/references.md">Design refs 25 кейсов</a></div>
       </div>
       <div class="footer-links">
         <a href="scanner.html">Бесплатный сканер</a>
@@ -283,36 +414,74 @@
       </div>
     </div>
     <div class="footer-disclaimer" style="margin-top:18px">
-      СтройРадар — AI-радар заказов на ремонт и стройку в Telegram — продукт Subscription Factory. Находим открытые заказы в Telegram и присылаем только релевантные. Не гарантируем закрытие сделок — гарантируем релевантность и скорость. Все цифры на лендинге до подключения пайплайна — плейсхолдеры и будут заменены живыми данными.
+      СтройРадар — AI-радар заказов на ремонт и стройку в Telegram — продукт Subscription Factory. Находим открытые заказы в Telegram и присылаем только релевантные. Не гарантируем закрытие сделок — гарантируем релевантность и скорость. Все цифры до подключения пайплайна — детерминированная заглушка (без рандома) и будут заменены живыми данными <code>factory.db → /api/scan</code>.
     </div>
   </div>
 </footer>
 
 <script>
-// Проброс UTM на ссылки сканера (чтобы attribution не терялась при переходе с лендинга)
+// UTM проброс на сканер
 (function(){
   try{
     var p = new URLSearchParams(location.search);
     var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
     var hasUtm = utmKeys.some(function(k){ return p.get(k); });
-    // сохраняем UTM с лендинга — продублирует scanner.js, но тут ещё пробрасываем в href
     if(hasUtm){
-      try{
-        utmKeys.forEach(function(k){
-          var v = p.get(k);
-          if(v) localStorage.setItem(k, v);
-        });
-      }catch(e){}
+      try{ utmKeys.forEach(function(k){ var v=p.get(k); if(v) localStorage.setItem(k,v); }); }catch(e){}
       document.querySelectorAll('a[href^="scanner.html"]').forEach(function(a){
         var u = new URL(a.getAttribute('href'), location.href);
-        utmKeys.forEach(function(k){
-          var v = p.get(k);
-          if(v) u.searchParams.set(k, v);
-        });
+        utmKeys.forEach(function(k){ var v=p.get(k); if(v) u.searchParams.set(k,v); });
         a.setAttribute('href', u.pathname + u.search);
       });
     }
   }catch(e){}
+})();
+// Landing scanner — детерминированная заглушка (копия логики scanner.js, без дублирования файла)
+(function(){
+  var NICHE_DATA={repair_flat:{label:'Ремонт квартир под ключ',total:47,hot:9,mid:17,low:21,avgBudget:1650000,examples:['Ремонт 3-комн. 82 м² под ключ, ЖК «Некрасовка» — бюджет ~1,8 млн, сроки 3 мес','Косметика + замена электрики, 54 м², Химки — бюджет ~650 тыс','Ремонт новостройки 68 м², Бутово — нужен сметчик, от 1,2 млн']},build_house:{label:'Строительство домов',total:28,hot:5,mid:11,low:12,avgBudget:4200000,examples:['Дом 140 м² из газобетона под ключ, Истра — коробка + кровля, ~4,5 млн','Каркасный дом 96 м², Всеволожск — фундамент готов, ~2,8 млн','Пристройка 40 м², Одинцово — ~900 тыс']},roof:{label:'Кровля',total:34,hot:7,mid:13,low:14,avgBudget:780000,examples:['Металлочерепица 210 м², Котельники — замена старой, ~750 тыс','Плоская кровля 480 м², СПб — от 1,2 млн','Ремонт конька 40 м², Гатчина — ~180 тыс']},foundation:{label:'Фундамент',total:19,hot:3,mid:8,low:8,avgBudget:950000,examples:['Ленточный 10×12 м, Дмитров — ~1,1 млн','Свайно-ростверковый, Ломоносовский р-н — ~850 тыс','Усиление фундамента, Пушкин — ~600 тыс']},electric:{label:'Электрика',total:52,hot:11,mid:19,low:22,avgBudget:320000,examples:['Электрика 74 м², Кузьминки — ~340 тыс','Щитовая + разводка 160 м², Раменское — ~520 тыс','Аварийная замена 120 м², СПб Центр — ~180 тыс']},ventilation:{label:'Вентиляция / ОВиК',total:31,hot:6,mid:12,low:13,avgBudget:1450000,examples:['Вентиляция 350 м², ТЦ район — ~2,1 млн','ОВиК склад, Домодедово — от 800 тыс/год','Приточно-вытяжная 220 м², СПб Петроградка — ~1,3 млн']},commercial:{label:'Коммерческий ремонт',total:24,hot:4,mid:10,low:10,avgBudget:2800000,examples:['Отделка офиса 380 м², Москва-Сити — ~3,5 млн','Ремонт кофейни 64 м², Невский — 45 дней, ~900 тыс','Косметика склада 1200 м², Подольск — ~1,8 млн']}};
+  var REGION_MULT={msk:1,mo:0.62,spb:0.71,lo:0.44};
+  var REGION_LABEL={msk:'Москва',mo:'Московская область',spb:'Санкт-Петербург',lo:'Ленинградская область'};
+  function fmtMoney(n){return n.toLocaleString('ru-RU')+' ₽';}
+  function getResult(nk,rk){
+    var b=NICHE_DATA[nk]; if(!b) return null;
+    var m=REGION_MULT[rk]||1;
+    var total=Math.round(b.total*m), hot=Math.round(b.hot*m), mid=Math.round(b.mid*m), low=Math.max(0,total-hot-mid);
+    var avg=Math.round((b.avgBudget*(0.72+0.28*m))/1000)*1000;
+    return {nicheLabel:b.label, regionLabel:REGION_LABEL[rk]||rk, total:total, hot:hot, mid:mid, low:low, avgBudget:avg, examples:b.examples};
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    var form=document.getElementById('landingScanForm');
+    if(!form) return;
+    form.addEventListener('submit',function(ev){
+      ev.preventDefault();
+      var niche=document.getElementById('landingNiche').value;
+      var region=document.getElementById('landingRegion').value;
+      var btn=document.getElementById('landingScanBtn'), prog=document.getElementById('landingScanProgress');
+      if(!niche||!region){ btn.textContent='Выберите нишу и регион'; setTimeout(function(){btn.textContent='Показать заказы — 2 мин';},1600); return; }
+      btn.disabled=true; btn.textContent='Сканируем…'; prog.classList.add('on');
+      // пробуем API, иначе заглушка
+      var payload={product:'construction-hunter',niche:niche,region:region,ts:new Date().toISOString()};
+      var done=function(r){
+        prog.classList.remove('on'); btn.disabled=false; btn.textContent='Показать заказы — 2 мин';
+        document.getElementById('lrTotal').textContent=r.total;
+        document.getElementById('lrHot').textContent=r.hot;
+        document.getElementById('lrBudget').textContent=fmtMoney(r.avgBudget);
+        document.getElementById('lrBreakdown').innerHTML='<span>Высокая (≥75): <b>'+r.hot+'</b></span><span>Средняя (50–74): <b>'+r.mid+'</b></span><span>Низкая (&lt;50): <b>'+r.low+'</b></span><span>Регион: <b>'+r.regionLabel+'</b></span>';
+        var ul=document.getElementById('lrExamples'); ul.innerHTML='';
+        r.examples.forEach(function(ex){ var li=document.createElement('li'); li.textContent=ex; ul.appendChild(li); });
+        document.getElementById('lrParams').textContent='Запрос: '+r.nicheLabel+' · '+r.regionLabel;
+        document.getElementById('landingScanResult').classList.add('on');
+        document.getElementById('landingScanResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+      };
+      try{
+        var ctrl=new AbortController(); var t=setTimeout(function(){ctrl.abort();},3500);
+        fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:ctrl.signal})
+          .then(function(res){ clearTimeout(t); if(!res.ok) throw new Error('api'); return res.json(); })
+          .then(function(api){ if(api&&api.total!=null) done(api); else done(getResult(niche,region)); })
+          .catch(function(){ clearTimeout(t); done(getResult(niche,region)); });
+      }catch(e){ done(getResult(niche,region)); }
+    });
+  });
 })();
 </script>
 </body>
