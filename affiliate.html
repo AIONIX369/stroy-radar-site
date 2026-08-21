@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Партнёрка СтройРадар — 20-30% с каждой оплаты</title>
+<meta name="description" content="СтройРадар партнёрка: 20-30% recurring с каждой оплаты. Готовые креативы, промокод, дашборд.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header"><div class="header-inner">
+  <a href="index.html" class="brand" style="text-decoration:none"><div class="brand-mark">◈</div><div class="brand-name">СТРОЙ<br>РАДАР<small>TELEGRAM · AI · LEADS</small></div></a>
+  <a href="index.html" class="btn btn-ghost" style="padding:9px 14px;font-size:11px">← На лендинг</a>
+</div></header>
+<main class="section"><div class="wrap" style="max-width:780px">
+  <div style="text-align:center;margin-bottom:28px">
+    <div class="kicker">Affiliate 20-30% recurring</div>
+    <h1>Зарабатывай с каждого клиента<br><span style="color:var(--terracotta)">СтройРадара</span></h1>
+    <p style="margin-top:14px;color:var(--muted);font-size:14px">20% базово, 30% сильным партнёрам. Пока клиент платит — ты получаешь. Готовые Shorts, посты и промокод.</p>
+  </div>
+  <div class="scanner-card">
+    <div class="scan-title">Оставь заявку</div>
+    <div class="scan-sub">Ответим в Telegram за день. Комиссия считается от фактически оплаченных месяцев.</div>
+    <form id="affForm">
+      <div class="field"><label>Контакт (Telegram @username или email)</label><input id="affContact" type="text" placeholder="@username или email" required></div>
+      <div class="field"><label>Ниша / аудитория</label><select id="affNiche"><option value="" disabled selected>Выбери</option><option>Строй-блогер</option><option>Школа ремонта</option><option>Сервис для подрядчиков</option><option>Другое</option></select></div>
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Отправить — ответим в TG</button>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted2);text-align:center">Нажимая, соглашаешься на обработку для связи</div>
+    </form>
+    <div style="margin-top:18px;font-size:13px;color:var(--muted);line-height:1.6">
+      Пример: 100 клиентов × 4900₽ × 20% = <b style="color:var(--text)">98 000 ₽/мес</b> партнёру. Реферал клиента: +14 дней обоим.
+    </div>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="wrap"><div style="font-size:12px;color:var(--muted2)">СтройРадар · Партнёрка · Выплаты по договору с ИП · Порог 3000₽</div></div></footer>
+<script>
+document.getElementById('affForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var c=document.getElementById('affContact').value.trim();
+  if(!c){ alert('Укажи контакт'); return; }
+  // пока без бэкенда — сохраняем в localStorage и показываем спасибо
+  try{ localStorage.setItem('aff_contact', c); }catch(_){}
+  e.target.innerHTML='<div style="text-align:center;padding:18px;color:var(--sage-dark);font-weight:700">Спасибо! Напишем в TG за день ✓</div>';
+});
+</script>
+</body>
+</html>

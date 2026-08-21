@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заказы на вентиляцию в Москве — 31 за 7 дней, средний бюджет 1,45 млн ₽ | СтройРадар</title>
+<meta name="description" content="Живые данные: за 7 дней найдено 31 заказов на вентиляцию в Москве, средний бюджет 1,45 млн ₽. Горячих 6. Обновление из Telegram — платный доступ от 2490₽/мес.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!--
+  DATA SEO ШАБЛОН — «Заказы на <нишу> в <городе>»
+  ======================================================
+  Плейсхолдеры (заменять при генерации):
+    вентиляцию        — человеческое имя ниши: "ремонт квартир", "монтаж вентиляции"...
+    ventilyatsiya   — слаг URL: "remont-kvartir", "ventilyaciya"
+    Москве         — город: "Москве", "Санкт-Петербурге"
+    moskva    — слаг города: "moskva", "spb"
+    31     — число заказов за 7 дней (живые данные пайплайна)
+    5  — новых сегодня
+    6    — горячих (скоринг >= 75)
+    1,45 млн ₽   — средний бюджет (например "1,6 млн ₽")
+    {{EXAMPLES}}     — 3-5 примеров заказов (реальные нормализованные сообщения)
+    2026-08-21   — дата/время обновления (ISO)
+    https://stroy-radar.ru/moskva/ventilyatsiya/    — canonical URL страницы
+
+  Как генерировать страницы (раздел 22-23 стратегии):
+  ---------------------------------------------------
+  1. Источник данных — пайплайн Product Factory:
+     SOURCE (Telethon по чатам) → NORMALIZATION → DEDUP → AI-фильтр (YandexGPT)
+     → INTENT → MATCH (ниша×город) → SCORE 0-100 → агрегация для DATA страниц.
+
+  2. Генерация — один сильный домен (см. раздел 22), не 20 сайтов:
+     stroy-radar.ru/                          — лендинг (index.html)
+     stroy-radar.ru/moskva/remont-kvartir    — DATA-страница «ремонт квартир в МСК»
+     stroy-radar.ru/moskva/ventilyaciya
+     stroy-radar.ru/spb/remont-kvartir
+     stroy-radar.ru/blog/gde-brat-zakazy
+     stroy-radar.ru/live/remont-kvartir
+
+     Структура папок для programmatic SEO:
+       /moskva/remont-kvartir/index.html
+       /moskva/ventilyaciya/index.html
+       /spb/remont-kvartir/index.html
+     Каждая — копия этого шаблона с подставленными плейсхолдерами.
+     Генерировать скриптом (Node/Python) из JSON агрегатов пайплайна.
+
+  3. Правило из раздела 23: страница создаётся ТОЛЬКО если
+     уникальных данных достаточно (например >= 10 заказов за 7 дней).
+     Меню / карта сайта генерируется из фактических агрегатов, а не из
+     декарта 20 ниш × 30 городов заранее. До 600 потенциальных — но
+     создаём только где есть данные. Иначе — поисковой фильтр за тонкий контент.
+
+  4. Обновление: агрегаты пересобирать ежедневно (cron пайплайна).
+     На каждой странице — "Обновлено 2026-08-21" + JSON-LD с датой.
+
+  5. Внутренняя перелинковка: внизу блок "Другие ниши в Москве" /
+     "Эта ниша в других городах" — чтобы вес шёл по кластеру.
+
+  6. UTM: CTA ведут на scanner.html с предзаполнением ниши/региона
+     и сохранением utm_source/medium/campaign для attribution.
+
+  Технически:
+  - Статика → деплой на GitHub Pages / Netlify / Яндекс Object Storage (0₽).
+  - Sitemap генерируется вместе со страницами.
+  - canonical на каждой DATA-странице обязателен.
+  ======================================================
+-->
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand" style="text-decoration:none">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="16" cy="14.8" r="11" stroke="white" stroke-width="1.35" opacity="0.95"/>
+          <circle cx="16" cy="14.8" r="7.2" stroke="white" stroke-width="1.15" opacity="0.52"/>
+          <circle cx="16" cy="14.8" r="3.9" stroke="white" stroke-width="1.15" opacity="0.28"/>
+          <circle cx="16" cy="14.8" r="1.5" fill="white"/>
+          <path d="M16 14.8 L26.6 6.6" stroke="white" stroke-width="1.45" stroke-linecap="round" opacity="0.9"/>
+          <path d="M16 19.2 L10.8 23.2 V27.2 H21.2 V23.2 Z" fill="white"/>
+          <path d="M16 19.2 L10.8 23.2 H21.2 Z" fill="white"/>
+          <rect x="13.6" y="24.2" width="4.8" height="3" rx="0.6" fill="#C97B5A" opacity="0.92"/>
+        </svg>
+      </div>
+      <div class="brand-name">СТРОЙ<br>РАДАР<small>TELEGRAM · AI · LEADS</small></div>
+    </a>
+    <a href="scanner.html?niche=ventilyatsiya&region=moskva" class="btn btn-primary" style="padding:10px 14px; font-size:11px">Проверить свою нишу — бесплатно</a>
+  </div>
+</header>
+
+<main>
+  <section class="data-hero wrap" style="text-align:center">
+    <div class="kicker">DATA SEO · Живые данные пайплайна · Обновлено 2026-08-21</div>
+    <h1>Заказы на вентиляцию в Москве</h1>
+    <p style="margin-top:12px; color:var(--muted); max-width:640px; margin-left:auto; margin-right:auto; font-size:14px">
+      Реальные заказы из Telegram-чатов, отфильтрованные AI. Показываем агрегаты за 7 дней и примеры — полный поток в подписке.
+    </p>
+    <div class="slug">
+      <a href="/moskva/ventilyatsiya">/moskva/ventilyatsiya — вы здесь</a>
+      <a href="index.html">Лендинг</a>
+      <a href="scanner.html">Сканер</a>
+      <a href="index.html#plans">Тарифы</a>
+    </div>
+
+    <div class="data-grid">
+      <div class="data-cell"><div class="num">31</div><div class="lbl">найдено за 7 дней<br>после AI-фильтра</div></div>
+      <div class="data-cell" style="border-color:rgba(156,175,136,0.30)"><div class="num" style="color:var(--sage-dark)">6</div><div class="lbl">горячих (скоринг ≥ 75)<br>высокая релевантность</div></div>
+      <div class="data-cell"><div class="num" style="color:var(--caramel-dark)">1,45 млн ₽</div><div class="lbl">средний бюджет<br>известных заказов</div></div>
+    </div>
+    <div class="meta-line">Новых сегодня: <b style="color:var(--text)">5</b> · Скоринг считается по: регион · бюджет · тип работ · квалификация (раздел 23) · Обновлено 2026-08-21</div>
+
+    <div class="data-examples">
+      <div style="font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); margin-bottom:8px">Примеры заказов на вентиляцию в Москве</div>
+      <ul>
+        <!-- Подставить {{EXAMPLES}} — 3-5 реальных нормализованных сообщений. Ниже плейсхолдер: -->
+        <li>Пример 1: «вентиляцию — Москве, площадь, бюджет, срок» (заменится живой строкой из пайплайна)</li>
+        <li>Пример 2: «вентиляцию — Москве, объект, адрес, бюджет ~ X ₽»</li>
+        <li>Пример 3: «вентиляцию — Москве, под ключ, бюджет обсуждается от Y ₽»</li>
+      </ul>
+      <div style="margin-top:10px; font-size:11px; color:var(--muted2)">Показано 3 примера. Остальные 31 − 3 — в подписке с мгновенными уведомлениями в Telegram.</div>
+    </div>
+
+    <div class="placeholder-banner">
+      Это <b style="color:var(--text)">шаблон</b>, не готовая страница. При генерации замени <code>31</code>, <code>6</code>, <code>1,45 млн ₽</code> и список <code>{{EXAMPLES}}</code> на агрегаты пайплайна.
+      Страница создаётся только если данных достаточно (раздел 23 — не создавать пустышки).
+      Canonical: <code>https://stroy-radar.ru/moskva/ventilyatsiya/</code> · <a href="scanner.html?niche=ventilyatsiya&region=moskva">CTA → сканер</a> с презаполнением ниши/региона.
+    </div>
+
+    <div style="margin-top:24px; display:flex; flex-direction:column; gap:10px; align-items:center">
+      <a href="scanner.html?niche=ventilyatsiya&region=moskva" class="btn btn-primary btn-lg">Получать такие заказы в реальном времени — от 2 490₽</a>
+      <a href="scanner.html" class="btn btn-ghost">Проверить свою нишу — бесплатно</a>
+    </div>
+
+    <!-- Перелинковка кластера -->
+    <div style="max-width:860px; margin:28px auto 0; display:grid; grid-template-columns:1fr; gap:10px; text-align:left">
+      <div style="border:1px solid rgba(255,255,255,0.60); background:rgba(255,255,255,0.68); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:20px; padding:18px">
+        <div style="font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted)">Другие ниши в Москве</div>
+        <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px">
+          <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/moskva/remont-kvartir">Ремонт квартир</a>
+          <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/moskva/ventilyaciya">Вентиляция</a>
+          <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/moskva/krovlya">Кровля</a>
+          <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/moskva/electrika">Электрика</a>
+        </div>
+      </div>
+      <div style="border:1px solid rgba(255,255,255,0.60); background:rgba(255,255,255,0.68); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:20px; padding:18px">
+        <div style="font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted)">Эта ниша в других городах</div>
+        <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px">
+          <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/moskva/ventilyatsiya">Москва</a>
+          <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/spb/ventilyatsiya">СПб</a>
+          <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/mo/ventilyatsiya">МО</a>
+          <a class="btn btn-ghost" style="padding:7px 10px; font-size:11px" href="/lo/ventilyatsiya">ЛО</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JSON-LD — подставить плейсхолдеры при генерации -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Заказы на вентиляцию в Москве",
+    "description": "За 7 дней найдено 31 заказов на вентиляцию в Москве, средний бюджет 1,45 млн ₽",
+    "url": "https://stroy-radar.ru/moskva/ventilyatsiya/",
+    "dateModified": "2026-08-21",
+    "isPartOf": { "@type": "WebSite", "name": "СтройРадар", "url": "https://stroy-radar.ru/" }
+  }
+  </script>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div style="font-family:'Inter',sans-serif; font-weight:800; font-size:11px; letter-spacing:1.2px; color:var(--text)">СТРОЙРАДАР</div>
+      <div class="footer-links">
+        <a href="index.html">Лендинг</a>
+        <a href="scanner.html">Сканер</a>
+        <a href="index.html#plans">Тарифы</a>
+      </div>
+    </div>
+    <div style="margin-top:14px; font-size:11px; color:var(--muted2)">Шаблон DATA-страницы. Копируется как <code>/&lt;город&gt;/&lt;ниша&gt;/index.html</code> с подстановкой плейсхолдеров из пайплайна.</div>
+  </div>
+</footer>
+
+</body>
+</html>
