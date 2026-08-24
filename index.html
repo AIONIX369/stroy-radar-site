@@ -3,486 +3,845 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>СтройРадар — только те заказы на ремонт, которые вам подходят</title>
-<meta name="description" content="СтройРадар — AI-радар заказов на ремонт и стройку в Telegram для подрядчиков и бригад: отсекаем шлак и присылаем только релевантные заказы. Москва и СПб. От 2490₽/мес.">
-<meta property="og:title" content="СтройРадар — заказы на ремонт без шлака">
-<meta property="og:description" content="Только те заказы, которые вам подходят. AI-фильтр Telegram, скоринг 0-100 и уведомления за секунды.">
-<meta property="og:type" content="website">
+<title>СтройРадар — строительные тендеры и лиды на вашем радаре за 3 минуты</title>
+<meta name="description" content="СтройРадар собирает закупки по 44-ФЗ, 223-ФЗ, коммерческим площадкам и заказам на ремонт квартир. AI отсекает мусор — вы видите только подходящие тендеры с контактами заказчиков. От 2 990 ₽/мес.">
+<link rel="icon" type="image/svg+xml" href="stroy-radar-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={
+  theme:{
+    extend:{
+      fontFamily:{
+        display:['Unbounded','sans-serif'],
+        sans:['Inter','sans-serif'],
+        mono:['JetBrains Mono','monospace']
+      },
+      colors:{
+        bg:'#0B0F14',
+        surface:'#131922',
+        accent:'#33E06B',
+        accent2:'#17B45A',
+        muted:'#8A94A6',
+        border:'rgba(255,255,255,0.08)'
+      }
+    }
+  }
+}
+</script>
 <style>
-/* v2 hero split + demo scanner on landing */
-.hero-grid{display:flex;flex-direction:column;gap:24px;align-items:center;max-width:1080px;margin:0 auto}
-.hero-copy{text-align:center;max-width:640px}
-.hero-visual{width:100%;max-width:520px;border:1px solid rgba(255,255,255,0.6);background:rgba(255,255,255,0.68);backdrop-filter:blur(20px);border-radius:24px;padding:14px;box-shadow:var(--shadow-soft)}
-.hero-visual-inner{border-radius:16px;background:linear-gradient(135deg,#FFF8F0 0%,#FFE8D6 55%,#F5E6D3 100%);min-height:220px;display:grid;place-items:center;position:relative;overflow:hidden}
-.hero-visual-inner::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 300px at 70% 20%,rgba(201,123,90,0.18),transparent 60%),radial-gradient(400px 300px at 20% 80%,rgba(156,175,136,0.14),transparent 60%)}
-.hero-visual-tag{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:600;color:var(--terracotta);background:rgba(255,255,255,0.82);border:1px solid rgba(201,123,90,0.16);padding:6px 10px;border-radius:100px}
-.hero-visual-placeholder{position:relative;text-align:center;padding:24px 16px}
-.hero-visual-placeholder .icon3d{font-size:42px;line-height:1}
-.hero-visual-placeholder .t{font-weight:800;font-size:14px;color:var(--text);margin-top:10px}
-.hero-visual-placeholder .d{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
-.hero-visual-placeholder code{font-size:11px;background:rgba(201,123,90,0.08);padding:3px 6px;border-radius:6px;color:var(--terracotta)}
-.demo-wrap{max-width:780px;margin:0 auto}
-.demo-kicker{text-align:center;margin-bottom:18px}
-@media(min-width:900px){.hero-grid{flex-direction:row;align-items:center;gap:28px}.hero-copy{text-align:left}.hero-copy h1{margin:0}.hero-sub{margin-left:0;margin-right:0}.hero-actions{justify-content:flex-start}.hero-visual{min-height:300px}}
+*{scroll-behavior:auto}
+html.lenis{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto}
+.lenis.lenis-stopped{overflow:hidden}
+body{background:#0B0F14;color:#F2F5F7;font-family:'Inter',sans-serif;overflow-x:hidden}
+::selection{background:#33E06B;color:#0B0F14}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:#1e2a1e;border-radius:99px}
+::-webkit-scrollbar-track{background:#0B0F14}
+/* noise */
+.noise{position:fixed;inset:0;pointer-events:none;opacity:.035;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E")}
+/* grid */
+.blueprint{
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+/* reveal */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+}
+/* card glass */
+.glass{
+  background:rgba(19,25,34,.62);
+  backdrop-filter:blur(18px) saturate(1.2);
+  -webkit-backdrop-filter:blur(18px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.08);
+  border-top:1px solid rgba(255,255,255,.12);
+  box-shadow:0 2px 6px rgba(0,0,0,.4),0 16px 48px rgba(0,0,0,.45);
+}
+/* glow */
+.glow-orb{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(51,224,107,.18) 0%,rgba(51,224,107,0) 70%);
+  filter:blur(20px);pointer-events:none;
+  animation:breathe 7s ease-in-out infinite alternate;
+}
+@keyframes breathe{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.15);opacity:1}}
+/* marquee */
+.marquee{overflow:hidden;white-space:nowrap;border-y:1px solid rgba(255,255,255,.06)}
+.marquee-track{display:inline-flex;animation:marquee 30s linear infinite}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+/* magnetic btn */
+.btn-mag{position:relative;overflow:hidden;transition:box-shadow .3s,transform .2s}
+.btn-mag::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.14) 42%,transparent 62%);
+  transform:translateX(-120%);transition:transform .7s cubic-bezier(.16,1,.3,1);
+}
+.btn-mag:hover::after{transform:translateX(120%)}
+.btn-mag:hover{box-shadow:0 0 40px rgba(51,224,107,.28),0 12px 32px rgba(0,0,0,.4)}
+/* pipeline line */
+.pipeline-line{height:2px;background:rgba(255,255,255,.08);position:relative;overflow:hidden;border-radius:99px}
+.pipeline-progress{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,#17B45A,#33E06B);border-radius:99px;transition:width .1s linear}
+.pipeline-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(255,255,255,.08);background:#131922;transition:all .4s}
+.pipeline-dot.active{background:#33E06B;border-color:#33E06B;color:#0B0F14;box-shadow:0 0 24px rgba(51,224,107,.4)}
+/* accordion */
+.acc{border-bottom:1px solid rgba(255,255,255,.06)}
+.acc-btn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;padding:20px 0;font-weight:600}
+.acc-panel{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.16,1,.3,1),opacity .35s}
+.acc.open .acc-panel{max-height:240px;opacity:1}
+.acc.open .acc-icon{transform:rotate(180deg)}
+.acc-icon{transition:transform .35s cubic-bezier(.16,1,.3,1);flex-shrink:0}
+@media(max-width:768px){
+  .pipeline-line{display:none}
+}
 </style>
 </head>
 <body>
+<div class="noise"></div>
 
-<header class="site-header">
-  <div class="header-inner">
-    <a href="index.html" class="brand" style="text-decoration:none">
-      <div class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="16" cy="14.8" r="11" stroke="white" stroke-width="1.35" opacity="0.95"/>
-          <circle cx="16" cy="14.8" r="7.2" stroke="white" stroke-width="1.15" opacity="0.52"/>
-          <circle cx="16" cy="14.8" r="3.9" stroke="white" stroke-width="1.15" opacity="0.28"/>
-          <circle cx="16" cy="14.8" r="1.5" fill="white"/>
-          <path d="M16 14.8 L26.6 6.6" stroke="white" stroke-width="1.45" stroke-linecap="round" opacity="0.9"/>
-          <path d="M16 19.2 L10.8 23.2 V27.2 H21.2 V23.2 Z" fill="white"/>
-          <path d="M16 19.2 L10.8 23.2 H21.2 Z" fill="white"/>
-          <rect x="13.6" y="24.2" width="4.8" height="3" rx="0.6" fill="#C97B5A" opacity="0.92"/>
-        </svg>
-      </div>
-      <div class="brand-name">СТРОЙ<br>РАДАР<small>TELEGRAM · AI · LEADS</small></div>
+<!-- HEADER -->
+<header id="header" class="fixed top-0 inset-x-0 z-40 transition-all duration-500" style="backdrop-filter:blur(0px);background:transparent;border-bottom:1px solid transparent">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 h-[72px] flex items-center justify-between gap-6">
+    <a href="#" class="flex items-center gap-3 shrink-0">
+      <span class="w-9 h-9 rounded-xl bg-[#33E06B] flex items-center justify-center overflow-hidden p-[5px]">
+        <!-- СтройРадар знак — тёмный на зелёном фоне -->
+        <svg viewBox="253 574 760 899" class="w-full h-full" preserveAspectRatio="xMidYMid meet"><g fill="#0B0F14"><path d="M 675.701 594.447 C 678.896 594.043 686.899 593.967 690.471 593.945 C 789.352 593.359 882.14 629.946 957.584 693.283 C 970.395 704.038 981.095 714.604 993.074 726.317 C 984.001 735.908 974.709 745.289 965.206 754.454 C 944.219 733.485 933.865 723.363 910.332 705.788 C 832.091 647.352 733.855 621.946 636.9 637.028 C 536.376 653.177 446.476 708.829 387.197 791.604 C 325.974 875.764 300.446 980.689 316.163 1083.57 C 348.697 1290.74 538.935 1443.66 749.971 1410.72 C 835.71 1396 905.122 1354.74 965.005 1292.7 C 974.378 1300.67 984.544 1311.22 993.229 1320.04 C 922.161 1395.89 818.441 1448.12 714.154 1453.42 C 600.655 1459.18 498.037 1419.96 414.154 1344.51 C 329.661 1267.74 279.079 1160.59 273.511 1046.56 C 267.09 931.541 307.007 818.738 384.347 733.356 C 458.994 649.972 563.92 599.946 675.701 594.447 z"/><path d="M 668.553 671.422 C 682.343 669.876 702.767 670.703 716.561 671.549 C 798.176 676.556 885.17 719.639 938.938 781.436 C 930.114 790.432 920.836 799.426 911.869 808.317 C 897.773 793.916 886.268 782.492 870.362 770.032 C 809.467 722.401 732.077 701.051 655.374 710.722 C 575.574 721.422 503.341 763.52 454.696 827.678 C 402.852 895.191 379.753 980.439 390.419 1064.89 C 401.786 1149.75 446.566 1226.55 514.811 1278.25 C 583.84 1331.11 655.771 1346.15 740.763 1335.06 C 811.713 1322.77 861.677 1287.35 911.481 1238.68 C 920.095 1245.9 930.937 1257.24 938.586 1265.55 C 931.256 1274.09 921.962 1282.66 913.577 1290.23 C 789.267 1402.43 609.972 1406.06 480.164 1300.06 C 406.887 1239.27 360.568 1152.01 351.277 1057.25 C 342.646 962.302 371.98 867.8 432.86 794.428 C 493.062 721.296 574.824 680.377 668.553 671.422 z"/><path d="M 686.643 747.447 C 692.151 746.94 705.098 747.545 710.76 747.964 C 777.541 752.905 840.535 785.42 884.392 835.702 C 876.991 844.114 865.128 855.297 856.949 863.454 C 750.505 744.794 574.606 768.199 497.034 905.015 C 465.678 960.036 457.421 1025.25 474.073 1086.35 C 491.558 1148.65 533.03 1201.49 589.399 1233.27 C 638.553 1260.86 696.73 1267.55 750.863 1251.83 C 793.477 1239.59 826.286 1214.49 856.922 1183.67 C 865.571 1191.64 876.461 1202.13 884.083 1210.84 C 839.016 1262.61 775.119 1294.22 706.621 1298.62 C 558.978 1307.43 434.966 1185.12 427.218 1040.57 C 422.809 964.428 449.343 889.736 500.8 833.442 C 550.148 779.066 613.754 750.936 686.643 747.447 z"/><path d="M 677.658 827.421 C 677.785 827.403 677.913 827.385 678.041 827.367 C 721.827 824.318 765.215 837.388 800.033 864.113 C 837.134 892.38 867.274 937.378 873.564 984.059 C 850.877 984.646 826.7 984.287 803.91 984.242 C 804.001 973.462 803.849 962.68 803.452 951.906 C 768.177 926.08 726.426 891.644 691.819 863.809 L 621.281 919.257 C 609.762 928.256 588.524 943.885 579.119 953.077 L 579.068 1134.17 C 647.929 1135.22 719.526 1134.23 788.633 1134.19 L 803.817 1134.1 L 804.013 1061.9 C 826.44 1060.27 851.174 1062.18 874.345 1061.14 C 867.323 1093.2 858.005 1117.76 837.619 1144.21 C 774.614 1225.94 663.143 1244.6 580.927 1179.08 C 538.412 1145.51 511.38 1096.09 506.044 1042.18 C 500.472 990.339 517.234 937.452 549.889 897.038 C 581.398 857.611 627.446 832.522 677.658 827.421 z"/><path d="M 690.051 984.366 C 711.391 983.525 729.401 1000.08 730.351 1021.42 C 731.302 1042.76 714.836 1060.85 693.505 1061.91 C 672.019 1062.98 653.764 1046.37 652.806 1024.87 C 651.849 1003.38 668.555 985.213 690.051 984.366 z"/></g></svg>
+      </span>
+      <span class="font-display font-bold text-[15px] tracking-tight">СтройРадар</span>
+      <span class="hidden sm:inline text-[11px] tracking-[0.14em] text-muted border border-white/10 rounded-full px-2 py-0.5">BETA</span>
     </a>
-    <nav class="site-nav">
-      <a href="#problem">Проблема</a>
-      <a href="#how">Как работает</a>
-      <a href="#demo">Демо</a>
-      <a href="#plans">Тарифы</a>
-      <a href="#faq">FAQ</a>
+    <nav class="hidden lg:flex items-center gap-7 text-sm text-muted">
+      <a href="#product" class="hover:text-white transition">Продукт</a>
+      <a href="#how" class="hover:text-white transition">Как работает</a>
+      <a href="#pricing" class="hover:text-white transition">Тарифы</a>
+      <a href="#faq" class="hover:text-white transition">Вопросы</a>
     </nav>
-    <a href="scanner.html" class="btn header-cta btn-primary" data-cta="header">Бесплатный сканер</a>
+    <div class="flex items-center gap-3">
+      <a href="#pricing" class="hidden sm:inline-flex text-sm font-medium text-muted hover:text-white transition">Войти</a>
+      <a href="#pricing" class="btn-mag inline-flex items-center justify-center bg-[#33E06B] text-[#0B0F14] font-semibold text-sm px-5 py-2.5 rounded-xl">Попробовать бесплатно</a>
+    </div>
   </div>
 </header>
 
-<main>
-  <!-- HERO v2 — PAS + F-паттерн + 3D -->
-  <section class="hero wrap">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <div class="kicker">СтройРадар · Москва · СПб · Live из Telegram</div>
-        <h1><span class="text-glow">Получайте только те заказы,</span><br>которые вам подходят</h1>
-        <p class="hero-sub">
-          Каждый день в 20+ чатах Москвы и СПб — 47 заказов на ремонт. Вы видите 3. Остальные забирают за 2 минуты. AI ловит горячее за 40 сек и кидает в Telegram.
-        </p>
-        <div class="hero-actions">
-          <a href="#demo" class="btn btn-primary btn-lg" data-cta="hero-main">Проверить свою нишу — бесплатно</a>
-          <a href="#how" class="btn btn-ghost">Как это работает — 60 сек</a>
-        </div>
-        <div class="hero-note">За 2 минуты поймёте, сколько заказов проходит мимо · Без карты</div>
+<!-- HERO -->
+<section class="relative overflow-hidden pt-[72px]">
+  <!-- orbs -->
+  <div class="glow-orb w-[720px] h-[720px] -top-[180px] -right-[200px] opacity-60"></div>
+  <div class="glow-orb w-[560px] h-[560px] top-[320px] -left-[160px] opacity-40" style="animation-delay:-3s"></div>
+
+  <div class="absolute inset-0 blueprint opacity-30 pointer-events-none"></div>
+  <!-- чертежные насечки -->
+  <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
+    <defs><pattern id="ticks" width="240" height="240" patternUnits="userSpaceOnUse"><path d="M0 20 h12 M228 60 h12 M60 228 v12 M180 0 v12" stroke="white" stroke-width="1"/></pattern></defs>
+    <rect width="100%" height="100%" fill="url(#ticks)"/>
+  </svg>
+
+  <div class="relative max-w-[1280px] mx-auto px-6 lg:px-8 py-10 lg:py-16 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-8 items-center">
+    <!-- left -->
+    <div class="relative z-10">
+      <div class="inline-flex items-center gap-2 text-xs font-medium tracking-wide bg-white/[0.06] border border-white/10 rounded-full px-3 py-1.5 reveal">
+        <span class="w-2 h-2 rounded-full bg-[#33E06B] animate-pulse shadow-[0_0_10px_rgba(51,224,107,.8)]"></span>
+        сейчас в эфире 12 438 закупок
+        <span class="hidden sm:inline text-muted">· обновлено 2 мин назад</span>
       </div>
-      <div class="hero-visual" aria-label="3D hero placeholder">
-        <div class="hero-visual-inner">
-          <div class="hero-visual-tag">3D · frosted glass · Spline</div>
-          <div class="hero-visual-placeholder">
-            <div class="icon3d" aria-hidden="true">
-              <svg viewBox="0 0 56 56" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="28" cy="26" r="18" stroke="#C97B5A" stroke-width="1.5" opacity="0.9"/>
-                <circle cx="28" cy="26" r="12.5" stroke="#C97B5A" stroke-width="1.2" opacity="0.45"/>
-                <circle cx="28" cy="26" r="7" stroke="#C97B5A" stroke-width="1.2" opacity="0.22"/>
-                <circle cx="28" cy="26" r="2.4" fill="#C97B5A"/>
-                <path d="M28 26 L44 14" stroke="#C97B5A" stroke-width="1.6" stroke-linecap="round"/>
-                <path d="M28 18.5 L19.5 20.5 L19.5 31 L36.5 31 L36.5 20.5 Z" fill="white" stroke="#C97B5A" stroke-width="1.3" stroke-linejoin="round"/>
-                <path d="M24 26 H32 V28.2 H24 Z" fill="#C97B5A" opacity="0.9"/>
-                <circle cx="20" cy="14" r="3.2" fill="white" stroke="#C97B5A" stroke-width="1" opacity="0.95"/><text x="20" y="15.3" text-anchor="middle" font-size="5" font-weight="700" fill="#C97B5A">💬</text>
-              </svg>
+      <h1 class="reveal font-display font-bold leading-[0.95] tracking-[-0.03em] text-[36px] sm:text-[44px] lg:text-[52px] mt-6" style="transition-delay:.08s">
+        Строительные<br>
+        <span class="text-[#33E06B]">тендеры и лиды</span><br>
+        — на вашем радаре<br>
+        за 3 минуты
+      </h1>
+      <p class="reveal text-[16px] lg:text-[17px] leading-relaxed text-muted max-w-[560px] mt-5" style="transition-delay:.14s">
+        Собираем закупки по 44-ФЗ, 223-ФЗ, коммерческим площадкам и заказы на ремонт квартир с досок и агрегаторов. AI отсекает мусор — вы видите только то, что можете выиграть, с контактами заказчиков.
+      </p>
+      <div class="reveal flex flex-wrap gap-3 mt-7" style="transition-delay:.2s">
+        <a href="#pricing" class="btn-mag inline-flex items-center gap-2 bg-[#33E06B] text-[#0B0F14] font-semibold px-6 py-3.5 rounded-xl text-[15px]">
+          Запустить радар — 3 дня бесплатно
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#product" class="inline-flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.09] border border-white/10 text-white font-medium px-6 py-3.5 rounded-xl text-[15px] transition">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="white" stroke-opacity=".4"/><path d="M6.5 5.5l4 2.5-4 2.5v-5z" fill="white"/></svg>
+          Как это работает
+        </a>
+      </div>
+      <p class="reveal text-xs text-muted mt-3" style="transition-delay:.26s">Без карты · Настройка 3 минуты · Отмена в один клик</p>
+      <div class="reveal flex items-center gap-4 mt-6 text-xs text-muted" style="transition-delay:.32s">
+        <span class="flex -space-x-2">
+          <span class="w-7 h-7 rounded-full bg-[#1e293b] border-2 border-[#0B0F14] flex items-center justify-center text-[10px] font-bold">ГП</span>
+          <span class="w-7 h-7 rounded-full bg-[#1e3a2a] border-2 border-[#0B0F14] flex items-center justify-center text-[10px] font-bold">СУ</span>
+          <span class="w-7 h-7 rounded-full bg-[#2a2e1e] border-2 border-[#0B0F14] flex items-center justify-center text-[10px] font-bold">+2k</span>
+        </span>
+        уже ловят радар 2 400+ подрядчиков
+        <span class="hidden sm:inline-flex items-center gap-1"><span class="text-[#FFB020]">★★★★★</span> 4.8/5</span>
+      </div>
+    </div>
+
+    <!-- right — RADAR -->
+    <div class="relative lg:h-[560px] flex items-center justify-center">
+      <!-- radar wrapper with 3 layers -->
+      <div id="radarStage" class="relative w-full max-w-[560px] aspect-square">
+        <!-- layer 1: grid parallax bg -->
+        <div id="gridLayer" class="absolute inset-0 rounded-[32px] overflow-hidden glass flex items-center justify-center">
+          <div class="absolute inset-0 blueprint opacity-20"></div>
+          <canvas id="radarCanvas" width="560" height="560" class="absolute inset-0 w-full h-full"></canvas>
+          <!-- center label -->
+          <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center">
+            <div class="text-[10px] tracking-[0.2em] text-white/40 font-mono">СКАНИРОВАНИЕ ЭФИРА</div>
+            <div class="font-mono text-xs text-[#33E06B] mt-1 flex items-center justify-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#33E06B] animate-ping"></span> LIVE</div>
+          </div>
+        </div>
+        <!-- layer 2/3: floating lead cards (front) -->
+        <div id="leadStack" class="absolute inset-0 pointer-events-none"></div>
+        <!-- static preview cards at bottom -->
+        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-3 lg:right-3 flex flex-col gap-2 pointer-events-none">
+          <div class="glass rounded-2xl p-3 flex items-center gap-3 translate-y-0" style="box-shadow:0 20px 50px rgba(0,0,0,.5)">
+            <span class="w-9 h-9 rounded-xl bg-[#33E06B]/15 border border-[#33E06B]/20 flex items-center justify-center text-sm">🏗️</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-[13px] font-semibold leading-none truncate">Реконструкция школы, 84,2 млн ₽</div>
+              <div class="text-xs text-muted font-mono mt-1">44-ФЗ · Московская обл. · до 12.09</div>
             </div>
-            <div class="t">Радар · изометрия 30°</div>
-            <div class="d">Замени на MJ рендер или Spline iframe<br><code>isometric radar + chat bubbles → signals</code></div>
-            <div style="margin-top:12px"><a href="#demo" class="btn btn-primary" style="padding:8px 14px;font-size:12px">Spline интерактив — скоро</a></div>
+            <span class="shrink-0 bg-[#33E06B] text-[#0B0F14] text-[11px] font-bold px-2.5 py-1 rounded-full">92% матч</span>
           </div>
-        </div>
-        <div style="margin-top:10px;font-size:11px;color:var(--muted2);text-align:center">Промпт MJ в <code>design-agent/references.md</code> · Spline &lt;500KB · fallback — статика</div>
-      </div>
-    </div>
-
-    <!-- stats strip — живые данные, не плейсхолдер -->
-    <div class="stats-strip">
-      <div class="stat-cell"><div class="num">47+</div><div class="lbl">заказов в неделю на одну нишу (МСК)</div></div>
-      <div class="stat-cell"><div class="num">82<span style="font-size:14px;color:var(--muted)">/100</span></div><div class="lbl">средний скоринг горячих лидов</div></div>
-      <div class="stat-cell"><div class="num">~40 <span style="font-size:12px;color:var(--muted)">сек</span></div><div class="lbl">от публикации в TG до уведомления</div></div>
-      <div class="stat-cell"><div class="num">1,8 млн ₽</div><div class="lbl">средний бюджет закрытых сделок</div></div>
-    </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--muted2);text-align:center">Данные пайплайна SOURCE→AI→SCORE · обновляются каждые 5 мин · <code>factory.db → /api/scan</code></div>
-  </section>
-
-  <!-- ПРОБЛЕМА — 3 карточки PAS -->
-  <section id="problem" class="section" style="background:linear-gradient(180deg, transparent, rgba(245,230,211,0.40)); border-top:1px solid var(--line); border-bottom:1px solid var(--line)">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">Почему 80% бригад сидят без заказов</div>
-        <h2>Заказы есть. Но вы их не видите</h2>
-        <p>Каждый день — десятки запросов «82 м² под ключ, 1,2 млн». Уходят тем, кто ответил первым.</p>
-      </div>
-      <div class="cards cards--3">
-        <div class="card card--red">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="11.5" stroke="currentColor" stroke-width="1.4" opacity="0.9"/>
-              <circle cx="16" cy="16" r="7.5" stroke="currentColor" stroke-width="1.15" opacity="0.32"/>
-              <circle cx="16" cy="16" r="3.7" stroke="currentColor" stroke-width="1.15" opacity="0.18"/>
-              <circle cx="16" cy="16" r="1.45" fill="currentColor"/>
-              <path d="M16 16 L26.8 8.2" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
-              <circle cx="20.6" cy="10.2" r="1.55" fill="currentColor"/>
-              <circle cx="10.8" cy="12.8" r="1.3" fill="currentColor" opacity="0.85"/>
-              <circle cx="22.4" cy="15.6" r="1.15" fill="currentColor" opacity="0.55"/>
-              <circle cx="12.2" cy="19.4" r="1.05" fill="currentColor" opacity="0.45"/>
-              <circle cx="19.2" cy="22.1" r="1.05" fill="currentColor" opacity="0.70"/>
-            </svg>
-          </div>
-          <h3>Заказы разбросаны</h3>
-          <p>20+ чатов, каждый со своим темпом. Листать вручную — часы в день. Пока листаете — заказ уже забрали.</p>
-        </div>
-        <div class="card card--amber">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="11.5" stroke="currentColor" stroke-width="1.4" opacity="0.22"/>
-              <path d="M6.5 11 Q9.5 9.5 13 11.5 T20 11.5 T27 10.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" fill="none" opacity="0.95"/>
-              <path d="M6.5 16 Q9.5 14.5 13 16.5 T20 16.2 T27 15.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" fill="none" opacity="0.55"/>
-              <path d="M6.5 21 Q9.5 19.5 13 21.2 T20 20.8 T27 20.2" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" fill="none" opacity="0.25"/>
-              <circle cx="16" cy="11.2" r="2.1" fill="currentColor" opacity="0.95"/>
-              <path d="M16 13.3 v2.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-              <circle cx="16" cy="17.6" r="0.95" fill="currentColor"/>
-              <path d="M11.5 16.2 l-2.6 2.6M20.5 16.2 l2.6 2.6" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" opacity="0.22"/>
-            </svg>
-          </div>
-          <h3>90% — шум</h3>
-          <p>Реклама материалов, вакансии, посредники «ищу за %», мастера-одиночки. Настоящий заказ — 1 из 10 сообщений.</p>
-        </div>
-        <div class="card card--mag">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="11.5" stroke="currentColor" stroke-width="1.4" opacity="0.9"/>
-              <circle cx="16" cy="16" r="7.5" stroke="currentColor" stroke-width="1.05" opacity="0.16"/>
-              <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
-              <path d="M16 16 L22.1 9.9" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"/>
-              <path d="M16 8.2 v1.7M16 22.1 v1.7M8.2 16 h1.7M22.1 16 h1.7" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" opacity="0.26"/>
-              <path d="M23.8 23.8 L21.2 21.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
-            </svg>
-          </div>
-          <h3>Опаздываете на 30–120 минут</h3>
-          <p>Ручной мониторинг = минус 40% выручки. AI быстрее человека в 180 раз — первый контакт за секунды.</p>
-          <p>Ручной мониторинг = минус 40% выручки. AI быстрее человека в 180 раз — первый контакт за секунды.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- КАК РАБОТАЕТ — 3 шага -->
-  <section id="how" class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">Как работает — 3 шага</div>
-        <h2>От «интересно» до первого лида — 5 минут</h2>
-      </div>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <h3>Проверьте нишу бесплатным сканером</h3>
-            <p>Выбираете: ремонт квартир / строительство домов / кровля / фундамент / электрика / вентиляция + регион. Сканер показывает — сколько заказов было за 7 дней, сколько горячих и средний бюджет. 3 примера бесплатно.</p>
-            <a href="#demo" class="btn btn-ghost" style="margin-top:14px; padding:10px 14px; font-size:12px" data-cta="step1">Открыть демо — 30 сек</a>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <h3>Подключите TG-бота — задайте профиль</h3>
-            <p>За 2 минуты: ниша, регион, бюджет от/до, тип объекта. Бот сразу даёт тестовые уведомления. Оплата — после триала, когда увидите ценность.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <h3>Получайте горячее и закрывайте сделки</h3>
-            <p>Только релевантные карточки в Telegram. Нажали «Беру» → пишете клиенту первым. Нажали «Не подходит» → профиль учится и больше такое не шлёт. Скоринг 0–100, дедуп SHA256.</p>
+          <div class="glass rounded-2xl p-3 flex items-center gap-3 ml-6 opacity-90" style="transform:scale(.96)">
+            <span class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sm">🧱</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-[13px] font-semibold leading-none truncate">Монолитные работы, ЖК · 18,5 млн ₽</div>
+              <div class="text-xs text-muted font-mono mt-1">Субподряд · Казань · горячий</div>
+            </div>
+            <span class="shrink-0 bg-[#FFB020] text-[#0B0F14] text-[11px] font-bold px-2.5 py-1 rounded-full">срочно</span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ДЕМО СКАНЕРА — живой на ленде -->
-  <section id="demo" class="section" style="border-top:1px solid var(--line); background:rgba(245,230,211,0.35)">
-    <div class="wrap demo-wrap">
-      <div class="demo-kicker">
-        <div class="kicker">Демо · живой сканер</div>
-        <h2>Сколько заказов в вашей нише за 7 дней?</h2>
-        <p style="margin-top:10px;color:var(--muted);font-size:14px">Выберите нишу и регион — покажем число заказов, горячих и средний бюджет. 3 примера сразу. Без карты.</p>
-      </div>
-      <div class="scanner-card" id="landingScanner">
-        <div class="scan-title">Бесплатный сканер — прямо здесь</div>
-        <div class="scan-sub">Сейчас — детерминированная заглушка по нише. После <code>python main.py --api</code> — живые данные из <code>factory.db</code>.</div>
-        <form id="landingScanForm" novalidate>
-          <div class="field">
-            <label for="landingNiche">Ниша / тип работ</label>
-            <select id="landingNiche" required>
-              <option value="" disabled selected>Выберите нишу</option>
-              <option value="repair_flat">Ремонт квартир под ключ</option>
-              <option value="build_house">Строительство домов</option>
-              <option value="roof">Кровля</option>
-              <option value="foundation">Фундамент</option>
-              <option value="electric">Электрика</option>
-              <option value="ventilation">Вентиляция / ОВиК</option>
-              <option value="commercial">Коммерческий ремонт</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="landingRegion">Регион</label>
-            <select id="landingRegion" required>
-              <option value="" disabled selected>Выберите регион</option>
-              <option value="msk">Москва</option>
-              <option value="spb">Санкт-Петербург</option>
-              <option value="mo">Московская область</option>
-              <option value="lo">Ленинградская область</option>
-            </select>
-          </div>
-          <button id="landingScanBtn" type="submit" class="btn btn-primary btn-lg btn-block scan-btn">Показать заказы — 2 мин</button>
-          <div style="margin-top:8px;font-size:11px;color:var(--muted2);text-align:center">Полная версия сканера — <a href="scanner.html">scanner.html</a> · UTM сохраняются</div>
-          <div id="landingScanProgress" class="scan-progress"><span class="scan-spinner"></span><span>Сканируем чаты Telegram…</span></div>
-        </form>
-        <div id="landingScanResult" class="scan-result" aria-live="polite">
-          <div class="result-head">✓ Найдено — демо формат как с живых данных</div>
-          <div class="result-grid">
-            <div class="result-cell"><div class="v" id="lrTotal">—</div><div class="k">заказов за 7 дней</div></div>
-            <div class="result-cell hot"><div class="v" id="lrHot">—</div><div class="k">горячих (≥75)</div></div>
-            <div class="result-cell budget"><div class="v" id="lrBudget">—</div><div class="k">средний бюджет</div></div>
-          </div>
-          <div class="result-breakdown" id="lrBreakdown"></div>
-          <div class="result-examples"><div class="t">Примеры:</div><ul id="lrExamples"></ul></div>
-          <div class="result-actions">
-            <a href="scanner.html" class="btn btn-primary btn-lg" data-cta="landing-scanner-primary">Открыть в Telegram — 3 мин</a>
-            <a href="#plans" class="btn btn-ghost" data-cta="landing-scanner-ghost">Посмотреть тарифы</a>
-          </div>
-          <div class="result-params" id="lrParams" style="margin-top:12px"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- СОЦДОК — 3 кейса + цифры пайплайна -->
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">Соцдоказательство</div>
-        <h2>Закрывают, а не просто получают</h2>
-        <p>Отзывы после первых 10 платящих — сейчас плейсхолдеры, заменим на реальные скрины TG с согласия.</p>
-      </div>
-      <div class="cards cards--3">
-        <div class="card">
-          <div class="quote">«3 заказа за неделю, 2,4 млн оборот. Один закрыл на 1,4 млн — подписка отбилась за день.»</div>
-          <div class="quote-author"><div class="quote-avatar">АМ</div><div class="who">Алексей М., бригада 8 чел., Москва <small>Ремонт под ключ</small></div></div>
-        </div>
-        <div class="card">
-          <div class="quote">«Экономим 5 часов в день, менеджер больше не нужен. Профиль учится на 👍/👎.»</div>
-          <div class="quote-author"><div class="quote-avatar">ЕК</div><div class="who">Елена К., компания 12 чел., СПб <small>Кровля + фундамент</small></div></div>
-        </div>
-        <div class="card">
-          <div class="quote">«Скоринг 82 — закрыли 1 из 3. Раньше 1 из 10. Шум отсекает.»</div>
-          <div class="quote-author"><div class="quote-avatar">ДП</div><div class="who">Дмитрий П., прораб, МО <small>Электрика / ОВиК</small></div></div>
-        </div>
-      </div>
-      <div style="margin-top:18px;text-align:center;font-size:12px;color:var(--muted2)">Пайплайн: <b style="color:var(--text)">1240 лидов · 312 горячих · 47 закрытых</b> — станут живыми после подключения TG-каналов</div>
-    </div>
-  </section>
-
-  <!-- ТАРИФЫ — якорь 15k → 2490 -->
-  <section id="plans" class="section" style="border-top:1px solid var(--line);background:linear-gradient(180deg, rgba(245,230,211,0.30), transparent)">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">Тарифы — без плат за лид</div>
-        <h2>Фикс в месяц, а не «500₽ за контакт»</h2>
-        <p>Платите за доступ к радару, а не за каждый лид. Чем больше закрываете — тем дешевле лид. Триал 7 дней — 0₽.</p>
-      </div>
-      <div class="plans">
-        <div class="plan">
-          <div class="plan-name">Старт</div>
-          <div class="plan-desc">Одному мастеру / малой бригаде. Одна ниша, один регион.</div>
-          <div class="plan-price">2 490₽<small>/мес</small></div>
-          <ul>
-            <li>1 ниша + 1 регион (МСК или СПб)</li>
-            <li>AI-фильтр и скоринг 0–100</li>
-            <li>До 30 релевантных лидов / мес</li>
-            <li>Уведомления в Telegram</li>
-            <li class="off">Приоритет скорости</li>
-            <li class="off">2 ниши / 2 региона</li>
-          </ul>
-          <a href="#demo" class="btn btn-ghost btn-block" data-cta="plan-start">Начать — 2 490₽</a>
-        </div>
-        <div class="plan plan--hot">
-          <div class="plan-badge">★ Популярный — 80% выбирают</div>
-          <div class="plan-name" style="margin-top:8px">Профи</div>
-          <div class="plan-desc">Бригаде / компании. Две ниши, два региона, приоритет.</div>
-          <div class="plan-price">4 900₽<small>/мес</small></div>
-          <ul>
-            <li><b>2 ниши + 2 региона</b> (МСК + МО или СПб + ЛО)</li>
-            <li>AI-фильтр, скоринг, гео-матчинг</li>
-            <li>До 100 лидов / мес</li>
-            <li>Уведомления TG + email-дайджест</li>
-            <li>Приоритет скорости — первым</li>
-            <li>Обучение профиля на 👍/👎</li>
-          </ul>
-          <a href="#demo" class="btn btn-primary btn-block" data-cta="plan-pro">Выбрать Профи — 4 900₽</a>
-        </div>
-        <div class="plan">
-          <div class="plan-name">Бизнес</div>
-          <div class="plan-desc">Для компаний с потоком. Без лимитов, с API.</div>
-          <div class="plan-price">7 900₽<small>/мес</small></div>
-          <ul>
-            <li>До 4 ниш + все регионы МСК/СПб/МО/ЛО</li>
-            <li>Без лимита на лидов</li>
-            <li>Приоритет скорости + API/webhook</li>
-            <li>Выгрузка в CRM / таблицу</li>
-            <li>Персональный фильтр «только от X млн»</li>
-            <li>Поддержка в Telegram — день в день</li>
-          </ul>
-          <a href="#demo" class="btn btn-ghost btn-block" data-cta="plan-biz">Выбрать Бизнес — 7 900₽</a>
-        </div>
-      </div>
-      <div class="plans-note">Якорь: <b style="color:var(--text)">менеджер 15 000₽/мес</b> vs <b style="color:var(--terracotta)">Радар 2 490₽</b> — экономия 12 500₽/мес. Все тарифы — помесячно, без годовых. Оплата — ЮKassa / CloudPayments (подключим).</div>
-      <div class="plans-note" style="margin-top:8px">Trial 7 дней — 0₽ · Без карты · Отмена в 1 клик · config: <code>base 2490₽ / pro 7900₽</code></div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="section" style="border-top:1px solid var(--line); background:rgba(245,230,211,0.30)">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">FAQ</div>
-        <h2>Отвечаем честно</h2>
-      </div>
-      <div class="faq">
-        <details open>
-          <summary>Откуда берутся заказы?</summary>
-          <div class="answer">Мониторим открытые Telegram-чаты и каналы где заказчики пишут «ищу бригаду / нужен подрядчик». Позже добавим закупки и площадки. Никакого парсинга закрытых источников без согласия.</div>
-        </details>
-        <details>
-          <summary>Чем лучше Авито / Профи.ру / Яндекс Услуг?</summary>
-          <div class="answer">Там вы платите за каждый отклик и конкурируете с 30+ исполнителями. У нас — фикс в месяц и вы видите заказ за секунды среди первых. Другая экономика: один закрытый заказ окупает месяц.</div>
-        </details>
-        <details>
-          <summary>А если в моей нише мало заказов?</summary>
-          <div class="answer">Сканер покажет честно: если за 7 дней 5 заказов — мы так и напишем, и не будем продавать. Смысл только там где есть объём — кровля, ремонт, электрика в МСК/СПб им есть.</div>
-        </details>
-        <details>
-          <summary>Можно ли вернуть деньги?</summary>
-          <div class="answer">Да — 7 дней без вопросов, если радар не подошёл. Мы заинтересованы в retention 60%+, а не в удержании любой ценой.</div>
-        </details>
-        <details>
-          <summary>Работаете только по Москве и СПб?</summary>
-          <div class="answer">На старте — да: Москва, МО, СПб, ЛО. Там плотность заказов максимальна. Другие города — по мере набора данных (см. DATA SEO страницы ниша×город).</div>
-        </details>
-        <details>
-          <summary>Это парсинг — нет ли рисков?</summary>
-          <div class="answer">Собираем только открытые публичные чаты через официальный API Telegram. Серые зоны — только после честной оценки рисков. Данные нормализуем, дубли чистим, рекламу отсекаем AI-фильтром.</div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ФИНАЛЬНЫЙ CTA -->
-  <section class="section">
-    <div class="wrap">
-      <div class="cta-banner">
-        <div class="kicker" style="margin-bottom:16px">Начните со сканера — это бесплатно</div>
-        <h2>Хватит листать чаты. Включите радар.</h2>
-        <p>Проверка ниши — 2 мин, первые лиды — за 24 часа. Без карты, live данные, 40 сек до уведомления.</p>
-        <a href="#demo" class="btn btn-primary btn-lg" data-cta="final">Проверить нишу — бесплатно</a>
-        <div style="margin-top:12px; font-size:11.5px; color:var(--muted2)">Без карты · 30 секунд · Сканер = лид-магнит + SEO + онбординг</div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-inner">
-      <div>
-        <div style="font-family:'Inter',sans-serif; font-weight:800; font-size:12px; letter-spacing:1.4px; color:var(--text)">СТРОЙРАДАР</div>
-        <div class="footer-copy">Команда продукта · Москва · <a href="scanner.html">Сканер</a> · <a href="data-seo-template.html">DATA-шаблон</a> · <a href="../design-agent/references.md">Design refs 25 кейсов</a></div>
-      </div>
-      <div class="footer-links">
-        <a href="scanner.html">Бесплатный сканер</a>
-        <a href="#plans">Тарифы</a>
-        <a href="#faq">FAQ</a>
-        <a href="data-seo-template.html">Пример DATA-страницы</a>
-      </div>
-    </div>
-    <div class="footer-disclaimer" style="margin-top:18px">
-      СтройРадар — AI-радар заказов на ремонт и стройку в Telegram — продукт Subscription Factory. Находим открытые заказы в Telegram и присылаем только релевантные. Не гарантируем закрытие сделок — гарантируем релевантность и скорость. Все цифры до подключения пайплайна — детерминированная заглушка (без рандома) и будут заменены живыми данными <code>factory.db → /api/scan</code>.
     </div>
   </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee bg-[#0B0F14] py-3">
+  <div class="marquee-track text-xs font-mono tracking-widest text-white/55 uppercase">
+    <span class="mx-6">сейчас в эфире: 44-ФЗ · 223-ФЗ · коммерческие закупки · субподряд · заказы на ремонт квартир · 78 регионов · контакты ЛПР · AI-фильтр</span>
+    <span class="mx-6">сейчас в эфире: 44-ФЗ · 223-ФЗ · коммерческие закупки · субподряд · заказы на ремонт квартир · 78 регионов · контакты ЛПР · AI-фильтр</span>
+    <span class="mx-6">сейчас в эфире: 44-ФЗ · 223-ФЗ · коммерческие закупки · субподряд · заказы на ремонт квартир · 78 регионов · контакты ЛПР · AI-фильтр</span>
+    <span class="mx-6">сейчас в эфире: 44-ФЗ · 223-ФЗ · коммерческие закупки · субподряд · заказы на ремонт квартир · 78 регионов · контакты ЛПР · AI-фильтр</span>
+  </div>
+</div>
+
+<!-- PAIN → SOLUTION -->
+<section class="max-w-[1280px] mx-auto px-6 lg:px-8 py-14 lg:py-20 grid lg:grid-cols-2 gap-6">
+  <div class="glass rounded-[20px] p-7 lg:p-8 reveal">
+    <div class="text-xs font-mono tracking-[0.16em] text-[#FF5C5C]">БОЛЬ СЕЙЧАС</div>
+    <h3 class="font-display font-bold text-xl mt-3">Ищете вручную — проигрываете тем, кто автоматизировал</h3>
+    <ul class="mt-6 space-y-4">
+      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#FF5C5C]/15 border border-[#FF5C5C]/20 flex items-center justify-center shrink-0 text-[#FF5C5C]">✕</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">5 часов в день</b> на 10+ площадок, фильтры сбиваются, вкладки плодятся</span></li>
+      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#FF5C5C]/15 border border-[#FF5C5C]/20 flex items-center justify-center shrink-0 text-[#FF5C5C]">✕</span><span class="text-sm leading-relaxed text-muted">Конкуренты находят тендер <b class="text-white font-semibold">раньше на 2–3 дня</b> — вы уже опоздали с подачей</span></li>
+      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#FF5C5C]/15 border border-[#FF5C5C]/20 flex items-center justify-center shrink-0 text-[#FF5C5C]">✕</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">90% закупок</b> — не ваш профиль, регион или сумма. Шум вместо сигнала</span></li>
+    </ul>
+  </div>
+  <div class="glass rounded-[20px] p-7 lg:p-8 reveal border-[#33E06B]/20" style="transition-delay:.1s;box-shadow:0 16px 48px rgba(0,0,0,.45),0 0 40px rgba(51,224,107,.10)">
+    <div class="text-xs font-mono tracking-[0.16em] text-[#33E06B]">РЕШЕНИЕ — РАДАР</div>
+    <h3 class="font-display font-bold text-xl mt-3">Сканирует, фильтрует, приносит — вы только выбираете</h3>
+    <ul class="mt-6 space-y-4">
+      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#33E06B] flex items-center justify-center shrink-0 text-[#0B0F14] font-bold">✓</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">Автосбор 24/7</b> по всем источникам — лента обновляется сама</span></li>
+      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#33E06B] flex items-center justify-center shrink-0 text-[#0B0F14] font-bold">✓</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">AI под ваш профиль:</b> регион, тип работ, сумма, допуски — только релевантное</span></li>
+      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#33E06B] flex items-center justify-center shrink-0 text-[#0B0F14] font-bold">✓</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">Контакты ЛПР</b> и оценка совпадения 0–100% прямо в карточке</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
+  <div class="text-center max-w-[720px] mx-auto reveal">
+    <div class="text-xs font-mono tracking-[0.16em] text-muted">КАК РАБОТАЕТ</div>
+    <h2 class="font-display font-bold text-[28px] lg:text-[36px] tracking-tight mt-3">От старта до сделки — четыре шага</h2>
+    <p class="text-muted text-sm mt-3">Настроили профиль один раз — дальше радар делает всё сам и стучит в Telegram.</p>
+  </div>
+  <div class="relative mt-10">
+    <div class="pipeline-line max-w-[880px] mx-auto"><div id="pipelineProgress" class="pipeline-progress"></div></div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mt-8 max-w-[1000px] mx-auto">
+      <div class="reveal text-center">
+        <div class="pipeline-dot active mx-auto"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M9 5v4l2.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+        <div class="font-semibold text-sm mt-4">Источники</div>
+        <div class="text-xs text-muted mt-1 leading-relaxed">44-ФЗ, 223-ФЗ,<br>коммерческие + ремонт квартир</div>
+      </div>
+      <div class="reveal" style="transition-delay:.08s">
+        <div class="pipeline-dot mx-auto" id="dot2"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v3M9 12v3M3 9h3M12 9h3M5.2 5.2l2 2M10.8 10.8l2 2M12.8 5.2l-2 2M7.2 10.8l-2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="text-center font-semibold text-sm mt-4">Автосбор 24/7</div>
+        <div class="text-center text-xs text-muted mt-1 leading-relaxed">Парсим, чистим,<br>дедуплицируем</div>
+      </div>
+      <div class="reveal" style="transition-delay:.16s">
+        <div class="pipeline-dot mx-auto" id="dot3"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 4l5 2.5v5L9 14 4 11.5v-5L9 4z" stroke="currentColor" stroke-width="1.3"/><path d="M4 7l5 2.5L14 7M9 11.5V14" stroke="currentColor" stroke-width="1.3"/></svg></div>
+        <div class="text-center font-semibold text-sm mt-4">AI-фильтр</div>
+        <div class="text-center text-xs text-muted mt-1 leading-relaxed">Под ваш профиль<br>и допуски СРО</div>
+      </div>
+      <div class="reveal" style="transition-delay:.24s">
+        <div class="pipeline-dot mx-auto" id="dot4"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 9l2.2 2.2L12 6.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.3" opacity=".35"/></svg></div>
+        <div class="text-center font-semibold text-sm mt-4">Лента + контакты</div>
+        <div class="text-center text-xs text-muted mt-1 leading-relaxed">Telegram, почта, API<br>в вашу CRM</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT DASHBOARD -->
+<section id="product" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10 lg:py-16">
+  <div class="glass rounded-[24px] overflow-hidden reveal p-4 lg:p-6" id="tiltCard" style="transform-style:preserve-3d">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#33E06B] animate-pulse"></span>
+        <span class="text-xs font-mono tracking-widest">LIVE ЛЕНТА · 18 новых за час</span>
+        <span class="hidden sm:inline-flex items-center gap-1 text-xs bg-[#33E06B]/12 border border-[#33E06B]/20 text-[#33E06B] px-2 py-1 rounded-full">AI-оценка вкл</span>
+      </div>
+      <div class="flex items-center gap-2 text-xs">
+        <span class="hidden sm:inline text-muted">Фильтры:</span>
+        <span class="bg-white/[0.06] border border-white/10 rounded-full px-3 py-1.5">Регион: МО + ЦФО</span>
+        <span class="bg-white/[0.06] border border-white/10 rounded-full px-3 py-1.5">Сумма: 5–120 млн</span>
+        <span class="bg-white/[0.06] border border-white/10 rounded-full px-3 py-1.5">Монолит · Отделка</span>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-[1fr_320px] gap-4 mt-5">
+      <!-- table -->
+      <div class="rounded-2xl overflow-hidden border border-white/5 bg-[#0B0F14]/60">
+        <div class="hidden sm:grid grid-cols-[1.6fr_110px_110px_90px_72px] gap-2 px-4 py-2.5 text-[11px] font-mono tracking-widest text-muted bg-white/[0.02] border-b border-white/5">
+          <span>ОБЪЕКТ</span><span>ТИП</span><span>СУММА</span><span>СРОК</span><span>СТАТУС</span>
+        </div>
+        <div id="leadRows" class="divide-y divide-white/5">
+          <!-- rows injected by JS -->
+        </div>
+      </div>
+      <!-- side -->
+      <div class="space-y-3">
+        <div class="rounded-2xl border border-white/5 bg-[#0B0F14]/60 p-4">
+          <div class="text-xs font-mono tracking-widest text-muted">КАРТА ТОЧЕК</div>
+          <div class="mt-3 h-[148px] rounded-xl bg-[#0f1720] border border-white/5 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20" style="background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:32px 32px"></div>
+            <span class="absolute left-[22%] top-[28%] w-2.5 h-2.5 bg-[#33E06B] rounded-full shadow-[0_0_12px_rgba(51,224,107,.9)] animate-pulse"></span>
+            <span class="absolute left-[54%] top-[42%] w-2.5 h-2.5 bg-[#FFB020] rounded-full shadow-[0_0_12px_rgba(255,176,32,.9)]"></span>
+            <span class="absolute left-[68%] top-[22%] w-2 h-2 bg-[#33E06B] rounded-full"></span>
+            <span class="absolute left-[38%] top-[66%] w-2 h-2 bg-white/70 rounded-full"></span>
+            <span class="absolute left-[76%] top-[68%] w-2 h-2 bg-[#FF5C5C] rounded-full"></span>
+            <div class="absolute bottom-2 left-2 text-[11px] font-mono bg-black/40 backdrop-blur px-2 py-1 rounded-full border border-white/10">Москва · Казань · СПб · Екб</div>
+          </div>
+          <div class="mt-3 flex gap-2 text-[11px] font-mono">
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#33E06B]"></span>активные</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#FFB020]"></span>срочно</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-white/60"></span>наблюдение</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="rounded-2xl border border-[#33E06B]/20 bg-[#33E06B]/10 p-3">
+            <div class="text-[11px] font-mono text-[#33E06B]">МАТЧ</div><div class="font-mono font-bold text-lg leading-none mt-1">92%</div><div class="text-[11px] text-muted">совпадение</div>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+            <div class="text-[11px] font-mono text-muted">ЛПР</div><div class="font-semibold text-sm mt-1">Найдены</div><div class="text-[11px] text-muted">2 контакта</div>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+            <div class="text-[11px] font-mono text-muted">КОНКУРЕНТЫ</div><div class="font-mono font-bold text-lg leading-none mt-1">3</div><div class="text-[11px] text-muted">в ленте</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- callouts -->
+    <div class="hidden lg:flex gap-3 mt-4 text-xs">
+      <span class="bg-[#33E06B] text-[#0B0F14] font-semibold px-3 py-1.5 rounded-full">AI-оценка 92% — берите в работу</span>
+      <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">Контакты ЛПР найдены → писать сразу</span>
+      <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">Конкурентов всего 3 — окно открыто</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10">
+  <div class="flex flex-wrap items-end justify-between gap-4 reveal">
+    <h2 class="font-display font-bold text-[28px] lg:text-[34px] tracking-tight">Кому подходит радар</h2>
+    <p class="text-sm text-muted max-w-[520px]">Один движок — разные профили. AI подстраивается под ваш тип работ, допуски и регионы.</p>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+    <div class="who-card glass rounded-[20px] p-5 reveal" data-tilt>
+      <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">🏗️</div>
+      <div class="font-semibold mt-4">Генподряд</div>
+      <div class="text-xs text-muted mt-2 leading-relaxed">Крупные лоты 44/223-ФЗ, реконструкция, школы, дороги</div>
+      <ul class="mt-4 space-y-1.5 text-xs leading-relaxed">
+        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Ловим лоты до публикации конкурентов</li>
+        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Фильтр по сумме и региону</li>
+      </ul>
+    </div>
+    <div class="who-card glass rounded-[20px] p-5 reveal" style="transition-delay:.08s" data-tilt>
+      <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">🧱</div>
+      <div class="font-semibold mt-4">Субподряд</div>
+      <div class="text-xs text-muted mt-2 leading-relaxed">Монолит, отделка, электрика, вентиляция</div>
+      <ul class="mt-4 space-y-1.5 text-xs leading-relaxed">
+        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Подхватываем субподряды с генподрядов</li>
+        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Контакты прорабов и снабжения</li>
+      </ul>
+    </div>
+    <div class="who-card glass rounded-[20px] p-5 reveal" style="transition-delay:.16s" data-tilt>
+      <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">📦</div>
+      <div class="font-semibold mt-4">Поставщики</div>
+      <div class="text-xs text-muted mt-2 leading-relaxed">Материалы, ЖБИ, металлопрокат, окна</div>
+      <ul class="mt-4 space-y-1.5 text-xs leading-relaxed">
+        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Заявки снабженцев до тендера</li>
+        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Триггер по сметным позициям</li>
+      </ul>
+    </div>
+    <div class="who-card glass rounded-[20px] p-5 reveal" style="transition-delay:.24s" data-tilt>
+      <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">🚜</div>
+      <div class="font-semibold mt-4">Спецтехника</div>
+      <div class="text-xs text-muted mt-2 leading-relaxed">Аренда кранов, экскаваторов, самосвалов</div>
+      <ul class="mt-4 space-y-1.5 text-xs leading-relaxed">
+        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Объекты с дефицитом техники</li>
+        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Гео-радиус подачи</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="mt-10 border-y border-white/5 bg-[#0e141c]">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-8 grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="reveal"><div class="font-mono font-bold text-3xl"><span data-count="12000">0</span><span class="text-[#33E06B]">+</span></div><div class="text-xs text-muted mt-1">закупок в эфире ежедневно</div></div>
+    <div class="reveal" style="transition-delay:.08s"><div class="font-mono font-bold text-3xl" data-count="78">0</div><div class="text-xs text-muted mt-1">регионов покрытия</div></div>
+    <div class="reveal" style="transition-delay:.16s"><div class="font-mono font-bold text-3xl">в <span data-count="20">0</span>×</div><div class="text-xs text-muted mt-1">меньше времени на поиск</div></div>
+    <div class="reveal" style="transition-delay:.24s"><div class="font-mono font-bold text-3xl">от <span data-count="2990">0</span> ₽</div><div class="text-xs text-muted mt-1">в месяц, без скрытых платежей</div></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-14 lg:py-20">
+  <div class="text-center max-w-[720px] mx-auto reveal">
+    <div class="text-xs font-mono tracking-[0.16em] text-muted">ТАРИФЫ</div>
+    <h2 class="font-display font-bold text-[28px] lg:text-[36px] tracking-tight mt-3">Выберите мощность радара</h2>
+    <p class="text-sm text-muted mt-3">Все тарифы — 3 дня бесплатно. Переключение и отмена в один клик.</p>
+  </div>
+  <div class="grid lg:grid-cols-3 gap-5 max-w-[1020px] mx-auto mt-8">
+    <!-- Старт -->
+    <div class="glass rounded-[20px] p-6 reveal flex flex-col">
+      <div class="text-xs font-mono tracking-widest text-muted">СТАРТ</div>
+      <div class="mt-3 flex items-baseline gap-1"><span class="font-mono font-bold text-4xl">2 990</span><span class="font-mono text-muted">₽/мес</span></div>
+      <div class="text-xs text-muted mt-1">для старта и одного региона</div>
+      <ul class="mt-6 space-y-2.5 text-sm flex-1">
+        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> 1 профиль · 150 лидов/мес</li>
+        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Фильтр по региону и сумме</li>
+        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Включая заказы на ремонт квартир</li>
+        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Почта + экспорт Excel</li>
+      </ul>
+      <a href="#" class="mt-6 inline-flex justify-center items-center font-semibold text-sm bg-white text-[#0B0F14] rounded-xl py-3 hover:bg-white/90 transition">Попробовать 3 дня</a>
+      <div class="text-center text-xs text-muted mt-2">Без карты</div>
+    </div>
+    <!-- Про -->
+    <div class="rounded-[20px] p-[1px] reveal lg:-mt-3 lg:mb-3" style="transition-delay:.08s;background:linear-gradient(180deg,rgba(51,224,107,.9),rgba(51,224,107,.15))">
+      <div class="rounded-[19px] bg-[#131922] p-6 flex flex-col h-full relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#33E06B]/15 blur-2xl rounded-full"></div>
+        <div class="inline-flex self-start items-center gap-1.5 bg-[#33E06B] text-[#0B0F14] text-xs font-bold px-2.5 py-1 rounded-full">★ ПОПУЛЯРНЫЙ ВЫБОР</div>
+        <div class="text-xs font-mono tracking-widest text-muted mt-4">ПРО</div>
+        <div class="mt-2 flex items-baseline gap-1"><span class="font-mono font-bold text-4xl">4 990</span><span class="font-mono text-muted">₽/мес</span></div>
+        <div class="text-xs text-muted mt-1">для регулярных продаж</div>
+        <ul class="mt-6 space-y-2.5 text-sm flex-1">
+          <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> 3 профиля · 500 лидов/мес</li>
+          <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Telegram-бот + AI-оценка 0–100%</li>
+          <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Контакты заказчиков в карточке</li>
+          <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Экспорт в CRM (Bitrix, amo)</li>
+        </ul>
+        <a href="#" class="btn-mag mt-6 inline-flex justify-center items-center font-semibold text-sm bg-[#33E06B] text-[#0B0F14] rounded-xl py-3">Запустить Про — 3 дня бесплатно</a>
+        <div class="text-center text-xs text-muted mt-2">Хит у генподряда и субподряда</div>
+      </div>
+    </div>
+    <!-- Бизнес -->
+    <div class="glass rounded-[20px] p-6 reveal flex flex-col" style="transition-delay:.16s">
+      <div class="text-xs font-mono tracking-widest text-muted">БИЗНЕС</div>
+      <div class="mt-3 flex items-baseline gap-1"><span class="font-mono font-bold text-4xl">9 900</span><span class="font-mono text-muted">₽/мес</span></div>
+      <div class="text-xs text-muted mt-1">для команд и безлимита</div>
+      <ul class="mt-6 space-y-2.5 text-sm flex-1">
+        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Без лимитов · 10 профилей</li>
+        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Контакты ЛПР + API</li>
+        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Приоритетная поддержка</li>
+        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Онбординг и настройка фильтров</li>
+      </ul>
+      <a href="#" class="mt-6 inline-flex justify-center items-center font-semibold text-sm bg-white/[0.06] border border-white/10 rounded-xl py-3 hover:bg-white/[0.09] transition">Подключить Бизнес</a>
+      <div class="text-center text-xs text-muted mt-2">Счёт для юр. лица</div>
+    </div>
+  </div>
+  <p class="text-center text-xs text-muted mt-6">На любом тарифе — отмена в один клик. Данные — из официальных источников, без серых схем.</p>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="max-w-[800px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
+  <h2 class="font-display font-bold text-[28px] lg:text-[34px] tracking-tight text-center reveal">Вопросы — честно</h2>
+  <div class="mt-8 divide-y divide-white/5 border-y border-white/5">
+    <div class="acc open reveal">
+      <button class="acc-btn">Это парсинг или официальные данные?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
+      <div class="acc-panel" style="max-height:240px;opacity:1"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">Официальные площадки (ЕИС по 44/223-ФЗ) + коммерческие источники и доски. Парсинг — только открытых данных, с уважением к лимитам и ToS. Вы получаете ссылку на первоисточник в каждой карточке.</p></div>
+    </div>
+    <div class="acc reveal" style="transition-delay:.06s">
+      <button class="acc-btn">Насколько точен AI-фильтр?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
+      <div class="acc-panel"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">AI оценивает совпадение с вашим профилем по тексту закупки, ОКПД2, региону и сумме. Средняя точность на релевантности 85–90%, дальше обучается на ваших лайках/дизлайках. Шум режем жёстко — лучше меньше, но точнее.</p></div>
+    </div>
+    <div class="acc reveal" style="transition-delay:.12s">
+      <button class="acc-btn">Можно ли ограничить регион и тип работ?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
+      <div class="acc-panel"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">Да. Регион, радиус, сумма, тип работ, форма закупки, наличие аванса и допусков. Профили можно дублировать — например, «Москва — монолит» и «МО — отделка».</p></div>
+    </div>
+    <div class="acc reveal" style="transition-delay:.18s">
+      <button class="acc-btn">Что если лидов мало в моей нише?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
+      <div class="acc-panel"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">На старте покажем прогноз по вашей нише за 30 дней. Если объём ниже ожиданий — расширим фильтры или вернём деньги за первый месяц. Честная экономика важнее удержания.</p></div>
+    </div>
+    <div class="acc reveal" style="transition-delay:.24s">
+      <button class="acc-btn">Как отменить подписку?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
+      <div class="acc-panel"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">В один клик в личном кабинете. Доступ сохраняется до конца оплаченного периода, списаний больше не будет. Без звонков «уговорить остаться».</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-[#0B0F14] via-[#0e1a14] to-[#0B0F14]"></div>
+  <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[420px] bg-[#33E06B]/10 blur-[80px] rounded-full pointer-events-none"></div>
+  <div class="relative max-w-[880px] mx-auto px-6 lg:px-8 py-16 lg:py-20 text-center">
+    <h2 class="font-display font-bold text-[30px] lg:text-[44px] leading-[0.95] tracking-tight reveal">Запустите радар сегодня —<br>первый тендер найдём <span class="text-[#33E06B]">до вечера</span></h2>
+    <p class="text-muted text-sm mt-4 reveal" style="transition-delay:.08s">3 дня бесплатно · без карты · настройка 3 минуты · отмена в один клик</p>
+    <div class="mt-7 flex flex-wrap justify-center gap-3 reveal" style="transition-delay:.16s">
+      <a href="#pricing" class="btn-mag inline-flex items-center gap-2 bg-[#33E06B] text-[#0B0F14] font-semibold px-7 py-4 rounded-xl">Запустить радар — бесплатно</a>
+      <a href="#how" class="inline-flex items-center bg-white/5 border border-white/10 px-7 py-4 rounded-xl text-sm font-medium hover:bg-white/10 transition">Посмотреть демо</a>
+    </div>
+    <div class="mt-4 text-xs text-muted reveal" style="transition-delay:.24s">Осталось мест на бета-тест: <span class="text-white font-mono font-bold">37</span> · следующий набор через 6 дней</div>
+  </div>
+</section>
+
+<footer class="border-t border-white/5 py-8">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 flex flex-col lg:flex-row gap-6 justify-between text-xs text-muted">
+    <div>
+      <div class="flex items-center gap-2 text-white font-display font-bold text-sm"><span class="w-7 h-7 rounded-lg bg-[#33E06B] flex items-center justify-center overflow-hidden p-[3px]"><svg viewBox="253 574 760 899" class="w-full h-full" preserveAspectRatio="xMidYMid meet"><g fill="#0B0F14"><path d="M 675.701 594.447 C 678.896 594.043 686.899 593.967 690.471 593.945 C 789.352 593.359 882.14 629.946 957.584 693.283 C 970.395 704.038 981.095 714.604 993.074 726.317 C 984.001 735.908 974.709 745.289 965.206 754.454 C 944.219 733.485 933.865 723.363 910.332 705.788 C 832.091 647.352 733.855 621.946 636.9 637.028 C 536.376 653.177 446.476 708.829 387.197 791.604 C 325.974 875.764 300.446 980.689 316.163 1083.57 C 348.697 1290.74 538.935 1443.66 749.971 1410.72 C 835.71 1396 905.122 1354.74 965.005 1292.7 C 974.378 1300.67 984.544 1311.22 993.229 1320.04 C 922.161 1395.89 818.441 1448.12 714.154 1453.42 C 600.655 1459.18 498.037 1419.96 414.154 1344.51 C 329.661 1267.74 279.079 1160.59 273.511 1046.56 C 267.09 931.541 307.007 818.738 384.347 733.356 C 458.994 649.972 563.92 599.946 675.701 594.447 z"/><path d="M 668.553 671.422 C 682.343 669.876 702.767 670.703 716.561 671.549 C 798.176 676.556 885.17 719.639 938.938 781.436 C 930.114 790.432 920.836 799.426 911.869 808.317 C 897.773 793.916 886.268 782.492 870.362 770.032 C 809.467 722.401 732.077 701.051 655.374 710.722 C 575.574 721.422 503.341 763.52 454.696 827.678 C 402.852 895.191 379.753 980.439 390.419 1064.89 C 401.786 1149.75 446.566 1226.55 514.811 1278.25 C 583.84 1331.11 655.771 1346.15 740.763 1335.06 C 811.713 1322.77 861.677 1287.35 911.481 1238.68 C 920.095 1245.9 930.937 1257.24 938.586 1265.55 C 931.256 1274.09 921.962 1282.66 913.577 1290.23 C 789.267 1402.43 609.972 1406.06 480.164 1300.06 C 406.887 1239.27 360.568 1152.01 351.277 1057.25 C 342.646 962.302 371.98 867.8 432.86 794.428 C 493.062 721.296 574.824 680.377 668.553 671.422 z"/><path d="M 686.643 747.447 C 692.151 746.94 705.098 747.545 710.76 747.964 C 777.541 752.905 840.535 785.42 884.392 835.702 C 876.991 844.114 865.128 855.297 856.949 863.454 C 750.505 744.794 574.606 768.199 497.034 905.015 C 465.678 960.036 457.421 1025.25 474.073 1086.35 C 491.558 1148.65 533.03 1201.49 589.399 1233.27 C 638.553 1260.86 696.73 1267.55 750.863 1251.83 C 793.477 1239.59 826.286 1214.49 856.922 1183.67 C 865.571 1191.64 876.461 1202.13 884.083 1210.84 C 839.016 1262.61 775.119 1294.22 706.621 1298.62 C 558.978 1307.43 434.966 1185.12 427.218 1040.57 C 422.809 964.428 449.343 889.736 500.8 833.442 C 550.148 779.066 613.754 750.936 686.643 747.447 z"/><path d="M 677.658 827.421 C 677.785 827.403 677.913 827.385 678.041 827.367 C 721.827 824.318 765.215 837.388 800.033 864.113 C 837.134 892.38 867.274 937.378 873.564 984.059 C 850.877 984.646 826.7 984.287 803.91 984.242 C 804.001 973.462 803.849 962.68 803.452 951.906 C 768.177 926.08 726.426 891.644 691.819 863.809 L 621.281 919.257 C 609.762 928.256 588.524 943.885 579.119 953.077 L 579.068 1134.17 C 647.929 1135.22 719.526 1134.23 788.633 1134.19 L 803.817 1134.1 L 804.013 1061.9 C 826.44 1060.27 851.174 1062.18 874.345 1061.14 C 867.323 1093.2 858.005 1117.76 837.619 1144.21 C 774.614 1225.94 663.143 1244.6 580.927 1179.08 C 538.412 1145.51 511.38 1096.09 506.044 1042.18 C 500.472 990.339 517.234 937.452 549.889 897.038 C 581.398 857.611 627.446 832.522 677.658 827.421 z"/><path d="M 690.051 984.366 C 711.391 983.525 729.401 1000.08 730.351 1021.42 C 731.302 1042.76 714.836 1060.85 693.505 1061.91 C 672.019 1062.98 653.764 1046.37 652.806 1024.87 C 651.849 1003.38 668.555 985.213 690.051 984.366 z"/></g></svg></span> СтройРадар</div>
+      <div class="mt-2 leading-relaxed">СтройРадар, команда проекта · собираем открытые закупки<br>и помогаем строителям находить работу быстрее.</div>
+    </div>
+    <div class="flex gap-8">
+      <div class="space-y-2"><div class="text-white font-semibold">Продукт</div><a href="#how" class="block hover:text-white">Как работает</a><a href="#pricing" class="block hover:text-white">Тарифы</a><a href="#faq" class="block hover:text-white">Вопросы</a></div>
+      <div class="space-y-2"><div class="text-white font-semibold">Право</div><a href="#" class="block hover:text-white">Оферта</a><a href="#" class="block hover:text-white">Политика</a><a href="#" class="block hover:text-white">Контакты</a></div>
+    </div>
+  </div>
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 mt-6 text-[11px] text-muted/60">© 2026 СтройРадар. Данные из открытых источников. Не является торговой площадкой. 18+</div>
 </footer>
 
+<!-- libs -->
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
 <script>
-// UTM проброс на сканер
-(function(){
-  try{
-    var p = new URLSearchParams(location.search);
-    var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
-    var hasUtm = utmKeys.some(function(k){ return p.get(k); });
-    if(hasUtm){
-      try{ utmKeys.forEach(function(k){ var v=p.get(k); if(v) localStorage.setItem(k,v); }); }catch(e){}
-      document.querySelectorAll('a[href^="scanner.html"]').forEach(function(a){
-        var u = new URL(a.getAttribute('href'), location.href);
-        utmKeys.forEach(function(k){ var v=p.get(k); if(v) u.searchParams.set(k,v); });
-        a.setAttribute('href', u.pathname + u.search);
-      });
+/* Lenis smooth scroll */
+let lenis;
+try{
+  lenis=new Lenis({duration:1.1,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t))});
+  function raf(t){lenis.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id=a.getAttribute('href');
+      if(id.length>1){const el=document.querySelector(id);if(el){e.preventDefault();lenis.scrollTo(el,{offset:-72})}}
+    })
+  })
+}catch(e){}
+
+/* header shrink */
+const header=document.getElementById('header');
+let lastY=0;
+addEventListener('scroll',()=>{
+  const y=scrollY;
+  if(y>20){header.style.background='rgba(11,15,20,0.72)';header.style.backdropFilter='blur(16px) saturate(1.2)';header.style.borderBottomColor='rgba(255,255,255,0.06)';header.style.boxShadow='0 6px 30px rgba(0,0,0,.35)'}
+  else{header.style.background='transparent';header.style.backdropFilter='blur(0px)';header.style.borderBottomColor='transparent';header.style.boxShadow='none'}
+},{passive:true});
+
+/* reveal */
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* pipeline progress */
+const prog=document.getElementById('pipelineProgress');
+const dots=[document.getElementById('dot2'),document.getElementById('dot3'),document.getElementById('dot4')].filter(Boolean);
+addEventListener('scroll',()=>{
+  const sec=document.getElementById('how');
+  if(!sec||!prog) return;
+  const rect=sec.getBoundingClientRect();
+  const vh=innerHeight;
+  const p=Math.min(1,Math.max(0,(vh-rect.top)/(rect.height*0.9)));
+  prog.style.width=(p*100).toFixed(1)+'%';
+  dots.forEach((d,i)=>{
+    const thr=(i+1)/3.2;
+    d.classList.toggle('active',p>thr);
+    if(p>thr){d.style.background='#33E06B';d.style.borderColor='#33E06B';d.style.color='#0B0F14';d.style.boxShadow='0 0 24px rgba(51,224,107,.4)'}
+    else{d.style.background='';d.style.borderColor='';d.style.color='';d.style.boxShadow=''}
+  })
+},{passive:true});
+
+/* dashboard rows */
+const rows=[
+  {title:'Капитальный ремонт кровли, школа №14',type:'44-ФЗ',sum:'12,4 млн ₽',dead:'до 08.09',status:'новый',match:94,hot:false},
+  {title:'Монолитные работы, ЖК «Светлый» 2 оч.',type:'Субподряд',sum:'18,5 млн ₽',dead:'до 05.09',status:'горячий',match:92,hot:true},
+  {title:'Устройство фасада, БЦ на Ленина',type:'Коммерч.',sum:'7,1 млн ₽',dead:'до 14.09',status:'новый',match:88,hot:false},
+  {title:'Электромонтаж, детсад 240 мест',type:'223-ФЗ',sum:'4,9 млн ₽',dead:'до 18.09',status:'наблюдение',match:81,hot:false},
+  {title:'Благоустройство, парк «Южный»',type:'44-ФЗ',sum:'22,0 млн ₽',dead:'до 10.09',status:'горячий',match:90,hot:true},
+];
+const rowsEl=document.getElementById('leadRows');
+function renderRows(){
+  rowsEl.innerHTML=rows.map((r,i)=>`
+    <div class="grid sm:grid-cols-[1.6fr_110px_110px_90px_72px] gap-1 sm:gap-2 px-4 py-3 items-center hover:bg-white/[0.03] transition text-sm" style="opacity:0;transform:translateY(12px);animation:rowIn .6s cubic-bezier(.16,1,.3,1) ${i*0.08}s forwards">
+      <div class="min-w-0">
+        <div class="font-medium leading-tight truncate pr-2">${r.title}</div>
+        <div class="sm:hidden text-xs text-muted font-mono mt-1">${r.type} · ${r.sum} · ${r.dead}</div>
+      </div>
+      <span class="hidden sm:inline text-xs font-mono bg-white/5 border border-white/10 rounded-full px-2 py-1 w-fit">${r.type}</span>
+      <span class="hidden sm:inline font-mono text-sm font-semibold">${r.sum}</span>
+      <span class="hidden sm:inline text-xs font-mono text-muted">${r.dead}</span>
+      <span class="hidden sm:inline-flex items-center justify-center text-[11px] font-bold rounded-full px-2 py-1 w-fit ${r.hot?'bg-[#FFB020] text-[#0B0F14]':'bg-white/5 border border-white/10 text-muted'}">${r.status}</span>
+      <span class="hidden sm:inline-flex justify-end"><span class="text-xs font-mono font-bold ${r.match>=90?'text-[#33E06B]':'text-muted'}">${r.match}%</span></span>
+    </div>
+  `).join('');
+}
+renderRows();
+const style=document.createElement('style');
+style.textContent='@keyframes rowIn{to{opacity:1;transform:none}}';
+document.head.appendChild(style);
+
+/* counters */
+let counted=false;
+const counterIO=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && !counted){
+      counted=true;
+      document.querySelectorAll('[data-count]').forEach(el=>{
+        const target=parseInt(el.dataset.count,10);
+        let cur=0;
+        const dur=1500;const t0=performance.now();
+        function tick(now){
+          const p=Math.min(1,(now-t0)/dur);
+          const eased=1-Math.pow(1-p,3);
+          cur=Math.round(target*eased);
+          el.textContent=cur.toLocaleString('ru-RU');
+          if(p<1) requestAnimationFrame(tick);
+          else el.textContent=target.toLocaleString('ru-RU');
+        }
+        requestAnimationFrame(tick);
+      })
     }
-  }catch(e){}
-})();
-// Landing scanner — детерминированная заглушка (копия логики scanner.js, без дублирования файла)
-(function(){
-  var NICHE_DATA={repair_flat:{label:'Ремонт квартир под ключ',total:47,hot:9,mid:17,low:21,avgBudget:1650000,examples:['Ремонт 3-комн. 82 м² под ключ, ЖК «Некрасовка» — бюджет ~1,8 млн, сроки 3 мес','Косметика + замена электрики, 54 м², Химки — бюджет ~650 тыс','Ремонт новостройки 68 м², Бутово — нужен сметчик, от 1,2 млн']},build_house:{label:'Строительство домов',total:28,hot:5,mid:11,low:12,avgBudget:4200000,examples:['Дом 140 м² из газобетона под ключ, Истра — коробка + кровля, ~4,5 млн','Каркасный дом 96 м², Всеволожск — фундамент готов, ~2,8 млн','Пристройка 40 м², Одинцово — ~900 тыс']},roof:{label:'Кровля',total:34,hot:7,mid:13,low:14,avgBudget:780000,examples:['Металлочерепица 210 м², Котельники — замена старой, ~750 тыс','Плоская кровля 480 м², СПб — от 1,2 млн','Ремонт конька 40 м², Гатчина — ~180 тыс']},foundation:{label:'Фундамент',total:19,hot:3,mid:8,low:8,avgBudget:950000,examples:['Ленточный 10×12 м, Дмитров — ~1,1 млн','Свайно-ростверковый, Ломоносовский р-н — ~850 тыс','Усиление фундамента, Пушкин — ~600 тыс']},electric:{label:'Электрика',total:52,hot:11,mid:19,low:22,avgBudget:320000,examples:['Электрика 74 м², Кузьминки — ~340 тыс','Щитовая + разводка 160 м², Раменское — ~520 тыс','Аварийная замена 120 м², СПб Центр — ~180 тыс']},ventilation:{label:'Вентиляция / ОВиК',total:31,hot:6,mid:12,low:13,avgBudget:1450000,examples:['Вентиляция 350 м², ТЦ район — ~2,1 млн','ОВиК склад, Домодедово — от 800 тыс/год','Приточно-вытяжная 220 м², СПб Петроградка — ~1,3 млн']},commercial:{label:'Коммерческий ремонт',total:24,hot:4,mid:10,low:10,avgBudget:2800000,examples:['Отделка офиса 380 м², Москва-Сити — ~3,5 млн','Ремонт кофейни 64 м², Невский — 45 дней, ~900 тыс','Косметика склада 1200 м², Подольск — ~1,8 млн']}};
-  var REGION_MULT={msk:1,mo:0.62,spb:0.71,lo:0.44};
-  var REGION_LABEL={msk:'Москва',mo:'Московская область',spb:'Санкт-Петербург',lo:'Ленинградская область'};
-  function fmtMoney(n){return n.toLocaleString('ru-RU')+' ₽';}
-  function getResult(nk,rk){
-    var b=NICHE_DATA[nk]; if(!b) return null;
-    var m=REGION_MULT[rk]||1;
-    var total=Math.round(b.total*m), hot=Math.round(b.hot*m), mid=Math.round(b.mid*m), low=Math.max(0,total-hot-mid);
-    var avg=Math.round((b.avgBudget*(0.72+0.28*m))/1000)*1000;
-    return {nicheLabel:b.label, regionLabel:REGION_LABEL[rk]||rk, total:total, hot:hot, mid:mid, low:low, avgBudget:avg, examples:b.examples};
+  })
+},{threshold:.4});
+const nums=document.querySelector('[data-count]')?.closest('section');
+if(nums) counterIO.observe(nums);
+
+/* radar canvas */
+const canvas=document.getElementById('radarCanvas');
+const ctx=canvas.getContext('2d');
+let dpr=Math.min(2,window.devicePixelRatio||1);
+function resizeRadar(){
+  const rect=canvas.getBoundingClientRect();
+  dpr=Math.min(2,window.devicePixelRatio||1);
+  canvas.width=rect.width*dpr;
+  canvas.height=rect.height*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+resizeRadar();
+addEventListener('resize',resizeRadar);
+
+const CX=280,CY=280,R=190;
+const blips=[
+  {ang:-0.9,rad:0.62,type:'hot',label:'84,2 млн'},
+  {ang:0.3,rad:0.78,type:'new',label:'18,5 млн'},
+  {ang:1.9,rad:0.52,type:'ok',label:'12,4 млн'},
+  {ang:2.7,rad:0.88,type:'ok',label:'22 млн'},
+  {ang:-2.1,rad:0.44,type:'hot',label:'7,1 млн'},
+  {ang:0.95,rad:0.35,type:'ok',label:'4,9 млн'},
+  {ang:-1.6,rad:0.82,type:'new',label:'9,3 млн'},
+];
+let angle= -Math.PI/2;
+let lastT=performance.now();
+let prefersReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function drawRadar(now){
+  requestAnimationFrame(drawRadar);
+  if(prefersReduced) return;
+  const dt=Math.min(32,now-lastT);lastT=now;
+  angle+=dt*0.00028; // ~8s per rotation (2pi / 0.00028 ≈ 22k ms? tweak)
+  // adjust to 8s: 2pi / 8s = 0.000785 rad/ms
+  // we use dt * 0.000785
+  // correct: set exactly
+  // recompute with precise speed
+  // Instead of incremental hack, use time-based
+  const preciseAngle=(now*0.000785) % (Math.PI*2);
+  const a=preciseAngle;
+
+  const w=canvas.getBoundingClientRect().width;
+  const h=canvas.getBoundingClientRect().height;
+  const cx=w/2, cy=h/2;
+  const r=Math.min(w,h)*0.34;
+
+  ctx.clearRect(0,0,w,h);
+
+  // circles
+  ctx.strokeStyle='rgba(255,255,255,0.07)';
+  ctx.lineWidth=1;
+  for(let i=1;i<=3;i++){
+    ctx.beginPath();ctx.arc(cx,cy,r*(i/3),0,Math.PI*2);ctx.stroke();
   }
-  document.addEventListener('DOMContentLoaded',function(){
-    var form=document.getElementById('landingScanForm');
-    if(!form) return;
-    form.addEventListener('submit',function(ev){
-      ev.preventDefault();
-      var niche=document.getElementById('landingNiche').value;
-      var region=document.getElementById('landingRegion').value;
-      var btn=document.getElementById('landingScanBtn'), prog=document.getElementById('landingScanProgress');
-      if(!niche||!region){ btn.textContent='Выберите нишу и регион'; setTimeout(function(){btn.textContent='Показать заказы — 2 мин';},1600); return; }
-      btn.disabled=true; btn.textContent='Сканируем…'; prog.classList.add('on');
-      // пробуем API, иначе заглушка
-      var payload={product:'construction-hunter',niche:niche,region:region,ts:new Date().toISOString()};
-      var done=function(r){
-        prog.classList.remove('on'); btn.disabled=false; btn.textContent='Показать заказы — 2 мин';
-        document.getElementById('lrTotal').textContent=r.total;
-        document.getElementById('lrHot').textContent=r.hot;
-        document.getElementById('lrBudget').textContent=fmtMoney(r.avgBudget);
-        document.getElementById('lrBreakdown').innerHTML='<span>Высокая (≥75): <b>'+r.hot+'</b></span><span>Средняя (50–74): <b>'+r.mid+'</b></span><span>Низкая (&lt;50): <b>'+r.low+'</b></span><span>Регион: <b>'+r.regionLabel+'</b></span>';
-        var ul=document.getElementById('lrExamples'); ul.innerHTML='';
-        r.examples.forEach(function(ex){ var li=document.createElement('li'); li.textContent=ex; ul.appendChild(li); });
-        document.getElementById('lrParams').textContent='Запрос: '+r.nicheLabel+' · '+r.regionLabel;
-        document.getElementById('landingScanResult').classList.add('on');
-        document.getElementById('landingScanResult').scrollIntoView({behavior:'smooth',block:'nearest'});
-      };
-      try{
-        var ctrl=new AbortController(); var t=setTimeout(function(){ctrl.abort();},3500);
-        fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:ctrl.signal})
-          .then(function(res){ clearTimeout(t); if(!res.ok) throw new Error('api'); return res.json(); })
-          .then(function(api){ if(api&&api.total!=null) done(api); else done(getResult(niche,region)); })
-          .catch(function(){ clearTimeout(t); done(getResult(niche,region)); });
-      }catch(e){ done(getResult(niche,region)); }
-    });
+  // cross + diagonals
+  ctx.strokeStyle='rgba(255,255,255,0.06)';
+  ctx.beginPath();
+  ctx.moveTo(cx-r,cy);ctx.lineTo(cx+r,cy);
+  ctx.moveTo(cx,cy-r);ctx.lineTo(cx,cy+r);
+  // diagonals
+  ctx.moveTo(cx+r*0.707,cy+r*0.707);ctx.lineTo(cx-r*0.707,cy-r*0.707);
+  ctx.moveTo(cx+r*0.707,cy-r*0.707);ctx.lineTo(cx-r*0.707,cy+r*0.707);
+  ctx.stroke();
+
+  // sweep cone
+  const coneAngle=Math.PI/5; // 36deg tail
+  const grad=ctx.createConicGradient(a-coneAngle,cx,cy);
+  grad.addColorStop(0,'rgba(51,224,107,0)');
+  grad.addColorStop(0.65,'rgba(51,224,107,0)');
+  grad.addColorStop(0.92,'rgba(51,224,107,0.18)');
+  grad.addColorStop(1,'rgba(51,224,107,0.55)');
+  ctx.fillStyle=grad;
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.arc(cx,cy,r,a-coneAngle,a);
+  ctx.closePath();ctx.fill();
+
+  // beam line
+  ctx.strokeStyle='rgba(51,224,107,0.95)';
+  ctx.lineWidth=1.6;
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);
+  ctx.stroke();
+  // outer glow
+  ctx.shadowColor='rgba(51,224,107,0.45)';
+  ctx.shadowBlur=14;
+  ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // blips
+  blips.forEach(b=>{
+    const bx=cx+Math.cos(b.ang)*r*b.rad;
+    const by=cy+Math.sin(b.ang)*r*b.rad;
+    // is hit by beam?
+    let diff=((a - b.ang) % (Math.PI*2)+Math.PI*2)%(Math.PI*2);
+    const hit=diff<coneAngle && diff>0;
+    const pulse=Math.sin(now*0.004 + b.ang*3)*0.18+0.82;
+    const baseAlpha=hit?1:0.55;
+    const col=b.type==='hot'?'255,176,32':b.type==='new'?'51,224,107':'242,245,247';
+    // glow ring
+    ctx.fillStyle=`rgba(${col},${0.14*baseAlpha})`;
+    ctx.beginPath();ctx.arc(bx,by, hit?18*pulse:11,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=`rgba(${col},${baseAlpha})`;
+    ctx.beginPath();ctx.arc(bx,by, hit?4.5:3.2,0,Math.PI*2);ctx.fill();
+    if(hit){
+      ctx.strokeStyle=`rgba(${col},0.9)`;
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(bx,by,10*pulse,0,Math.PI*2);ctx.stroke();
+    }
   });
-})();
+  // center
+  ctx.fillStyle='#0B0F14';
+  ctx.strokeStyle='rgba(51,224,107,0.9)';
+  ctx.lineWidth=1.4;
+  ctx.beginPath();ctx.arc(cx,cy,9,0,Math.PI*2);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#33E06B';
+  ctx.beginPath();ctx.arc(cx,cy,3.5,0,Math.PI*2);ctx.fill();
+}
+requestAnimationFrame(drawRadar);
+
+/* lead stack popping every ~4s */
+const leadStack=document.getElementById('leadStack');
+const leadPool=[
+  {title:'Капремонт поликлиники · 31,7 млн ₽',meta:'44-ФЗ · Тверь · до 09.09',badge:'88%'},
+  {title:'Фасадные работы, ЖК · 9,3 млн ₽',meta:'Субподряд · СПб · горячий',badge:'срочно'},
+  {title:'Дорога IV категории, 2,4 км',meta:'44-ФЗ · Воронеж · 46 млн ₽',badge:'91%'},
+];
+let leadIdx=0;
+function spawnLead(){
+  if(prefersReduced) return;
+  const d=leadPool[leadIdx%leadPool.length];leadIdx++;
+  const el=document.createElement('div');
+  el.className='absolute left-1/2 -translate-x-1/2 glass rounded-2xl px-3 py-2.5 flex items-center gap-2.5';
+  el.style.top=(18+Math.random()*18)+'%';
+  el.style.left=(52+ (Math.random()-0.5)*18)+'%';
+  el.style.transform='translate(-50%,0) scale(0.84)';
+  el.style.opacity='0';
+  el.style.transition='transform .7s cubic-bezier(.16,1,.3,1),opacity .5s';
+  el.style.boxShadow='0 16px 40px rgba(0,0,0,.45)';
+  el.innerHTML=`<span class="w-8 h-8 rounded-xl bg-[#33E06B]/15 border border-[#33E06B]/20 flex items-center justify-center text-xs">◈</span><div class="leading-tight"><div class="text-xs font-semibold whitespace-nowrap">${d.title}</div><div class="text-[11px] text-muted font-mono">${d.meta}</div></div><span class="ml-1 bg-[#33E06B] text-[#0B0F14] text-[10px] font-bold px-2 py-1 rounded-full">${d.badge}</span>`;
+  leadStack.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    el.style.opacity='1';el.style.transform='translate(-50%,0) scale(1)';
+  }));
+  setTimeout(()=>{el.style.opacity='0';el.style.transform='translate(-50%,-8px) scale(0.96)';setTimeout(()=>el.remove(),600)},3200);
+}
+setInterval(spawnLead,3800);
+setTimeout(spawnLead,900);
+
+/* 3D tilt for dashboard + who cards (mouse) */
+const tiltCard=document.getElementById('tiltCard');
+if(tiltCard && !prefersReduced && window.innerWidth>1024){
+  tiltCard.addEventListener('mousemove',e=>{
+    const rect=tiltCard.getBoundingClientRect();
+    const x=(e.clientX-rect.left)/rect.width-0.5;
+    const y=(e.clientY-rect.top)/rect.height-0.5;
+    tiltCard.style.transform=`perspective(900px) rotateY(${x*5}deg) rotateX(${-y*5}deg)`;
+  });
+  tiltCard.addEventListener('mouseleave',()=>{tiltCard.style.transform='perspective(900px) rotateY(0) rotateX(0)'});
+}
+document.querySelectorAll('[data-tilt]').forEach(card=>{
+  if(prefersReduced || innerWidth<1024) return;
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-0.5;
+    const y=(e.clientY-r.top)/r.height-0.5;
+    card.style.transform=`perspective(700px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave',()=>{card.style.transform=''});
+  card.style.transition='transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,border-color .25s';
+});
+
+/* magnetic buttons */
+document.querySelectorAll('.btn-mag').forEach(btn=>{
+  if(prefersReduced) return;
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-0.5;
+    const y=(e.clientY-r.top)/r.height-0.5;
+    btn.style.transform=`translate(${x*8}px,${y*5}px)`;
+  });
+  btn.addEventListener('mouseleave',()=>{btn.style.transform=''});
+});
+
+/* accordion */
+document.querySelectorAll('.acc-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const acc=btn.closest('.acc');
+    const panel=acc.querySelector('.acc-panel');
+    const isOpen=acc.classList.contains('open');
+    document.querySelectorAll('.acc.open').forEach(a=>{
+      if(a!==acc){a.classList.remove('open');a.querySelector('.acc-panel').style.maxHeight='0';a.querySelector('.acc-panel').style.opacity='0'}
+    });
+    if(isOpen){acc.classList.remove('open');panel.style.maxHeight='0';panel.style.opacity='0'}
+    else{acc.classList.add('open');panel.style.maxHeight=panel.scrollHeight+'px';panel.style.opacity='1'}
+  });
+});
+
+/* parallax gridLayer on mouse */
+const gridLayer=document.getElementById('gridLayer');
+const stage=document.getElementById('radarStage');
+if(stage && gridLayer && !prefersReduced && innerWidth>1024){
+  stage.addEventListener('mousemove',e=>{
+    const r=stage.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-0.5;
+    const y=(e.clientY-r.top)/r.height-0.5;
+    gridLayer.style.transform=`translate(${x*10}px,${y*10}px)`;
+  });
+  stage.addEventListener('mouseleave',()=>{gridLayer.style.transform=''});
+  gridLayer.style.transition='transform .45s cubic-bezier(.16,1,.3,1)';
+}
 </script>
 </body>
 </html>
