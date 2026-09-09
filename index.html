@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>СтройРадар — строительные тендеры и лиды на вашем радаре за 3 минуты</title>
-<meta name="description" content="СтройРадар собирает закупки по 44-ФЗ, 223-ФЗ, коммерческим площадкам и заказам на ремонт квартир. AI отсекает мусор — вы видите только подходящие тендеры с контактами заказчиков. От 2 990 ₽/мес.">
+<title>СтройРадар — заказы на ремонт квартир в новостройках по классу ЖК</title>
+<meta name="description" content="Заказы на ремонт квартир в новостройках Москвы, МО и Санкт-Петербурга. Каждый лид размечен по классу ЖК — эконом, комфорт, бизнес, люкс — чтобы вы брали работу под свой чек. От 1 990 ₽/мес, 3 дня бесплатно.">
 <link rel="icon" type="image/svg+xml" href="stroy-radar-mark.svg">
+<link rel="canonical" href="https://stroy-radar.ru/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -21,8 +22,9 @@ tailwind.config={
       colors:{
         bg:'#0B0F14',
         surface:'#131922',
-        accent:'#33E06B',
-        accent2:'#17B45A',
+        accent:'#FF9A3C',
+        accent2:'#E07A1C',
+        gold:'#F5D27A',
         muted:'#8A94A6',
         border:'rgba(255,255,255,0.08)'
       }
@@ -36,26 +38,24 @@ html.lenis{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto}
 .lenis.lenis-stopped{overflow:hidden}
 body{background:#0B0F14;color:#F2F5F7;font-family:'Inter',sans-serif;overflow-x:hidden}
-::selection{background:#33E06B;color:#0B0F14}
+::selection{background:#FF9A3C;color:#0B0F14}
 ::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-thumb{background:#1e2a1e;border-radius:99px}
+::-webkit-scrollbar-thumb{background:#2a2018;border-radius:99px}
 ::-webkit-scrollbar-track{background:#0B0F14}
-/* noise */
 .noise{position:fixed;inset:0;pointer-events:none;opacity:.035;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E")}
-/* grid */
 .blueprint{
   background-image:
     linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
     linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
   background-size:48px 48px;
 }
-/* reveal */
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}
+  .win.lit{animation:none!important}
+  .lead-pop{animation:none!important;opacity:1!important;transform:none!important}
 }
-/* card glass */
 .glass{
   background:rgba(19,25,34,.62);
   backdrop-filter:blur(18px) saturate(1.2);
@@ -64,39 +64,60 @@ body{background:#0B0F14;color:#F2F5F7;font-family:'Inter',sans-serif;overflow-x:
   border-top:1px solid rgba(255,255,255,.12);
   box-shadow:0 2px 6px rgba(0,0,0,.4),0 16px 48px rgba(0,0,0,.45);
 }
-/* glow */
 .glow-orb{
   position:absolute;border-radius:50%;
-  background:radial-gradient(circle,rgba(51,224,107,.18) 0%,rgba(51,224,107,0) 70%);
+  background:radial-gradient(circle,rgba(255,154,60,.16) 0%,rgba(255,154,60,0) 70%);
   filter:blur(20px);pointer-events:none;
   animation:breathe 7s ease-in-out infinite alternate;
 }
 @keyframes breathe{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.15);opacity:1}}
-/* marquee */
-.marquee{overflow:hidden;white-space:nowrap;border-y:1px solid rgba(255,255,255,.06)}
-.marquee-track{display:inline-flex;animation:marquee 30s linear infinite}
-@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-/* magnetic btn */
 .btn-mag{position:relative;overflow:hidden;transition:box-shadow .3s,transform .2s}
 .btn-mag::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.14) 42%,transparent 62%);
+  background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.16) 42%,transparent 62%);
   transform:translateX(-120%);transition:transform .7s cubic-bezier(.16,1,.3,1);
 }
 .btn-mag:hover::after{transform:translateX(120%)}
-.btn-mag:hover{box-shadow:0 0 40px rgba(51,224,107,.28),0 12px 32px rgba(0,0,0,.4)}
-/* pipeline line */
+.btn-mag:hover{box-shadow:0 0 40px rgba(255,154,60,.26),0 12px 32px rgba(0,0,0,.4)}
+/* сегмент-переключатель направлений */
+.seg{display:inline-flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.seg a{padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;color:#8A94A6;transition:.25s;white-space:nowrap}
+.seg a:hover{color:#fff}
+@media(max-width:640px){
+  .seg{padding:2px}
+  .seg a{padding:5px 11px;font-size:12px}
+}
+.seg a.on{background:#FF9A3C;color:#0B0F14}
+.seg a.on-green{background:#33E06B;color:#0B0F14}
+/* дом-визуал */
+.house{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.win{aspect-ratio:1/1.4;border-radius:4px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.04);transition:background .8s ease,box-shadow .8s ease}
+.win.lit{animation:lit 5.5s ease-in-out forwards}
+@keyframes lit{
+  0%{background:rgba(255,255,255,.055);box-shadow:none}
+  12%{background:var(--lit,#FF9A3C);box-shadow:0 0 18px -2px var(--lit,#FF9A3C)}
+  70%{background:var(--lit,#FF9A3C);box-shadow:0 0 18px -2px var(--lit,#FF9A3C)}
+  100%{background:rgba(255,255,255,.055);box-shadow:none}
+}
+.lead-pop{animation:pop 6s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes pop{
+  0%{opacity:0;transform:translateY(14px) scale(.96)}
+  8%{opacity:1;transform:none}
+  84%{opacity:1;transform:none}
+  100%{opacity:0;transform:translateY(-10px) scale(.98)}
+}
 .pipeline-line{height:2px;background:rgba(255,255,255,.08);position:relative;overflow:hidden;border-radius:99px}
-.pipeline-progress{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,#17B45A,#33E06B);border-radius:99px;transition:width .1s linear}
+.pipeline-progress{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,#E07A1C,#FF9A3C);border-radius:99px;transition:width .1s linear}
 .pipeline-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(255,255,255,.08);background:#131922;transition:all .4s}
-.pipeline-dot.active{background:#33E06B;border-color:#33E06B;color:#0B0F14;box-shadow:0 0 24px rgba(51,224,107,.4)}
-/* accordion */
+.pipeline-dot.active{background:#FF9A3C;border-color:#FF9A3C;color:#0B0F14;box-shadow:0 0 24px rgba(255,154,60,.4)}
 .acc{border-bottom:1px solid rgba(255,255,255,.06)}
 .acc-btn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;padding:20px 0;font-weight:600}
 .acc-panel{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.16,1,.3,1),opacity .35s}
-.acc.open .acc-panel{max-height:240px;opacity:1}
+.acc.open .acc-panel{max-height:320px;opacity:1}
 .acc.open .acc-icon{transform:rotate(180deg)}
 .acc-icon{transition:transform .35s cubic-bezier(.16,1,.3,1);flex-shrink:0}
+.cls-card{transition:transform .45s cubic-bezier(.16,1,.3,1),border-color .45s}
+.cls-card:hover{transform:translateY(-6px)}
 @media(max-width:768px){
   .pipeline-line{display:none}
 }
@@ -107,741 +128,607 @@ body{background:#0B0F14;color:#F2F5F7;font-family:'Inter',sans-serif;overflow-x:
 
 <!-- HEADER -->
 <header id="header" class="fixed top-0 inset-x-0 z-40 transition-all duration-500" style="backdrop-filter:blur(0px);background:transparent;border-bottom:1px solid transparent">
-  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 h-[72px] flex items-center justify-between gap-6">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 h-[72px] flex items-center justify-between gap-5">
     <a href="/" class="flex items-center gap-3 shrink-0">
-      <span class="w-9 h-9 rounded-xl bg-[#33E06B] flex items-center justify-center overflow-hidden p-[5px]">
-        <!-- СтройРадар знак — тёмный на зелёном фоне -->
+      <span class="w-9 h-9 rounded-xl bg-[#FF9A3C] flex items-center justify-center overflow-hidden p-[5px]">
         <svg viewBox="253 574 760 899" class="w-full h-full" preserveAspectRatio="xMidYMid meet"><g fill="#0B0F14"><path d="M 675.701 594.447 C 678.896 594.043 686.899 593.967 690.471 593.945 C 789.352 593.359 882.14 629.946 957.584 693.283 C 970.395 704.038 981.095 714.604 993.074 726.317 C 984.001 735.908 974.709 745.289 965.206 754.454 C 944.219 733.485 933.865 723.363 910.332 705.788 C 832.091 647.352 733.855 621.946 636.9 637.028 C 536.376 653.177 446.476 708.829 387.197 791.604 C 325.974 875.764 300.446 980.689 316.163 1083.57 C 348.697 1290.74 538.935 1443.66 749.971 1410.72 C 835.71 1396 905.122 1354.74 965.005 1292.7 C 974.378 1300.67 984.544 1311.22 993.229 1320.04 C 922.161 1395.89 818.441 1448.12 714.154 1453.42 C 600.655 1459.18 498.037 1419.96 414.154 1344.51 C 329.661 1267.74 279.079 1160.59 273.511 1046.56 C 267.09 931.541 307.007 818.738 384.347 733.356 C 458.994 649.972 563.92 599.946 675.701 594.447 z"/><path d="M 668.553 671.422 C 682.343 669.876 702.767 670.703 716.561 671.549 C 798.176 676.556 885.17 719.639 938.938 781.436 C 930.114 790.432 920.836 799.426 911.869 808.317 C 897.773 793.916 886.268 782.492 870.362 770.032 C 809.467 722.401 732.077 701.051 655.374 710.722 C 575.574 721.422 503.341 763.52 454.696 827.678 C 402.852 895.191 379.753 980.439 390.419 1064.89 C 401.786 1149.75 446.566 1226.55 514.811 1278.25 C 583.84 1331.11 655.771 1346.15 740.763 1335.06 C 811.713 1322.77 861.677 1287.35 911.481 1238.68 C 920.095 1245.9 930.937 1257.24 938.586 1265.55 C 931.256 1274.09 921.962 1282.66 913.577 1290.23 C 789.267 1402.43 609.972 1406.06 480.164 1300.06 C 406.887 1239.27 360.568 1152.01 351.277 1057.25 C 342.646 962.302 371.98 867.8 432.86 794.428 C 493.062 721.296 574.824 680.377 668.553 671.422 z"/><path d="M 686.643 747.447 C 692.151 746.94 705.098 747.545 710.76 747.964 C 777.541 752.905 840.535 785.42 884.392 835.702 C 876.991 844.114 865.128 855.297 856.949 863.454 C 750.505 744.794 574.606 768.199 497.034 905.015 C 465.678 960.036 457.421 1025.25 474.073 1086.35 C 491.558 1148.65 533.03 1201.49 589.399 1233.27 C 638.553 1260.86 696.73 1267.55 750.863 1251.83 C 793.477 1239.59 826.286 1214.49 856.922 1183.67 C 865.571 1191.64 876.461 1202.13 884.083 1210.84 C 839.016 1262.61 775.119 1294.22 706.621 1298.62 C 558.978 1307.43 434.966 1185.12 427.218 1040.57 C 422.809 964.428 449.343 889.736 500.8 833.442 C 550.148 779.066 613.754 750.936 686.643 747.447 z"/><path d="M 677.658 827.421 C 677.785 827.403 677.913 827.385 678.041 827.367 C 721.827 824.318 765.215 837.388 800.033 864.113 C 837.134 892.38 867.274 937.378 873.564 984.059 C 850.877 984.646 826.7 984.287 803.91 984.242 C 804.001 973.462 803.849 962.68 803.452 951.906 C 768.177 926.08 726.426 891.644 691.819 863.809 L 621.281 919.257 C 609.762 928.256 588.524 943.885 579.119 953.077 L 579.068 1134.17 C 647.929 1135.22 719.526 1134.23 788.633 1134.19 L 803.817 1134.1 L 804.013 1061.9 C 826.44 1060.27 851.174 1062.18 874.345 1061.14 C 867.323 1093.2 858.005 1117.76 837.619 1144.21 C 774.614 1225.94 663.143 1244.6 580.927 1179.08 C 538.412 1145.51 511.38 1096.09 506.044 1042.18 C 500.472 990.339 517.234 937.452 549.889 897.038 C 581.398 857.611 627.446 832.522 677.658 827.421 z"/><path d="M 690.051 984.366 C 711.391 983.525 729.401 1000.08 730.351 1021.42 C 731.302 1042.76 714.836 1060.85 693.505 1061.91 C 672.019 1062.98 653.764 1046.37 652.806 1024.87 C 651.849 1003.38 668.555 985.213 690.051 984.366 z"/></g></svg>
       </span>
-      <span class="font-display font-bold text-[15px] tracking-tight">СтройРадар</span>
-      <span class="hidden sm:inline text-[11px] tracking-[0.14em] text-muted border border-white/10 rounded-full px-2 py-0.5">BETA</span>
+      <span class="hidden sm:inline font-display font-bold text-[15px] tracking-tight">СтройРадар</span>
+      <span class="hidden sm:inline text-[11px] tracking-[0.14em] text-[#FF9A3C] border border-[#FF9A3C]/30 bg-[#FF9A3C]/10 rounded-full px-2 py-0.5">BETA</span>
     </a>
-    <nav class="hidden lg:flex items-center gap-7 text-sm text-muted">
-      <a href="#product" class="hover:text-white transition">Продукт</a>
+    <div class="seg">
+      <a href="/" class="on"><span class="sm:hidden">Ремонт</span><span class="hidden sm:inline">Ремонт квартир</span></a>
+      <a href="/podryad/"><span class="sm:hidden">Подряд</span><span class="hidden sm:inline">Подряд и тендеры</span></a>
+    </div>
+    <nav class="hidden xl:flex items-center gap-6 text-sm text-muted">
+      <a href="#classes" class="hover:text-white transition">Классы ЖК</a>
       <a href="#how" class="hover:text-white transition">Как работает</a>
       <a href="#pricing" class="hover:text-white transition">Тарифы</a>
       <a href="#faq" class="hover:text-white transition">Вопросы</a>
     </nav>
     <div class="flex items-center gap-3">
       <a href="/cabinet/#/login" class="hidden sm:inline-flex text-sm font-medium text-muted hover:text-white transition">Войти</a>
-      <a href="/cabinet/#/register" class="btn-mag inline-flex items-center justify-center bg-[#33E06B] text-[#0B0F14] font-semibold text-sm px-5 py-2.5 rounded-xl">Попробовать бесплатно</a>
+      <a href="/cabinet/#/register?dir=remont" class="btn-mag inline-flex items-center justify-center bg-[#FF9A3C] text-[#0B0F14] font-semibold text-sm px-5 py-2.5 rounded-xl">3 дня<span class="hidden sm:inline">&nbsp;бесплатно</span></a>
     </div>
   </div>
 </header>
 
 <!-- HERO -->
 <section class="relative overflow-hidden pt-[72px]">
-  <!-- orbs -->
   <div class="glow-orb w-[720px] h-[720px] -top-[180px] -right-[200px] opacity-60"></div>
-  <div class="glow-orb w-[560px] h-[560px] top-[320px] -left-[160px] opacity-40" style="animation-delay:-3s"></div>
+  <div class="glow-orb w-[520px] h-[520px] top-[220px] -left-[180px] opacity-40" style="animation-delay:-3s"></div>
+  <div class="absolute inset-0 blueprint opacity-[0.55] pointer-events-none"></div>
 
-  <div class="absolute inset-0 blueprint opacity-30 pointer-events-none"></div>
-  <!-- чертежные насечки -->
-  <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
-    <defs><pattern id="ticks" width="240" height="240" patternUnits="userSpaceOnUse"><path d="M0 20 h12 M228 60 h12 M60 228 v12 M180 0 v12" stroke="white" stroke-width="1"/></pattern></defs>
-    <rect width="100%" height="100%" fill="url(#ticks)"/>
-  </svg>
-
-  <div class="relative max-w-[1280px] mx-auto px-6 lg:px-8 py-10 lg:py-16 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-8 items-center">
-    <!-- left -->
-    <div class="relative z-10">
-      <div class="inline-flex items-center gap-2 text-xs font-medium tracking-wide bg-white/[0.06] border border-white/10 rounded-full px-3 py-1.5 reveal">
-        <span class="w-2 h-2 rounded-full bg-[#33E06B] animate-pulse shadow-[0_0_10px_rgba(51,224,107,.8)]"></span>
-        сейчас в эфире 12 438 закупок
-        <span class="hidden sm:inline text-muted">· обновлено 2 мин назад</span>
+  <div class="relative max-w-[1280px] mx-auto px-6 lg:px-8 pt-12 lg:pt-16 pb-12 lg:pb-20 grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-14 items-center">
+    <div>
+      <div class="reveal inline-flex items-center gap-2 text-[11px] tracking-[0.14em] text-muted border border-white/10 rounded-full px-3 py-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#FF9A3C]"></span>
+        РЕМОНТ КВАРТИР · НОВОСТРОЙКИ
       </div>
-      <h1 class="reveal font-display font-bold leading-[0.95] tracking-[-0.03em] text-[36px] sm:text-[44px] lg:text-[52px] mt-6" style="transition-delay:.08s">
-        Строительные<br>
-        <span class="text-[#33E06B]">тендеры и лиды</span><br>
-        — на вашем радаре<br>
-        за 3 минуты
+
+      <h1 class="reveal font-display font-bold leading-[0.98] tracking-[-0.03em] text-[34px] sm:text-[42px] lg:text-[50px] mt-6" style="transition-delay:.08s">
+        Заказы на ремонт<br>в новостройках —<br><span class="text-[#FF9A3C]">в день выдачи ключей</span>
       </h1>
-      <p class="reveal text-[16px] lg:text-[17px] leading-relaxed text-muted max-w-[560px] mt-5" style="transition-delay:.14s">
-        Собираем закупки по 44-ФЗ, 223-ФЗ, коммерческим площадкам и заказы на ремонт квартир с досок и агрегаторов. AI отсекает мусор — вы видите только то, что можете выиграть, с контактами заказчиков.
+
+      <p class="reveal text-muted text-[15px] lg:text-[17px] leading-relaxed mt-6 max-w-[560px]" style="transition-delay:.14s">
+        Собираем сообщения собственников из чатов конкретных ЖК и профильных площадок.
+        AI отсекает рекламу и посредников, оставляя реальные заявки — и сразу проставляет
+        <span class="text-white">класс дома</span>, чтобы вы брали объекты под свой чек, а не разгребали всё подряд.
       </p>
-      <div class="reveal flex flex-wrap gap-3 mt-7" style="transition-delay:.2s">
-        <a href="/cabinet/#/register" class="btn-mag inline-flex items-center gap-2 bg-[#33E06B] text-[#0B0F14] font-semibold px-6 py-3.5 rounded-xl text-[15px]">
-          Запустить радар — 3 дня бесплатно
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+      <div class="reveal flex flex-wrap items-center gap-3 mt-8" style="transition-delay:.2s">
+        <a href="/cabinet/#/register?dir=remont" class="btn-mag inline-flex items-center gap-2 bg-[#FF9A3C] text-[#0B0F14] font-semibold px-6 py-3.5 rounded-xl">
+          Смотреть заявки 3 дня бесплатно
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h9M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a href="#product" class="inline-flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.09] border border-white/10 text-white font-medium px-6 py-3.5 rounded-xl text-[15px] transition">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="white" stroke-opacity=".4"/><path d="M6.5 5.5l4 2.5-4 2.5v-5z" fill="white"/></svg>
-          Как это работает
+        <a href="#classes" class="inline-flex items-center gap-2 border border-white/12 hover:border-white/25 hover:bg-white/[0.03] transition px-6 py-3.5 rounded-xl font-medium text-sm">
+          Как считаем класс дома
         </a>
       </div>
-      <p class="reveal text-xs text-muted mt-3" style="transition-delay:.26s">Без карты · Настройка 3 минуты · Отмена в один клик</p>
-      <div class="reveal flex items-center gap-4 mt-6 text-xs text-muted" style="transition-delay:.32s">
-        <span class="flex -space-x-2">
-          <span class="w-7 h-7 rounded-full bg-[#1e293b] border-2 border-[#0B0F14] flex items-center justify-center text-[10px] font-bold">ГП</span>
-          <span class="w-7 h-7 rounded-full bg-[#1e3a2a] border-2 border-[#0B0F14] flex items-center justify-center text-[10px] font-bold">СУ</span>
-          <span class="w-7 h-7 rounded-full bg-[#2a2e1e] border-2 border-[#0B0F14] flex items-center justify-center text-[10px] font-bold">+2k</span>
-        </span>
-        уже ловят радар 2 400+ подрядчиков
-        <span class="hidden sm:inline-flex items-center gap-1"><span class="text-[#FFB020]">★★★★★</span> 4.8/5</span>
+
+      <div class="reveal flex flex-wrap items-center gap-x-6 gap-y-2 mt-7 text-xs text-muted" style="transition-delay:.26s">
+        <span class="flex items-center gap-1.5"><span class="text-[#FF9A3C]">✓</span> Без карты на триале</span>
+        <span class="flex items-center gap-1.5"><span class="text-[#FF9A3C]">✓</span> Отмена в один клик</span>
+        <span class="flex items-center gap-1.5"><span class="text-[#FF9A3C]">✓</span> Москва, МО, Санкт-Петербург</span>
       </div>
     </div>
 
-    <!-- right — RADAR -->
-    <div class="relative lg:h-[560px] flex items-center justify-center">
-      <!-- radar wrapper with 3 layers -->
-      <div id="radarStage" class="relative w-full max-w-[560px] aspect-square">
-        <!-- layer 1: grid parallax bg -->
-        <div id="gridLayer" class="absolute inset-0 rounded-[32px] overflow-hidden glass flex items-center justify-center">
-          <div class="absolute inset-0 blueprint opacity-20"></div>
-          <canvas id="radarCanvas" width="560" height="560" class="absolute inset-0 w-full h-full"></canvas>
-          <!-- center label -->
-          <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center">
-            <div class="text-[10px] tracking-[0.2em] text-white/40 font-mono">СКАНИРОВАНИЕ ЭФИРА</div>
-            <div class="font-mono text-xs text-[#33E06B] mt-1 flex items-center justify-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#33E06B] animate-ping"></span> LIVE</div>
-          </div>
+    <!-- ДОМ-ВИЗУАЛ -->
+    <div class="reveal relative" style="transition-delay:.18s">
+      <div class="glass rounded-[28px] p-5 lg:p-6 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-5">
+          <div class="text-xs text-muted">Квартиры с ключами · сейчас в эфире</div>
+          <div class="flex items-center gap-1.5 text-[11px] text-muted"><span class="w-1.5 h-1.5 rounded-full bg-[#FF9A3C] animate-pulse"></span> live</div>
         </div>
-        <!-- layer 2/3: floating lead cards (front) -->
-        <div id="leadStack" class="absolute inset-0 pointer-events-none"></div>
-        <!-- static preview cards at bottom -->
-        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-3 lg:right-3 flex flex-col gap-2 pointer-events-none">
-          <div class="glass rounded-2xl p-3 flex items-center gap-3 translate-y-0" style="box-shadow:0 20px 50px rgba(0,0,0,.5)">
-            <span class="w-9 h-9 rounded-xl bg-[#33E06B]/15 border border-[#33E06B]/20 flex items-center justify-center text-sm">🏗️</span>
-            <div class="flex-1 min-w-0">
-              <div class="text-[13px] font-semibold leading-none truncate">Реконструкция школы, 84,2 млн ₽</div>
-              <div class="text-xs text-muted font-mono mt-1">44-ФЗ · Московская обл. · до 12.09</div>
-            </div>
-            <span class="shrink-0 bg-[#33E06B] text-[#0B0F14] text-[11px] font-bold px-2.5 py-1 rounded-full">92% матч</span>
-          </div>
-          <div class="glass rounded-2xl p-3 flex items-center gap-3 ml-6 opacity-90" style="transform:scale(.96)">
-            <span class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sm">🧱</span>
-            <div class="flex-1 min-w-0">
-              <div class="text-[13px] font-semibold leading-none truncate">Монолитные работы, ЖК · 18,5 млн ₽</div>
-              <div class="text-xs text-muted font-mono mt-1">Субподряд · Казань · горячий</div>
-            </div>
-            <span class="shrink-0 bg-[#FFB020] text-[#0B0F14] text-[11px] font-bold px-2.5 py-1 rounded-full">срочно</span>
-          </div>
+        <div class="house" id="house"></div>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-5 text-[11px] text-muted">
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-[3px]" style="background:#7C8B9E"></span>эконом</span>
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-[3px]" style="background:#C9A87C"></span>комфорт</span>
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-[3px]" style="background:#FF9A3C"></span>бизнес</span>
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-[3px]" style="background:#F5D27A"></span>люкс</span>
         </div>
+        <div id="leadStack" class="absolute left-5 right-5 pointer-events-none" style="bottom:58px"></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee bg-[#0B0F14] py-3">
-  <div class="marquee-track text-xs font-mono tracking-widest text-white/55 uppercase">
-    <span class="mx-6">сейчас в эфире: 44-ФЗ · 223-ФЗ · коммерческие закупки · субподряд · заказы на ремонт квартир · 78 регионов · контакты ЛПР · AI-фильтр</span>
-    <span class="mx-6">сейчас в эфире: 44-ФЗ · 223-ФЗ · коммерческие закупки · субподряд · заказы на ремонт квартир · 78 регионов · контакты ЛПР · AI-фильтр</span>
-    <span class="mx-6">сейчас в эфире: 44-ФЗ · 223-ФЗ · коммерческие закупки · субподряд · заказы на ремонт квартир · 78 регионов · контакты ЛПР · AI-фильтр</span>
-    <span class="mx-6">сейчас в эфире: 44-ФЗ · 223-ФЗ · коммерческие закупки · субподряд · заказы на ремонт квартир · 78 регионов · контакты ЛПР · AI-фильтр</span>
-  </div>
-</div>
-
-<!-- PAIN → SOLUTION -->
+<!-- БОЛЬ / РЕШЕНИЕ -->
 <section class="max-w-[1280px] mx-auto px-6 lg:px-8 py-14 lg:py-20 grid lg:grid-cols-2 gap-6">
-  <div class="glass rounded-[20px] p-7 lg:p-8 reveal">
-    <div class="text-xs font-mono tracking-[0.16em] text-[#FF5C5C]">БОЛЬ СЕЙЧАС</div>
-    <h3 class="font-display font-bold text-xl mt-3">Ищете вручную — проигрываете тем, кто автоматизировал</h3>
-    <ul class="mt-6 space-y-4">
-      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#FF5C5C]/15 border border-[#FF5C5C]/20 flex items-center justify-center shrink-0 text-[#FF5C5C]">✕</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">5 часов в день</b> на 10+ площадок, фильтры сбиваются, вкладки плодятся</span></li>
-      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#FF5C5C]/15 border border-[#FF5C5C]/20 flex items-center justify-center shrink-0 text-[#FF5C5C]">✕</span><span class="text-sm leading-relaxed text-muted">Конкуренты находят тендер <b class="text-white font-semibold">раньше на 2–3 дня</b> — вы уже опоздали с подачей</span></li>
-      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#FF5C5C]/15 border border-[#FF5C5C]/20 flex items-center justify-center shrink-0 text-[#FF5C5C]">✕</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">90% закупок</b> — не ваш профиль, регион или сумма. Шум вместо сигнала</span></li>
+  <div class="glass rounded-[24px] p-6 lg:p-8 reveal">
+    <div class="text-[11px] tracking-[0.14em] text-muted">КАК СЕЙЧАС</div>
+    <h2 class="font-display font-bold text-[22px] lg:text-[26px] tracking-tight mt-3">Заявки приходят к тем, кто платит за клик</h2>
+    <ul class="mt-5 space-y-3 text-sm text-muted leading-relaxed">
+      <li class="flex gap-3"><span class="text-white/25 mt-0.5">01</span> Агрегаторы продают один контакт пяти бригадам — приходите шестым и торгуетесь вниз.</li>
+      <li class="flex gap-3"><span class="text-white/25 mt-0.5">02</span> В чатах ЖК заявка живёт полчаса: пока прочитали — уже «спасибо, нашли».</li>
+      <li class="flex gap-3"><span class="text-white/25 mt-0.5">03</span> Половина откликов — не ваш чек: приехали на замер в эконом, а вы делаете дизайнерский.</li>
+      <li class="flex gap-3"><span class="text-white/25 mt-0.5">04</span> Мониторить два десятка чатов руками некогда — вы на объекте, а не в телефоне.</li>
     </ul>
   </div>
-  <div class="glass rounded-[20px] p-7 lg:p-8 reveal border-[#33E06B]/20" style="transition-delay:.1s;box-shadow:0 16px 48px rgba(0,0,0,.45),0 0 40px rgba(51,224,107,.10)">
-    <div class="text-xs font-mono tracking-[0.16em] text-[#33E06B]">РЕШЕНИЕ — РАДАР</div>
-    <h3 class="font-display font-bold text-xl mt-3">Сканирует, фильтрует, приносит — вы только выбираете</h3>
-    <ul class="mt-6 space-y-4">
-      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#33E06B] flex items-center justify-center shrink-0 text-[#0B0F14] font-bold">✓</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">Автосбор 24/7</b> по всем источникам — лента обновляется сама</span></li>
-      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#33E06B] flex items-center justify-center shrink-0 text-[#0B0F14] font-bold">✓</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">AI под ваш профиль:</b> регион, тип работ, сумма, допуски — только релевантное</span></li>
-      <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-[#33E06B] flex items-center justify-center shrink-0 text-[#0B0F14] font-bold">✓</span><span class="text-sm leading-relaxed text-muted"><b class="text-white font-semibold">Контакты ЛПР</b> и оценка совпадения 0–100% прямо в карточке</span></li>
+  <div class="glass rounded-[24px] p-6 lg:p-8 reveal" style="transition-delay:.1s;border-color:rgba(255,154,60,.22)">
+    <div class="text-[11px] tracking-[0.14em] text-[#FF9A3C]">КАК С РАДАРОМ</div>
+    <h2 class="font-display font-bold text-[22px] lg:text-[26px] tracking-tight mt-3">Заявка падает вам с классом дома и чеком</h2>
+    <ul class="mt-5 space-y-3 text-sm leading-relaxed">
+      <li class="flex gap-3"><span class="text-[#FF9A3C] mt-0.5">→</span> Читаем чаты ЖК и площадки круглосуточно, проверка каждые 5 минут.</li>
+      <li class="flex gap-3"><span class="text-[#FF9A3C] mt-0.5">→</span> AI выбрасывает рекламу, посредников и «ищу работу» — остаётся живой заказчик.</li>
+      <li class="flex gap-3"><span class="text-[#FF9A3C] mt-0.5">→</span> Каждой заявке присваивается класс ЖК и ожидаемый чек — фильтруете под себя.</li>
+      <li class="flex gap-3"><span class="text-[#FF9A3C] mt-0.5">→</span> Уведомление в Telegram со ссылкой на исходное сообщение — пишете первым.</li>
     </ul>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id="how" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
+<!-- КЛАССЫ ЖК -->
+<section id="classes" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
   <div class="text-center max-w-[720px] mx-auto reveal">
-    <div class="text-xs font-mono tracking-[0.16em] text-muted">КАК РАБОТАЕТ</div>
-    <h2 class="font-display font-bold text-[28px] lg:text-[36px] tracking-tight mt-3">От старта до сделки — четыре шага</h2>
-    <p class="text-muted text-sm mt-3">Настроили профиль один раз — дальше радар делает всё сам и стучит в Telegram.</p>
+    <div class="text-[11px] tracking-[0.14em] text-muted">ГЛАВНОЕ ОТЛИЧИЕ</div>
+    <h2 class="font-display font-bold text-[28px] lg:text-[36px] tracking-tight mt-3">Класс дома — это ваш чек</h2>
+    <p class="text-muted text-sm lg:text-[15px] leading-relaxed mt-4">
+      Мы знаем ЖК, из которого пришла заявка, а значит знаем класс дома, площади и цену метра.
+      Из этого считается вилка бюджета на ремонт. Вы включаете только те классы, с которыми работаете.
+    </p>
   </div>
-  <div class="relative mt-10">
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-9">
+    <div class="cls-card glass rounded-[20px] p-5 reveal" style="border-color:rgba(124,139,158,.28)">
+      <div class="flex items-center justify-between">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[13px] font-bold" style="background:rgba(124,139,158,.16);color:#A9B6C6">Э</div>
+        <div class="text-[11px] tracking-[0.12em]" style="color:#7C8B9E">ЭКОНОМ</div>
+      </div>
+      <div class="font-display font-bold text-[20px] mt-4">0,6–1,2 млн</div>
+      <div class="text-[11px] text-muted mt-1">чек за ремонт «под ключ», 2-комн.</div>
+      <ul class="mt-4 space-y-2 text-xs text-muted leading-relaxed">
+        <li>Панель и монолит массовой застройки, 35–60 м²</li>
+        <li>Черновая + чистовая без дизайн-проекта</li>
+        <li>Решение за 1–2 дня, торг по смете</li>
+      </ul>
+      <div class="text-[11px] mt-4 pt-4 border-t border-white/6" style="color:#7C8B9E">Поток: самый большой объём заявок</div>
+    </div>
+
+    <div class="cls-card glass rounded-[20px] p-5 reveal" style="transition-delay:.07s;border-color:rgba(201,168,124,.28)">
+      <div class="flex items-center justify-between">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[13px] font-bold" style="background:rgba(201,168,124,.16);color:#D9BD91">К</div>
+        <div class="text-[11px] tracking-[0.12em]" style="color:#C9A87C">КОМФОРТ</div>
+      </div>
+      <div class="font-display font-bold text-[20px] mt-4">1,2–2,5 млн</div>
+      <div class="text-[11px] text-muted mt-1">чек за ремонт «под ключ», 2-комн.</div>
+      <ul class="mt-4 space-y-2 text-xs text-muted leading-relaxed">
+        <li>Кварталы с благоустройством, 45–80 м²</li>
+        <li>Часто с дизайн-проектом из готовых решений</li>
+        <li>Смотрят портфолио и отзывы, решение за неделю</li>
+      </ul>
+      <div class="text-[11px] mt-4 pt-4 border-t border-white/6" style="color:#C9A87C">Поток: лучший баланс объёма и маржи</div>
+    </div>
+
+    <div class="cls-card glass rounded-[20px] p-5 reveal" style="transition-delay:.14s;border-color:rgba(255,154,60,.32)">
+      <div class="flex items-center justify-between">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[13px] font-bold" style="background:rgba(255,154,60,.16);color:#FF9A3C">Б</div>
+        <div class="text-[11px] tracking-[0.12em]" style="color:#FF9A3C">БИЗНЕС</div>
+      </div>
+      <div class="font-display font-bold text-[20px] mt-4">3–8 млн</div>
+      <div class="text-[11px] text-muted mt-1">чек за ремонт «под ключ», 2-комн.</div>
+      <ul class="mt-4 space-y-2 text-xs text-muted leading-relaxed">
+        <li>Клубные дома и башни, 60–120 м², высокие потолки</li>
+        <li>Индивидуальный дизайн-проект, авторский надзор</li>
+        <li>Инженерия: увлажнение, слаботочка, умный дом</li>
+      </ul>
+      <div class="text-[11px] mt-4 pt-4 border-t border-white/6" style="color:#FF9A3C">Поток: меньше заявок, выше маржа</div>
+    </div>
+
+    <div class="cls-card glass rounded-[20px] p-5 reveal" style="transition-delay:.21s;border-color:rgba(245,210,122,.32)">
+      <div class="flex items-center justify-between">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[13px] font-bold" style="background:rgba(245,210,122,.14);color:#F5D27A">Л</div>
+        <div class="text-[11px] tracking-[0.12em]" style="color:#F5D27A">ЛЮКС</div>
+      </div>
+      <div class="font-display font-bold text-[20px] mt-4">от 8 млн</div>
+      <div class="text-[11px] text-muted mt-1">чек за ремонт «под ключ», 2-комн.</div>
+      <ul class="mt-4 space-y-2 text-xs text-muted leading-relaxed">
+        <li>Премиальные адреса, 100–300 м² и пентхаусы</li>
+        <li>Архитектурное бюро, редкие материалы, столярка</li>
+        <li>Сроки 8–18 месяцев, договор с этапами</li>
+      </ul>
+      <div class="text-[11px] mt-4 pt-4 border-t border-white/6" style="color:#F5D27A">Эксклюзив: не больше 3 подписчиков на заявку</div>
+    </div>
+  </div>
+
+  <p class="text-[11px] text-muted text-center mt-6 max-w-[680px] mx-auto leading-relaxed reveal">
+    Вилки чеков — ориентир по рынку Москвы и Санкт-Петербурга на 2026 год, а не гарантия бюджета
+    конкретного заказчика. Итоговую сумму вы называете сами после замера.
+  </p>
+</section>
+
+<!-- КАК РАБОТАЕТ -->
+<section id="how" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
+  <div class="text-center max-w-[640px] mx-auto reveal">
+    <div class="text-[11px] tracking-[0.14em] text-muted">КАК ЭТО РАБОТАЕТ</div>
+    <h2 class="font-display font-bold text-[28px] lg:text-[36px] tracking-tight mt-3">От сообщения в чате до вашего замера</h2>
+  </div>
+
+  <div class="mt-12 relative">
     <div class="pipeline-line max-w-[880px] mx-auto"><div id="pipelineProgress" class="pipeline-progress"></div></div>
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mt-8 max-w-[1000px] mx-auto">
-      <div class="reveal text-center">
-        <div class="pipeline-dot active mx-auto"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M9 5v4l2.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>
-        <div class="font-semibold text-sm mt-4">Источники</div>
-        <div class="text-xs text-muted mt-1 leading-relaxed">44-ФЗ, 223-ФЗ,<br>коммерческие + ремонт квартир</div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 mt-8">
+      <div class="text-center reveal">
+        <div class="pipeline-dot mx-auto active">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V7l6-4 6 4v7" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 14v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="font-semibold text-sm mt-4">Чаты ЖК и площадки</div>
+        <div class="text-xs text-muted mt-2 leading-relaxed">Читаем чаты жильцов конкретных домов, профильные группы и доски объявлений. Опрос каждые 5 минут.</div>
       </div>
-      <div class="reveal" style="transition-delay:.08s">
-        <div class="pipeline-dot mx-auto" id="dot2"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v3M9 12v3M3 9h3M12 9h3M5.2 5.2l2 2M10.8 10.8l2 2M12.8 5.2l-2 2M7.2 10.8l-2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-        <div class="text-center font-semibold text-sm mt-4">Автосбор 24/7</div>
-        <div class="text-center text-xs text-muted mt-1 leading-relaxed">Парсим, чистим,<br>дедуплицируем</div>
+      <div class="text-center reveal" style="transition-delay:.08s">
+        <div class="pipeline-dot mx-auto" id="dot2">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v3M9 12v3M3 9h3M12 9h3M5.2 5.2l2 2M10.8 10.8l2 2M12.8 5.2l-2 2M7.2 10.8l-2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="font-semibold text-sm mt-4">AI отсекает мусор</div>
+        <div class="text-xs text-muted mt-2 leading-relaxed">Реклама, посредники, «ищу работу» и старые перепосты не проходят. Остаётся живой заказчик с намерением.</div>
       </div>
-      <div class="reveal" style="transition-delay:.16s">
-        <div class="pipeline-dot mx-auto" id="dot3"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 4l5 2.5v5L9 14 4 11.5v-5L9 4z" stroke="currentColor" stroke-width="1.3"/><path d="M4 7l5 2.5L14 7M9 11.5V14" stroke="currentColor" stroke-width="1.3"/></svg></div>
-        <div class="text-center font-semibold text-sm mt-4">AI-фильтр</div>
-        <div class="text-center text-xs text-muted mt-1 leading-relaxed">Под ваш профиль<br>и допуски СРО</div>
+      <div class="text-center reveal" style="transition-delay:.16s">
+        <div class="pipeline-dot mx-auto" id="dot3">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 15V6l6-3 6 3v9" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 9h6M6 12h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="font-semibold text-sm mt-4">Класс и чек</div>
+        <div class="text-xs text-muted mt-2 leading-relaxed">По ЖК и адресу определяем класс дома, площадь и вилку бюджета. Заявка получает метку: эконом, комфорт, бизнес или люкс.</div>
       </div>
-      <div class="reveal" style="transition-delay:.24s">
-        <div class="pipeline-dot mx-auto" id="dot4"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 9l2.2 2.2L12 6.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.3" opacity=".35"/></svg></div>
-        <div class="text-center font-semibold text-sm mt-4">Лента + контакты</div>
-        <div class="text-center text-xs text-muted mt-1 leading-relaxed">Telegram, почта, API<br>в вашу CRM</div>
+      <div class="text-center reveal" style="transition-delay:.24s">
+        <div class="pipeline-dot mx-auto" id="dot4">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 9l2.2 2.2L12 6.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.3" opacity=".35"/></svg>
+        </div>
+        <div class="font-semibold text-sm mt-4">Вам в Telegram</div>
+        <div class="text-xs text-muted mt-2 leading-relaxed">Приходит карточка со ссылкой на исходное сообщение. Пишете заказчику напрямую, без посредника между вами.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRODUCT DASHBOARD -->
+<!-- ЛЕНТА ЛИДОВ -->
 <section id="product" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10 lg:py-16">
   <div class="glass rounded-[24px] overflow-hidden reveal p-4 lg:p-6" id="tiltCard" style="transform-style:preserve-3d">
-    <div class="flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-[#33E06B] animate-pulse"></span>
-        <span class="text-xs font-mono tracking-widest">LIVE ЛЕНТА · 18 новых за час</span>
-        <span class="hidden sm:inline-flex items-center gap-1 text-xs bg-[#33E06B]/12 border border-[#33E06B]/20 text-[#33E06B] px-2 py-1 rounded-full">AI-оценка вкл</span>
+    <div class="flex flex-wrap items-center justify-between gap-3 px-2 pt-2 pb-4">
+      <div>
+        <div class="text-[11px] tracking-[0.14em] text-muted">ЛЕНТА ЗАЯВОК</div>
+        <div class="font-display font-bold text-[19px] tracking-tight mt-1">Так выглядит ваш экран утром</div>
       </div>
-      <div class="flex items-center gap-2 text-xs">
-        <span class="hidden sm:inline text-muted">Фильтры:</span>
-        <span class="bg-white/[0.06] border border-white/10 rounded-full px-3 py-1.5">Регион: МО + ЦФО</span>
-        <span class="bg-white/[0.06] border border-white/10 rounded-full px-3 py-1.5">Сумма: 5–120 млн</span>
-        <span class="bg-white/[0.06] border border-white/10 rounded-full px-3 py-1.5">Монолит · Отделка</span>
+      <div class="flex flex-wrap gap-1.5 text-[11px]">
+        <span class="px-2.5 py-1 rounded-lg" style="background:rgba(255,154,60,.14);color:#FF9A3C">все классы</span>
+        <span class="px-2.5 py-1 rounded-lg bg-white/5 text-muted">Москва + МО</span>
+        <span class="px-2.5 py-1 rounded-lg bg-white/5 text-muted">от 800 тыс.</span>
       </div>
     </div>
-
-    <div class="grid lg:grid-cols-[1fr_320px] gap-4 mt-5">
-      <!-- table -->
-      <div class="rounded-2xl overflow-hidden border border-white/5 bg-[#0B0F14]/60">
-        <div class="hidden sm:grid grid-cols-[1.6fr_110px_110px_90px_72px] gap-2 px-4 py-2.5 text-[11px] font-mono tracking-widest text-muted bg-white/[0.02] border-b border-white/5">
-          <span>ОБЪЕКТ</span><span>ТИП</span><span>СУММА</span><span>СРОК</span><span>СТАТУС</span>
-        </div>
-        <div id="leadRows" class="divide-y divide-white/5">
-          <!-- rows injected by JS -->
-        </div>
+    <div class="rounded-[16px] border border-white/6 overflow-hidden bg-[#0e141c]">
+      <div class="hidden md:grid grid-cols-[1.6fr_.7fr_.8fr_.6fr_.5fr] gap-3 px-5 py-3 text-[11px] tracking-[0.1em] text-muted border-b border-white/6">
+        <div>ОБЪЕКТ И ЗАПРОС</div><div>КЛАСС</div><div>ЧЕК</div><div>ПЛОЩАДЬ</div><div>КОГДА</div>
       </div>
-      <!-- side -->
-      <div class="space-y-3">
-        <div class="rounded-2xl border border-white/5 bg-[#0B0F14]/60 p-4">
-          <div class="text-xs font-mono tracking-widest text-muted">КАРТА ТОЧЕК</div>
-          <div class="mt-3 h-[148px] rounded-xl bg-[#0f1720] border border-white/5 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-20" style="background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:32px 32px"></div>
-            <span class="absolute left-[22%] top-[28%] w-2.5 h-2.5 bg-[#33E06B] rounded-full shadow-[0_0_12px_rgba(51,224,107,.9)] animate-pulse"></span>
-            <span class="absolute left-[54%] top-[42%] w-2.5 h-2.5 bg-[#FFB020] rounded-full shadow-[0_0_12px_rgba(255,176,32,.9)]"></span>
-            <span class="absolute left-[68%] top-[22%] w-2 h-2 bg-[#33E06B] rounded-full"></span>
-            <span class="absolute left-[38%] top-[66%] w-2 h-2 bg-white/70 rounded-full"></span>
-            <span class="absolute left-[76%] top-[68%] w-2 h-2 bg-[#FF5C5C] rounded-full"></span>
-            <div class="absolute bottom-2 left-2 text-[11px] font-mono bg-black/40 backdrop-blur px-2 py-1 rounded-full border border-white/10">Москва · Казань · СПб · Екб</div>
-          </div>
-          <div class="mt-3 flex gap-2 text-[11px] font-mono">
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#33E06B]"></span>активные</span>
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#FFB020]"></span>срочно</span>
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-white/60"></span>наблюдение</span>
-          </div>
-        </div>
-        <div class="grid grid-cols-3 gap-2">
-          <div class="rounded-2xl border border-[#33E06B]/20 bg-[#33E06B]/10 p-3">
-            <div class="text-[11px] font-mono text-[#33E06B]">МАТЧ</div><div class="font-mono font-bold text-lg leading-none mt-1">92%</div><div class="text-[11px] text-muted">совпадение</div>
-          </div>
-          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-            <div class="text-[11px] font-mono text-muted">ЛПР</div><div class="font-semibold text-sm mt-1">Найдены</div><div class="text-[11px] text-muted">2 контакта</div>
-          </div>
-          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-            <div class="text-[11px] font-mono text-muted">КОНКУРЕНТЫ</div><div class="font-mono font-bold text-lg leading-none mt-1">3</div><div class="text-[11px] text-muted">в ленте</div>
-          </div>
-        </div>
-      </div>
+      <div id="leadRows" class="divide-y divide-white/5"></div>
     </div>
-
-    <!-- callouts -->
-    <div class="hidden lg:flex gap-3 mt-4 text-xs">
-      <span class="bg-[#33E06B] text-[#0B0F14] font-semibold px-3 py-1.5 rounded-full">AI-оценка 92% — берите в работу</span>
-      <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">Контакты ЛПР найдены → писать сразу</span>
-      <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">Конкурентов всего 3 — окно открыто</span>
+    <div class="flex flex-wrap items-center justify-between gap-3 px-2 pt-4 text-[11px] text-muted">
+      <span>Контакт не копируем — открываете исходное сообщение и пишете заказчику сами.</span>
+      <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#FF9A3C]"></span> обновление каждые 5 минут</span>
     </div>
   </div>
 </section>
 
-<!-- FOR WHOM -->
-<section class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10">
-  <div class="flex flex-wrap items-end justify-between gap-4 reveal">
-    <h2 class="font-display font-bold text-[28px] lg:text-[34px] tracking-tight">Кому подходит радар</h2>
-    <p class="text-sm text-muted max-w-[520px]">Один движок — разные профили. AI подстраивается под ваш тип работ, допуски и регионы.</p>
-  </div>
-  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-    <div class="who-card glass rounded-[20px] p-5 reveal" data-tilt>
-      <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">🏗️</div>
-      <div class="font-semibold mt-4">Генподряд</div>
-      <div class="text-xs text-muted mt-2 leading-relaxed">Крупные лоты 44/223-ФЗ, реконструкция, школы, дороги</div>
-      <ul class="mt-4 space-y-1.5 text-xs leading-relaxed">
-        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Ловим лоты до публикации конкурентов</li>
-        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Фильтр по сумме и региону</li>
-      </ul>
-    </div>
-    <div class="who-card glass rounded-[20px] p-5 reveal" style="transition-delay:.08s" data-tilt>
-      <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">🧱</div>
-      <div class="font-semibold mt-4">Субподряд</div>
-      <div class="text-xs text-muted mt-2 leading-relaxed">Монолит, отделка, электрика, вентиляция</div>
-      <ul class="mt-4 space-y-1.5 text-xs leading-relaxed">
-        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Подхватываем субподряды с генподрядов</li>
-        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Контакты прорабов и снабжения</li>
-      </ul>
-    </div>
-    <div class="who-card glass rounded-[20px] p-5 reveal" style="transition-delay:.16s" data-tilt>
-      <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">📦</div>
-      <div class="font-semibold mt-4">Поставщики</div>
-      <div class="text-xs text-muted mt-2 leading-relaxed">Материалы, ЖБИ, металлопрокат, окна</div>
-      <ul class="mt-4 space-y-1.5 text-xs leading-relaxed">
-        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Заявки снабженцев до тендера</li>
-        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Триггер по сметным позициям</li>
-      </ul>
-    </div>
-    <div class="who-card glass rounded-[20px] p-5 reveal" style="transition-delay:.24s" data-tilt>
-      <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">🚜</div>
-      <div class="font-semibold mt-4">Спецтехника</div>
-      <div class="text-xs text-muted mt-2 leading-relaxed">Аренда кранов, экскаваторов, самосвалов</div>
-      <ul class="mt-4 space-y-1.5 text-xs leading-relaxed">
-        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Объекты с дефицитом техники</li>
-        <li class="flex gap-1.5"><span class="text-[#33E06B]">›</span> Гео-радиус подачи</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- NUMBERS -->
-<section class="mt-10 border-y border-white/5 bg-[#0e141c]">
+<!-- ФАКТЫ -->
+<section class="mt-4 border-y border-white/5 bg-[#0e141c]">
   <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-8 grid grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="reveal"><div class="font-mono font-bold text-3xl"><span data-count="12000">0</span><span class="text-[#33E06B]">+</span></div><div class="text-xs text-muted mt-1">закупок в эфире ежедневно</div></div>
-    <div class="reveal" style="transition-delay:.08s"><div class="font-mono font-bold text-3xl" data-count="78">0</div><div class="text-xs text-muted mt-1">регионов покрытия</div></div>
-    <div class="reveal" style="transition-delay:.16s"><div class="font-mono font-bold text-3xl">в <span data-count="20">0</span>×</div><div class="text-xs text-muted mt-1">меньше времени на поиск</div></div>
-    <div class="reveal" style="transition-delay:.24s"><div class="font-mono font-bold text-3xl">от <span data-count="2990">0</span> ₽</div><div class="text-xs text-muted mt-1">в месяц, без скрытых платежей</div></div>
+    <div class="reveal"><div class="font-mono font-bold text-3xl"><span data-count="4">0</span></div><div class="text-xs text-muted mt-1">класса ЖК на каждой заявке</div></div>
+    <div class="reveal" style="transition-delay:.08s"><div class="font-mono font-bold text-3xl"><span data-count="5">0</span> мин</div><div class="text-xs text-muted mt-1">интервал проверки источников</div></div>
+    <div class="reveal" style="transition-delay:.16s"><div class="font-mono font-bold text-3xl"><span data-count="3">0</span> дня</div><div class="text-xs text-muted mt-1">бесплатно, без карты</div></div>
+    <div class="reveal" style="transition-delay:.24s"><div class="font-mono font-bold text-3xl">от <span data-count="1990">0</span> <span class="text-[#FF9A3C]">₽</span></div><div class="text-xs text-muted mt-1">в месяц, отмена в один клик</div></div>
   </div>
 </section>
 
-<!-- PRICING -->
+<!-- ТАРИФЫ -->
 <section id="pricing" class="max-w-[1280px] mx-auto px-6 lg:px-8 py-14 lg:py-20">
-  <div class="text-center max-w-[720px] mx-auto reveal">
-    <div class="text-xs font-mono tracking-[0.16em] text-muted">ТАРИФЫ</div>
-    <h2 class="font-display font-bold text-[28px] lg:text-[36px] tracking-tight mt-3">Выберите мощность радара</h2>
-    <p class="text-sm text-muted mt-3">Все тарифы — 3 дня бесплатно. Переключение и отмена в один клик.</p>
+  <div class="text-center max-w-[640px] mx-auto reveal">
+    <div class="text-[11px] tracking-[0.14em] text-muted">ТАРИФЫ</div>
+    <h2 class="font-display font-bold text-[28px] lg:text-[36px] tracking-tight mt-3">Платите за классы, с которыми работаете</h2>
+    <p class="text-muted text-sm mt-4">Один закрытый заказ в комфорт-классе окупает год подписки. Первые 3 дня — бесплатно, карта не нужна.</p>
   </div>
-  <div class="grid lg:grid-cols-3 gap-5 max-w-[1020px] mx-auto mt-8">
-    <!-- Старт -->
-    <div class="glass rounded-[20px] p-6 reveal flex flex-col">
-      <div class="text-xs font-mono tracking-widest text-muted">СТАРТ</div>
-      <div class="mt-3 flex items-baseline gap-1"><span class="font-mono font-bold text-4xl">2 990</span><span class="font-mono text-muted">₽/мес</span></div>
-      <div class="text-xs text-muted mt-1">для старта и одного региона</div>
-      <ul class="mt-6 space-y-2.5 text-sm flex-1">
-        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> 1 профиль · 150 лидов/мес</li>
-        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Фильтр по региону и сумме</li>
-        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Включая заказы на ремонт квартир</li>
-        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Почта + экспорт Excel</li>
-      </ul>
-      <a href="/cabinet/#/register?plan=start" class="mt-6 inline-flex justify-center items-center font-semibold text-sm bg-white text-[#0B0F14] rounded-xl py-3 hover:bg-white/90 transition">Попробовать 3 дня</a>
-      <div class="text-center text-xs text-muted mt-2">Без карты</div>
-    </div>
-    <!-- Про -->
-    <div class="rounded-[20px] p-[1px] reveal lg:-mt-3 lg:mb-3" style="transition-delay:.08s;background:linear-gradient(180deg,rgba(51,224,107,.9),rgba(51,224,107,.15))">
-      <div class="rounded-[19px] bg-[#131922] p-6 flex flex-col h-full relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#33E06B]/15 blur-2xl rounded-full"></div>
-        <div class="inline-flex self-start items-center gap-1.5 bg-[#33E06B] text-[#0B0F14] text-xs font-bold px-2.5 py-1 rounded-full">★ ПОПУЛЯРНЫЙ ВЫБОР</div>
-        <div class="text-xs font-mono tracking-widest text-muted mt-4">ПРО</div>
-        <div class="mt-2 flex items-baseline gap-1"><span class="font-mono font-bold text-4xl">4 990</span><span class="font-mono text-muted">₽/мес</span></div>
-        <div class="text-xs text-muted mt-1">для регулярных продаж</div>
-        <ul class="mt-6 space-y-2.5 text-sm flex-1">
-          <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> 3 профиля · 500 лидов/мес</li>
-          <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Telegram-бот + AI-оценка 0–100%</li>
-          <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Контакты заказчиков в карточке</li>
-          <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Экспорт в CRM (Bitrix, amo)</li>
-        </ul>
-        <a href="/cabinet/#/register?plan=pro" class="btn-mag mt-6 inline-flex justify-center items-center font-semibold text-sm bg-[#33E06B] text-[#0B0F14] rounded-xl py-3">Запустить Про — 3 дня бесплатно</a>
-        <div class="text-center text-xs text-muted mt-2">Хит у генподряда и субподряда</div>
+
+  <div class="grid lg:grid-cols-3 gap-5 mt-10 items-start">
+    <!-- БРИГАДА -->
+    <div class="glass rounded-[24px] p-6 lg:p-7 reveal">
+      <div class="font-display font-bold text-[19px]">Бригада</div>
+      <div class="text-xs text-muted mt-1.5">Начать поток и закрыть ближайший месяц</div>
+      <div class="flex items-end gap-1.5 mt-6">
+        <span class="font-display font-bold text-[38px] leading-none">1 990</span>
+        <span class="text-muted text-sm mb-1">₽/мес</span>
       </div>
-    </div>
-    <!-- Бизнес -->
-    <div class="glass rounded-[20px] p-6 reveal flex flex-col" style="transition-delay:.16s">
-      <div class="text-xs font-mono tracking-widest text-muted">БИЗНЕС</div>
-      <div class="mt-3 flex items-baseline gap-1"><span class="font-mono font-bold text-4xl">9 900</span><span class="font-mono text-muted">₽/мес</span></div>
-      <div class="text-xs text-muted mt-1">для команд и безлимита</div>
-      <ul class="mt-6 space-y-2.5 text-sm flex-1">
-        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Без лимитов · 10 профилей</li>
-        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Контакты ЛПР + API</li>
-        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Приоритетная поддержка</li>
-        <li class="flex gap-2"><span class="text-[#33E06B]">✓</span> Онбординг и настройка фильтров</li>
+      <a href="/cabinet/#/register?plan=brigada" class="mt-6 w-full inline-flex items-center justify-center border border-white/12 hover:border-white/25 hover:bg-white/[0.03] transition px-5 py-3 rounded-xl font-medium text-sm">Попробовать 3 дня</a>
+      <ul class="mt-6 space-y-2.5 text-sm">
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> Классы: эконом и комфорт</li>
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> Один город на выбор</li>
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> До 100 заявок в месяц</li>
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> Уведомления в Telegram</li>
+        <li class="flex gap-2.5 text-muted"><span class="text-white/20">—</span> Без экспорта и приоритета</li>
       </ul>
-      <a href="/cabinet/#/register?plan=business" class="mt-6 inline-flex justify-center items-center font-semibold text-sm bg-white/[0.06] border border-white/10 rounded-xl py-3 hover:bg-white/[0.09] transition">Подключить Бизнес</a>
-      <div class="text-center text-xs text-muted mt-2">Счёт для юр. лица</div>
+    </div>
+
+    <!-- КОМПАНИЯ -->
+    <div class="glass rounded-[24px] p-6 lg:p-7 reveal relative lg:-mt-3" style="transition-delay:.08s;border-color:rgba(255,154,60,.4);box-shadow:0 0 60px rgba(255,154,60,.10),0 16px 48px rgba(0,0,0,.45)">
+      <div class="absolute -top-3 left-6 text-[10px] tracking-[0.14em] font-semibold bg-[#FF9A3C] text-[#0B0F14] px-3 py-1 rounded-full">ВЫБИРАЮТ ЧАЩЕ</div>
+      <div class="font-display font-bold text-[19px]">Компания</div>
+      <div class="text-xs text-muted mt-1.5">Для команды «под ключ» с менеджером на замерах</div>
+      <div class="flex items-end gap-1.5 mt-6">
+        <span class="font-display font-bold text-[38px] leading-none text-[#FF9A3C]">4 990</span>
+        <span class="text-muted text-sm mb-1">₽/мес</span>
+      </div>
+      <a href="/cabinet/#/register?plan=company" class="btn-mag mt-6 w-full inline-flex items-center justify-center bg-[#FF9A3C] text-[#0B0F14] font-semibold px-5 py-3 rounded-xl text-sm">Попробовать 3 дня</a>
+      <ul class="mt-6 space-y-2.5 text-sm">
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> Все четыре класса, включая бизнес</li>
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> До трёх городов</li>
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> До 400 заявок в месяц</li>
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> Выгрузка в Excel и CRM</li>
+        <li class="flex gap-2.5"><span class="text-[#FF9A3C]">✓</span> До 3 профилей фильтров на команду</li>
+      </ul>
+    </div>
+
+    <!-- ПРЕМИУМ -->
+    <div class="glass rounded-[24px] p-6 lg:p-7 reveal" style="transition-delay:.16s;border-color:rgba(245,210,122,.28)">
+      <div class="font-display font-bold text-[19px]" style="color:#F5D27A">Премиум</div>
+      <div class="text-xs text-muted mt-1.5">Бизнес и люкс: мало заявок, большой чек</div>
+      <div class="flex items-end gap-1.5 mt-6">
+        <span class="font-display font-bold text-[38px] leading-none">9 900</span>
+        <span class="text-muted text-sm mb-1">₽/мес</span>
+      </div>
+      <a href="/cabinet/#/register?plan=premium" class="mt-6 w-full inline-flex items-center justify-center border transition px-5 py-3 rounded-xl font-medium text-sm" style="border-color:rgba(245,210,122,.35);color:#F5D27A">Попробовать 3 дня</a>
+      <ul class="mt-6 space-y-2.5 text-sm">
+        <li class="flex gap-2.5"><span style="color:#F5D27A">✓</span> Приоритет на бизнес и люкс</li>
+        <li class="flex gap-2.5"><span style="color:#F5D27A">✓</span> Окно эксклюзива 30 минут до общей ленты</li>
+        <li class="flex gap-2.5"><span style="color:#F5D27A">✓</span> Заявка люкс — максимум 3 подписчикам</li>
+        <li class="flex gap-2.5"><span style="color:#F5D27A">✓</span> Все города, без лимита заявок</li>
+        <li class="flex gap-2.5"><span style="color:#F5D27A">✓</span> API и онбординг с настройкой фильтров</li>
+      </ul>
     </div>
   </div>
-  <p class="text-center text-xs text-muted mt-6">На любом тарифе — отмена в один клик. Данные — из официальных источников, без серых схем.</p>
+
+  <p class="text-[11px] text-muted text-center mt-7 reveal">
+    Оплата картой или СБП. Подписка отменяется в кабинете в один клик — доступ остаётся до конца оплаченного периода, следующего списания не будет.
+  </p>
 </section>
 
 <!-- FAQ -->
 <section id="faq" class="max-w-[800px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
   <h2 class="font-display font-bold text-[28px] lg:text-[34px] tracking-tight text-center reveal">Вопросы — честно</h2>
-  <div class="mt-8 divide-y divide-white/5 border-y border-white/5">
-    <div class="acc open reveal">
-      <button class="acc-btn">Это парсинг или официальные данные?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
-      <div class="acc-panel" style="max-height:240px;opacity:1"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">Официальные площадки (ЕИС по 44/223-ФЗ) + коммерческие источники и доски. Парсинг — только открытых данных, с уважением к лимитам и ToS. Вы получаете ссылку на первоисточник в каждой карточке.</p></div>
+  <div class="mt-9 reveal">
+    <div class="acc">
+      <button class="acc-btn"><span>Откуда берутся заявки?</span><svg class="acc-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="acc-panel"><p class="text-sm text-muted leading-relaxed pb-5">Из открытых сообщений: чаты жильцов конкретных ЖК, профильные группы по ремонту в вашем городе, доски объявлений. Мы не покупаем базы и не звоним по спискам — работаем только с тем, что человек опубликовал сам, когда искал бригаду.</p></div>
     </div>
-    <div class="acc reveal" style="transition-delay:.06s">
-      <button class="acc-btn">Насколько точен AI-фильтр?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
-      <div class="acc-panel"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">AI оценивает совпадение с вашим профилем по тексту закупки, ОКПД2, региону и сумме. Средняя точность на релевантности 85–90%, дальше обучается на ваших лайках/дизлайках. Шум режем жёстко — лучше меньше, но точнее.</p></div>
+    <div class="acc">
+      <button class="acc-btn"><span>Это законно? Что с персональными данными?</span><svg class="acc-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="acc-panel"><p class="text-sm text-muted leading-relaxed pb-5">Мы принципиально не храним и не показываем телефоны и переписку. В карточке — суть запроса, класс дома, площадь и ссылка на исходное открытое сообщение. Контакт вы видите там же, где его видит любой участник чата, и пишете человеку напрямую. Это ровно то, что вы сделали бы руками, только за вас это делает радар.</p></div>
     </div>
-    <div class="acc reveal" style="transition-delay:.12s">
-      <button class="acc-btn">Можно ли ограничить регион и тип работ?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
-      <div class="acc-panel"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">Да. Регион, радиус, сумма, тип работ, форма закупки, наличие аванса и допусков. Профили можно дублировать — например, «Москва — монолит» и «МО — отделка».</p></div>
+    <div class="acc">
+      <button class="acc-btn"><span>Заявку получаю только я?</span><svg class="acc-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="acc-panel"><p class="text-sm text-muted leading-relaxed pb-5">В эконом и комфорте — нет: сообщение открытое, его видят все, и мы этого не скрываем. Наше преимущество в скорости, вы приходите первым. В бизнесе и люксе на тарифе Премиум действует окно эксклюзива 30 минут, а заявка люкс уходит максимум трём подписчикам — иначе смысл дорогого тарифа теряется.</p></div>
     </div>
-    <div class="acc reveal" style="transition-delay:.18s">
-      <button class="acc-btn">Что если лидов мало в моей нише?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
-      <div class="acc-panel"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">На старте покажем прогноз по вашей нише за 30 дней. Если объём ниже ожиданий — расширим фильтры или вернём деньги за первый месяц. Честная экономика важнее удержания.</p></div>
+    <div class="acc">
+      <button class="acc-btn"><span>Как вы определяете класс дома?</span><svg class="acc-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="acc-panel"><p class="text-sm text-muted leading-relaxed pb-5">По ЖК и адресу из сообщения: у нас справочник новостроек с классом, ценой метра и типовыми площадями. Если ЖК не распознан, класс ставится по формулировкам самого запроса и помечается как предварительный — вы видите, где мы уверены, а где нет.</p></div>
     </div>
-    <div class="acc reveal" style="transition-delay:.24s">
-      <button class="acc-btn">Как отменить подписку?<span class="acc-icon w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">⌄</span></button>
-      <div class="acc-panel"><p class="text-sm leading-relaxed text-muted pb-5 pr-8">В один клик в личном кабинете. Доступ сохраняется до конца оплаченного периода, списаний больше не будет. Без звонков «уговорить остаться».</p></div>
+    <div class="acc">
+      <button class="acc-btn"><span>Сколько заявок будет в день?</span><svg class="acc-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="acc-panel"><p class="text-sm text-muted leading-relaxed pb-5">Зависит от города и выбранных классов: эконом и комфорт дают поток каждый день, бизнес и люкс — единицы в неделю, но с чеком в разы выше. Обещать конкретное число до вашего профиля было бы враньём, поэтому даём 3 дня посмотреть на реальную ленту и решить.</p></div>
+    </div>
+    <div class="acc">
+      <button class="acc-btn"><span>Чем отличается от Авито и агрегаторов?</span><svg class="acc-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="acc-panel"><p class="text-sm text-muted leading-relaxed pb-5">Там вы платите за каждый контакт, который параллельно продан ещё четверым, и попадаете в аукцион на понижение цены. Здесь — фиксированная подписка без платы за лид, источники, которых на агрегаторах нет, и разметка по классу, чтобы вы не ездили на замеры не своего чека.</p></div>
+    </div>
+    <div class="acc">
+      <button class="acc-btn"><span>Какие города сейчас работают?</span><svg class="acc-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="acc-panel"><p class="text-sm text-muted leading-relaxed pb-5">Москва, Московская область и Санкт-Петербург — там больше всего новостроек и живых чатов ЖК. Следующие города открываем по запросам подписчиков: напишите свой при регистрации, он попадёт в очередь.</p></div>
+    </div>
+    <div class="acc">
+      <button class="acc-btn"><span>Как отменить подписку?</span><svg class="acc-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="acc-panel"><p class="text-sm text-muted leading-relaxed pb-5">Одной кнопкой в кабинете, без писем и звонков. Доступ останется до конца оплаченного периода, следующего списания не будет. На триале карта не привязывается вообще.</p></div>
     </div>
   </div>
 </section>
 
-<!-- FINAL CTA -->
+<!-- ФИНАЛЬНЫЙ CTA -->
 <section class="relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-b from-[#0B0F14] via-[#0e1a14] to-[#0B0F14]"></div>
-  <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[420px] bg-[#33E06B]/10 blur-[80px] rounded-full pointer-events-none"></div>
-  <div class="relative max-w-[880px] mx-auto px-6 lg:px-8 py-16 lg:py-20 text-center">
-    <h2 class="font-display font-bold text-[30px] lg:text-[44px] leading-[0.95] tracking-tight reveal">Запустите радар сегодня —<br>первый тендер найдём <span class="text-[#33E06B]">до вечера</span></h2>
-    <p class="text-muted text-sm mt-4 reveal" style="transition-delay:.08s">3 дня бесплатно · без карты · настройка 3 минуты · отмена в один клик</p>
-    <div class="mt-7 flex flex-wrap justify-center gap-3 reveal" style="transition-delay:.16s">
-      <a href="/cabinet/#/register" class="btn-mag inline-flex items-center gap-2 bg-[#33E06B] text-[#0B0F14] font-semibold px-7 py-4 rounded-xl">Запустить радар — бесплатно</a>
-      <a href="#how" class="inline-flex items-center bg-white/5 border border-white/10 px-7 py-4 rounded-xl text-sm font-medium hover:bg-white/10 transition">Посмотреть демо</a>
+  <div class="glow-orb w-[620px] h-[620px] -bottom-[220px] left-1/2 -translate-x-1/2 opacity-50"></div>
+  <div class="relative max-w-[860px] mx-auto px-6 lg:px-8 py-16 lg:py-24 text-center">
+    <h2 class="font-display font-bold text-[30px] lg:text-[42px] leading-[1] tracking-tight reveal">Ключи выдают каждый день.<br>Вопрос только — <span class="text-[#FF9A3C]">кому позвонят</span></h2>
+    <p class="text-muted text-sm lg:text-base mt-5 max-w-[540px] mx-auto reveal" style="transition-delay:.08s">Включите радар на три дня и посмотрите, сколько заявок вашего класса проходит мимо прямо сейчас.</p>
+    <div class="flex flex-wrap items-center justify-center gap-3 mt-8 reveal" style="transition-delay:.14s">
+      <a href="/cabinet/#/register?dir=remont" class="btn-mag inline-flex items-center gap-2 bg-[#FF9A3C] text-[#0B0F14] font-semibold px-7 py-4 rounded-xl">
+        Запустить радар ремонтов
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h9M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="/podryad/" class="inline-flex items-center gap-2 border border-white/12 hover:border-white/25 hover:bg-white/[0.03] transition px-7 py-4 rounded-xl font-medium text-sm">Мне нужен подряд и тендеры</a>
     </div>
-    <div class="mt-4 text-xs text-muted reveal" style="transition-delay:.24s">Осталось мест на бета-тест: <span class="text-white font-mono font-bold">37</span> · следующий набор через 6 дней</div>
   </div>
 </section>
 
-<footer class="border-t border-white/5 py-8">
-  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 flex flex-col lg:flex-row gap-6 justify-between text-xs text-muted">
+<!-- FOOTER -->
+<footer class="border-t border-white/6">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-10 grid gap-8 md:grid-cols-[1.4fr_1fr_1fr] text-sm">
     <div>
-      <div class="flex items-center gap-2 text-white font-display font-bold text-sm"><span class="w-7 h-7 rounded-lg bg-[#33E06B] flex items-center justify-center overflow-hidden p-[3px]"><svg viewBox="253 574 760 899" class="w-full h-full" preserveAspectRatio="xMidYMid meet"><g fill="#0B0F14"><path d="M 675.701 594.447 C 678.896 594.043 686.899 593.967 690.471 593.945 C 789.352 593.359 882.14 629.946 957.584 693.283 C 970.395 704.038 981.095 714.604 993.074 726.317 C 984.001 735.908 974.709 745.289 965.206 754.454 C 944.219 733.485 933.865 723.363 910.332 705.788 C 832.091 647.352 733.855 621.946 636.9 637.028 C 536.376 653.177 446.476 708.829 387.197 791.604 C 325.974 875.764 300.446 980.689 316.163 1083.57 C 348.697 1290.74 538.935 1443.66 749.971 1410.72 C 835.71 1396 905.122 1354.74 965.005 1292.7 C 974.378 1300.67 984.544 1311.22 993.229 1320.04 C 922.161 1395.89 818.441 1448.12 714.154 1453.42 C 600.655 1459.18 498.037 1419.96 414.154 1344.51 C 329.661 1267.74 279.079 1160.59 273.511 1046.56 C 267.09 931.541 307.007 818.738 384.347 733.356 C 458.994 649.972 563.92 599.946 675.701 594.447 z"/><path d="M 668.553 671.422 C 682.343 669.876 702.767 670.703 716.561 671.549 C 798.176 676.556 885.17 719.639 938.938 781.436 C 930.114 790.432 920.836 799.426 911.869 808.317 C 897.773 793.916 886.268 782.492 870.362 770.032 C 809.467 722.401 732.077 701.051 655.374 710.722 C 575.574 721.422 503.341 763.52 454.696 827.678 C 402.852 895.191 379.753 980.439 390.419 1064.89 C 401.786 1149.75 446.566 1226.55 514.811 1278.25 C 583.84 1331.11 655.771 1346.15 740.763 1335.06 C 811.713 1322.77 861.677 1287.35 911.481 1238.68 C 920.095 1245.9 930.937 1257.24 938.586 1265.55 C 931.256 1274.09 921.962 1282.66 913.577 1290.23 C 789.267 1402.43 609.972 1406.06 480.164 1300.06 C 406.887 1239.27 360.568 1152.01 351.277 1057.25 C 342.646 962.302 371.98 867.8 432.86 794.428 C 493.062 721.296 574.824 680.377 668.553 671.422 z"/><path d="M 686.643 747.447 C 692.151 746.94 705.098 747.545 710.76 747.964 C 777.541 752.905 840.535 785.42 884.392 835.702 C 876.991 844.114 865.128 855.297 856.949 863.454 C 750.505 744.794 574.606 768.199 497.034 905.015 C 465.678 960.036 457.421 1025.25 474.073 1086.35 C 491.558 1148.65 533.03 1201.49 589.399 1233.27 C 638.553 1260.86 696.73 1267.55 750.863 1251.83 C 793.477 1239.59 826.286 1214.49 856.922 1183.67 C 865.571 1191.64 876.461 1202.13 884.083 1210.84 C 839.016 1262.61 775.119 1294.22 706.621 1298.62 C 558.978 1307.43 434.966 1185.12 427.218 1040.57 C 422.809 964.428 449.343 889.736 500.8 833.442 C 550.148 779.066 613.754 750.936 686.643 747.447 z"/><path d="M 677.658 827.421 C 677.785 827.403 677.913 827.385 678.041 827.367 C 721.827 824.318 765.215 837.388 800.033 864.113 C 837.134 892.38 867.274 937.378 873.564 984.059 C 850.877 984.646 826.7 984.287 803.91 984.242 C 804.001 973.462 803.849 962.68 803.452 951.906 C 768.177 926.08 726.426 891.644 691.819 863.809 L 621.281 919.257 C 609.762 928.256 588.524 943.885 579.119 953.077 L 579.068 1134.17 C 647.929 1135.22 719.526 1134.23 788.633 1134.19 L 803.817 1134.1 L 804.013 1061.9 C 826.44 1060.27 851.174 1062.18 874.345 1061.14 C 867.323 1093.2 858.005 1117.76 837.619 1144.21 C 774.614 1225.94 663.143 1244.6 580.927 1179.08 C 538.412 1145.51 511.38 1096.09 506.044 1042.18 C 500.472 990.339 517.234 937.452 549.889 897.038 C 581.398 857.611 627.446 832.522 677.658 827.421 z"/><path d="M 690.051 984.366 C 711.391 983.525 729.401 1000.08 730.351 1021.42 C 731.302 1042.76 714.836 1060.85 693.505 1061.91 C 672.019 1062.98 653.764 1046.37 652.806 1024.87 C 651.849 1003.38 668.555 985.213 690.051 984.366 z"/></g></svg></span> СтройРадар</div>
-      <div class="mt-2 leading-relaxed">СтройРадар, команда проекта · собираем открытые закупки<br>и помогаем строителям находить работу быстрее.</div>
+      <div class="flex items-center gap-2.5">
+        <span class="w-7 h-7 rounded-lg bg-[#FF9A3C]"></span>
+        <span class="font-display font-bold text-[14px]">СтройРадар</span>
+        <span class="text-[10px] tracking-[0.14em] text-muted border border-white/10 rounded-full px-2 py-0.5">BETA</span>
+      </div>
+      <p class="text-xs text-muted leading-relaxed mt-4 max-w-[320px]">Заявки на ремонт квартир в новостройках с разметкой по классу дома. Основное направление проекта СтройРадар.</p>
     </div>
-    <div class="flex gap-8">
-      <div class="space-y-2"><div class="text-white font-semibold">Продукт</div><a href="#how" class="block hover:text-white">Как работает</a><a href="#pricing" class="block hover:text-white">Тарифы</a><a href="#faq" class="block hover:text-white">Вопросы</a></div>
-      <div class="space-y-2"><div class="text-white font-semibold">Право</div><a href="https://t.me/StroyRadarBot" class="block hover:text-white">Оферта (скоро)</a><a href="https://t.me/StroyRadarBot" class="block hover:text-white">Политика (скоро)</a><a href="https://t.me/StroyRadarBot" class="block hover:text-white">Контакты — @StroyRadarBot</a></div>
+    <div>
+      <div class="text-xs tracking-[0.12em] text-muted">НАПРАВЛЕНИЯ</div>
+      <ul class="mt-4 space-y-2.5 text-sm text-muted">
+        <li><a href="/" class="hover:text-white transition">Ремонт в новостройках</a></li>
+        <li><a href="/podryad/" class="hover:text-white transition">Подряд и тендеры</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="text-xs tracking-[0.12em] text-muted">РАЗДЕЛЫ</div>
+      <ul class="mt-4 space-y-2.5 text-sm text-muted">
+        <li><a href="#classes" class="hover:text-white transition">Классы ЖК</a></li>
+        <li><a href="#pricing" class="hover:text-white transition">Тарифы</a></li>
+        <li><a href="#faq" class="hover:text-white transition">Вопросы</a></li>
+        <li><a href="/cabinet/#/login" class="hover:text-white transition">Личный кабинет</a></li>
+      </ul>
     </div>
   </div>
-  <div class="max-w-[1280px] mx-auto px-6 lg:px-8 mt-6 text-[11px] text-muted/60">© 2026 СтройРадар. Данные из открытых источников. Не является торговой площадкой. 18+</div>
+  <div class="border-t border-white/6">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-8 py-5 flex flex-wrap items-center justify-between gap-3 text-xs text-muted">
+      <span>© 2026 СтройРадар</span>
+      <span>Команда проекта СтройРадар · Москва</span>
+    </div>
+  </div>
 </footer>
 
-<!-- libs -->
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
 <script>
-/* Lenis smooth scroll */
-let lenis;
-try{
-  lenis=new Lenis({duration:1.1,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t))});
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- плавный скролл ---------- */
+if(window.Lenis && !reduced){
+  const lenis = new Lenis({duration:1.1, easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)), smoothWheel:true});
   function raf(t){lenis.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener('click',e=>{
       const id=a.getAttribute('href');
       if(id.length>1){const el=document.querySelector(id);if(el){e.preventDefault();lenis.scrollTo(el,{offset:-72})}}
-    })
-  })
-}catch(e){}
+    });
+  });
+}
 
-/* header shrink */
+/* ---------- шапка при скролле ---------- */
 const header=document.getElementById('header');
-let lastY=0;
 addEventListener('scroll',()=>{
-  const y=scrollY;
-  if(y>20){header.style.background='rgba(11,15,20,0.72)';header.style.backdropFilter='blur(16px) saturate(1.2)';header.style.borderBottomColor='rgba(255,255,255,0.06)';header.style.boxShadow='0 6px 30px rgba(0,0,0,.35)'}
-  else{header.style.background='transparent';header.style.backdropFilter='blur(0px)';header.style.borderBottomColor='transparent';header.style.boxShadow='none'}
+  const solid = scrollY > 24;
+  header.style.backdropFilter = solid ? 'blur(14px)' : 'blur(0px)';
+  header.style.background = solid ? 'rgba(11,15,20,.78)' : 'transparent';
+  header.style.borderBottom = solid ? '1px solid rgba(255,255,255,.07)' : '1px solid transparent';
 },{passive:true});
 
-/* reveal */
-const io=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})
-},{threshold:.12});
+/* ---------- появление блоков ---------- */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-/* pipeline progress */
+/* ---------- прогресс пайплайна ---------- */
 const prog=document.getElementById('pipelineProgress');
 const dots=[document.getElementById('dot2'),document.getElementById('dot3'),document.getElementById('dot4')].filter(Boolean);
 addEventListener('scroll',()=>{
   const sec=document.getElementById('how');
-  if(!sec||!prog) return;
+  if(!sec||!prog)return;
   const rect=sec.getBoundingClientRect();
-  const vh=innerHeight;
-  const p=Math.min(1,Math.max(0,(vh-rect.top)/(rect.height*0.9)));
-  prog.style.width=(p*100).toFixed(1)+'%';
-  dots.forEach((d,i)=>{
-    const thr=(i+1)/3.2;
-    d.classList.toggle('active',p>thr);
-    if(p>thr){d.style.background='#33E06B';d.style.borderColor='#33E06B';d.style.color='#0B0F14';d.style.boxShadow='0 0 24px rgba(51,224,107,.4)'}
-    else{d.style.background='';d.style.borderColor='';d.style.color='';d.style.boxShadow=''}
-  })
+  const p=Math.min(1,Math.max(0,(innerHeight-rect.top)/(rect.height*0.9)));
+  prog.style.width=(p*100)+'%';
+  dots.forEach((d,i)=>{d.classList.toggle('active', p >= (i+1)/3.2)});
 },{passive:true});
 
-/* dashboard rows */
+/* ---------- дом: окна с ключами ---------- */
+const CLASS_COLORS={'эконом':'#7C8B9E','комфорт':'#C9A87C','бизнес':'#FF9A3C','люкс':'#F5D27A'};
+const house=document.getElementById('house');
+if(house){
+  const total=80;
+  for(let i=0;i<total;i++){
+    const w=document.createElement('div');
+    w.className='win';
+    house.appendChild(w);
+  }
+  const wins=[...house.children];
+  const weights=[['эконом',5],['комфорт',4],['бизнес',2],['люкс',1]];
+  const pool=weights.flatMap(([k,n])=>Array(n).fill(k));
+  function lightWindow(){
+    const w=wins[Math.floor(Math.random()*wins.length)];
+    if(w.classList.contains('lit'))return;
+    const cls=pool[Math.floor(Math.random()*pool.length)];
+    w.style.setProperty('--lit',CLASS_COLORS[cls]);
+    w.classList.add('lit');
+    setTimeout(()=>{w.classList.remove('lit');w.style.removeProperty('--lit')},5600);
+  }
+  if(!reduced){
+    for(let i=0;i<7;i++) setTimeout(lightWindow,i*220);
+    setInterval(lightWindow,700);
+  }else{
+    wins.slice(0,11).forEach((w,i)=>{
+      const cls=pool[i%pool.length];
+      w.style.background=CLASS_COLORS[cls];
+    });
+  }
+}
+
+/* ---------- всплывающие карточки заявок в hero ---------- */
+const heroLeads=[
+  {t:'Двушка 58 м², нужен ремонт под ключ',c:'комфорт',d:'ЖК на Ходынке'},
+  {t:'Ищем бригаду, черновая после застройщика',c:'эконом',d:'Люберцы, новостройка'},
+  {t:'Ремонт с дизайн-проектом, 96 м²',c:'бизнес',d:'Раменки, клубный дом'},
+  {t:'Отделка пентхауса, есть проект бюро',c:'люкс',d:'Пресня, башня'},
+  {t:'Студия 27 м², бюджетно и быстро',c:'эконом',d:'Новая Москва'},
+  {t:'Трёшка 78 м², под ключ с материалами',c:'комфорт',d:'Приморский р-н, СПб'}
+];
+const leadStack=document.getElementById('leadStack');
+let leadIdx=0;
+function spawnHeroLead(){
+  if(!leadStack||reduced)return;
+  const d=heroLeads[leadIdx%heroLeads.length];leadIdx++;
+  const col=CLASS_COLORS[d.c];
+  const el=document.createElement('div');
+  el.className='lead-pop glass rounded-[14px] px-3.5 py-3 flex items-center gap-3';
+  el.style.border='1px solid '+col+'55';
+  el.innerHTML='<span class="w-1.5 h-8 rounded-full shrink-0" style="background:'+col+'"></span>'+
+    '<span class="min-w-0"><span class="block text-[12px] font-medium truncate">'+d.t+'</span>'+
+    '<span class="block text-[10px] text-muted truncate">'+d.d+'</span></span>'+
+    '<span class="ml-auto text-[10px] px-2 py-0.5 rounded-md shrink-0" style="background:'+col+'22;color:'+col+'">'+d.c+'</span>';
+  leadStack.innerHTML='';
+  leadStack.appendChild(el);
+  setTimeout(()=>{if(el.parentNode)el.remove()},6200);
+}
+if(!reduced){setTimeout(spawnHeroLead,900);setInterval(spawnHeroLead,6400)}
+
+/* ---------- лента заявок ---------- */
 const rows=[
-  {title:'Капитальный ремонт кровли, школа №14',type:'44-ФЗ',sum:'12,4 млн ₽',dead:'до 08.09',status:'новый',match:94,hot:false},
-  {title:'Монолитные работы, ЖК «Светлый» 2 оч.',type:'Субподряд',sum:'18,5 млн ₽',dead:'до 05.09',status:'горячий',match:92,hot:true},
-  {title:'Устройство фасада, БЦ на Ленина',type:'Коммерч.',sum:'7,1 млн ₽',dead:'до 14.09',status:'новый',match:88,hot:false},
-  {title:'Электромонтаж, детсад 240 мест',type:'223-ФЗ',sum:'4,9 млн ₽',dead:'до 18.09',status:'наблюдение',match:81,hot:false},
-  {title:'Благоустройство, парк «Южный»',type:'44-ФЗ',sum:'22,0 млн ₽',dead:'до 10.09',status:'горячий',match:90,hot:true},
+  {obj:'Двушка 58 м², ремонт под ключ, есть ключи',geo:'ЖК на Ходынке, Москва',cls:'комфорт',chek:'1,6–2,1 млн',sq:'58 м²',t:'4 мин назад'},
+  {obj:'Отделка пентхауса по проекту бюро',geo:'Пресня, Москва',cls:'люкс',chek:'от 9 млн',sq:'182 м²',t:'26 мин назад'},
+  {obj:'Черновая после застройщика, ищем бригаду',geo:'Люберцы, МО',cls:'эконом',chek:'0,7–1,0 млн',sq:'44 м²',t:'41 мин назад'},
+  {obj:'Ремонт с дизайн-проектом и авторским надзором',geo:'Раменки, Москва',cls:'бизнес',chek:'4,2–6,0 млн',sq:'96 м²',t:'1 ч назад'},
+  {obj:'Трёшка под ключ с материалами, заезд в марте',geo:'Приморский р-н, СПб',cls:'комфорт',chek:'1,9–2,4 млн',sq:'78 м²',t:'2 ч назад'},
+  {obj:'Студия, бюджетно, только стены и полы',geo:'Новая Москва',cls:'эконом',chek:'0,6–0,8 млн',sq:'27 м²',t:'3 ч назад'}
 ];
 const rowsEl=document.getElementById('leadRows');
-function renderRows(){
-  rowsEl.innerHTML=rows.map((r,i)=>`
-    <div class="grid sm:grid-cols-[1.6fr_110px_110px_90px_72px] gap-1 sm:gap-2 px-4 py-3 items-center hover:bg-white/[0.03] transition text-sm" style="opacity:0;transform:translateY(12px);animation:rowIn .6s cubic-bezier(.16,1,.3,1) ${i*0.08}s forwards">
-      <div class="min-w-0">
-        <div class="font-medium leading-tight truncate pr-2">${r.title}</div>
-        <div class="sm:hidden text-xs text-muted font-mono mt-1">${r.type} · ${r.sum} · ${r.dead}</div>
-      </div>
-      <span class="hidden sm:inline text-xs font-mono bg-white/5 border border-white/10 rounded-full px-2 py-1 w-fit">${r.type}</span>
-      <span class="hidden sm:inline font-mono text-sm font-semibold">${r.sum}</span>
-      <span class="hidden sm:inline text-xs font-mono text-muted">${r.dead}</span>
-      <span class="hidden sm:inline-flex items-center justify-center text-[11px] font-bold rounded-full px-2 py-1 w-fit ${r.hot?'bg-[#FFB020] text-[#0B0F14]':'bg-white/5 border border-white/10 text-muted'}">${r.status}</span>
-      <span class="hidden sm:inline-flex justify-end"><span class="text-xs font-mono font-bold ${r.match>=90?'text-[#33E06B]':'text-muted'}">${r.match}%</span></span>
-    </div>
-  `).join('');
+if(rowsEl){
+  rowsEl.innerHTML=rows.map((r,i)=>{
+    const col=CLASS_COLORS[r.cls];
+    return '<div class="grid md:grid-cols-[1.6fr_.7fr_.8fr_.6fr_.5fr] gap-x-3 gap-y-1 px-5 py-4 hover:bg-white/[0.02] transition items-center">'+
+      '<div class="min-w-0"><div class="text-[13px] font-medium truncate">'+r.obj+'</div>'+
+      '<div class="text-[11px] text-muted mt-0.5 truncate">'+r.geo+'</div></div>'+
+      '<div><span class="text-[11px] px-2 py-0.5 rounded-md" style="background:'+col+'1f;color:'+col+'">'+r.cls+'</span></div>'+
+      '<div class="font-mono text-[12px]">'+r.chek+'</div>'+
+      '<div class="text-[12px] text-muted">'+r.sq+'</div>'+
+      '<div class="text-[11px] text-muted md:text-right">'+r.t+'</div>'+
+    '</div>';
+  }).join('');
 }
-renderRows();
-const style=document.createElement('style');
-style.textContent='@keyframes rowIn{to{opacity:1;transform:none}}';
-document.head.appendChild(style);
 
-/* counters */
-let counted=false;
-const counterIO=new IntersectionObserver((entries)=>{
+/* ---------- счётчики ---------- */
+const counterIO=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
-    if(e.isIntersecting && !counted){
-      counted=true;
-      document.querySelectorAll('[data-count]').forEach(el=>{
-        const target=parseInt(el.dataset.count,10);
-        let cur=0;
-        const dur=1500;const t0=performance.now();
-        function tick(now){
-          const p=Math.min(1,(now-t0)/dur);
-          const eased=1-Math.pow(1-p,3);
-          cur=Math.round(target*eased);
-          el.textContent=cur.toLocaleString('ru-RU');
-          if(p<1) requestAnimationFrame(tick);
-          else el.textContent=target.toLocaleString('ru-RU');
-        }
-        requestAnimationFrame(tick);
-      })
-    }
-  })
-},{threshold:.4});
-const nums=document.querySelector('[data-count]')?.closest('section');
-if(nums) counterIO.observe(nums);
-
-/* radar canvas */
-const canvas=document.getElementById('radarCanvas');
-const ctx=canvas.getContext('2d');
-let dpr=Math.min(2,window.devicePixelRatio||1);
-function resizeRadar(){
-  const rect=canvas.getBoundingClientRect();
-  dpr=Math.min(2,window.devicePixelRatio||1);
-  canvas.width=rect.width*dpr;
-  canvas.height=rect.height*dpr;
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-}
-resizeRadar();
-addEventListener('resize',resizeRadar);
-
-const CX=280,CY=280,R=190;
-const blips=[
-  {ang:-0.9,rad:0.62,type:'hot',label:'84,2 млн'},
-  {ang:0.3,rad:0.78,type:'new',label:'18,5 млн'},
-  {ang:1.9,rad:0.52,type:'ok',label:'12,4 млн'},
-  {ang:2.7,rad:0.88,type:'ok',label:'22 млн'},
-  {ang:-2.1,rad:0.44,type:'hot',label:'7,1 млн'},
-  {ang:0.95,rad:0.35,type:'ok',label:'4,9 млн'},
-  {ang:-1.6,rad:0.82,type:'new',label:'9,3 млн'},
-];
-let angle= -Math.PI/2;
-let lastT=performance.now();
-let prefersReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-function drawRadar(now){
-  requestAnimationFrame(drawRadar);
-  if(prefersReduced) return;
-  const dt=Math.min(32,now-lastT);lastT=now;
-  angle+=dt*0.00028; // ~8s per rotation (2pi / 0.00028 ≈ 22k ms? tweak)
-  // adjust to 8s: 2pi / 8s = 0.000785 rad/ms
-  // we use dt * 0.000785
-  // correct: set exactly
-  // recompute with precise speed
-  // Instead of incremental hack, use time-based
-  const preciseAngle=(now*0.000785) % (Math.PI*2);
-  const a=preciseAngle;
-
-  const w=canvas.getBoundingClientRect().width;
-  const h=canvas.getBoundingClientRect().height;
-  const cx=w/2, cy=h/2;
-  const r=Math.min(w,h)*0.34;
-
-  ctx.clearRect(0,0,w,h);
-
-  // circles
-  ctx.strokeStyle='rgba(255,255,255,0.07)';
-  ctx.lineWidth=1;
-  for(let i=1;i<=3;i++){
-    ctx.beginPath();ctx.arc(cx,cy,r*(i/3),0,Math.PI*2);ctx.stroke();
-  }
-  // cross + diagonals
-  ctx.strokeStyle='rgba(255,255,255,0.06)';
-  ctx.beginPath();
-  ctx.moveTo(cx-r,cy);ctx.lineTo(cx+r,cy);
-  ctx.moveTo(cx,cy-r);ctx.lineTo(cx,cy+r);
-  // diagonals
-  ctx.moveTo(cx+r*0.707,cy+r*0.707);ctx.lineTo(cx-r*0.707,cy-r*0.707);
-  ctx.moveTo(cx+r*0.707,cy-r*0.707);ctx.lineTo(cx-r*0.707,cy+r*0.707);
-  ctx.stroke();
-
-  // sweep cone
-  const coneAngle=Math.PI/5; // 36deg tail
-  const grad=ctx.createConicGradient(a-coneAngle,cx,cy);
-  grad.addColorStop(0,'rgba(51,224,107,0)');
-  grad.addColorStop(0.65,'rgba(51,224,107,0)');
-  grad.addColorStop(0.92,'rgba(51,224,107,0.18)');
-  grad.addColorStop(1,'rgba(51,224,107,0.55)');
-  ctx.fillStyle=grad;
-  ctx.beginPath();
-  ctx.moveTo(cx,cy);
-  ctx.arc(cx,cy,r,a-coneAngle,a);
-  ctx.closePath();ctx.fill();
-
-  // beam line
-  ctx.strokeStyle='rgba(51,224,107,0.95)';
-  ctx.lineWidth=1.6;
-  ctx.beginPath();
-  ctx.moveTo(cx,cy);
-  ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);
-  ctx.stroke();
-  // outer glow
-  ctx.shadowColor='rgba(51,224,107,0.45)';
-  ctx.shadowBlur=14;
-  ctx.stroke();
-  ctx.shadowBlur=0;
-
-  // blips
-  blips.forEach(b=>{
-    const bx=cx+Math.cos(b.ang)*r*b.rad;
-    const by=cy+Math.sin(b.ang)*r*b.rad;
-    // is hit by beam?
-    let diff=((a - b.ang) % (Math.PI*2)+Math.PI*2)%(Math.PI*2);
-    const hit=diff<coneAngle && diff>0;
-    const pulse=Math.sin(now*0.004 + b.ang*3)*0.18+0.82;
-    const baseAlpha=hit?1:0.55;
-    const col=b.type==='hot'?'255,176,32':b.type==='new'?'51,224,107':'242,245,247';
-    // glow ring
-    ctx.fillStyle=`rgba(${col},${0.14*baseAlpha})`;
-    ctx.beginPath();ctx.arc(bx,by, hit?18*pulse:11,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=`rgba(${col},${baseAlpha})`;
-    ctx.beginPath();ctx.arc(bx,by, hit?4.5:3.2,0,Math.PI*2);ctx.fill();
-    if(hit){
-      ctx.strokeStyle=`rgba(${col},0.9)`;
-      ctx.lineWidth=1;
-      ctx.beginPath();ctx.arc(bx,by,10*pulse,0,Math.PI*2);ctx.stroke();
-    }
+    if(!e.isIntersecting)return;
+    e.target.querySelectorAll('[data-count]').forEach(el=>{
+      if(el.dataset.done)return;el.dataset.done='1';
+      const target=parseInt(el.dataset.count,10);
+      if(reduced){el.textContent=target.toLocaleString('ru-RU');return}
+      const dur=1400,t0=performance.now();
+      function tick(now){
+        const p=Math.min(1,(now-t0)/dur);
+        const eased=1-Math.pow(1-p,3);
+        el.textContent=Math.round(target*eased).toLocaleString('ru-RU');
+        if(p<1)requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+    counterIO.unobserve(e.target);
   });
-  // center
-  ctx.fillStyle='#0B0F14';
-  ctx.strokeStyle='rgba(51,224,107,0.9)';
-  ctx.lineWidth=1.4;
-  ctx.beginPath();ctx.arc(cx,cy,9,0,Math.PI*2);ctx.fill();ctx.stroke();
-  ctx.fillStyle='#33E06B';
-  ctx.beginPath();ctx.arc(cx,cy,3.5,0,Math.PI*2);ctx.fill();
-}
-requestAnimationFrame(drawRadar);
+},{threshold:.3});
+document.querySelectorAll('[data-count]').forEach(el=>{
+  const sec=el.closest('section');if(sec)counterIO.observe(sec);
+});
 
-/* lead stack popping every ~4s */
-const leadStack=document.getElementById('leadStack');
-const leadPool=[
-  {title:'Капремонт поликлиники · 31,7 млн ₽',meta:'44-ФЗ · Тверь · до 09.09',badge:'88%'},
-  {title:'Фасадные работы, ЖК · 9,3 млн ₽',meta:'Субподряд · СПб · горячий',badge:'срочно'},
-  {title:'Дорога IV категории, 2,4 км',meta:'44-ФЗ · Воронеж · 46 млн ₽',badge:'91%'},
-];
-let leadIdx=0;
-function spawnLead(){
-  if(prefersReduced) return;
-  const d=leadPool[leadIdx%leadPool.length];leadIdx++;
-  const el=document.createElement('div');
-  el.className='absolute left-1/2 -translate-x-1/2 glass rounded-2xl px-3 py-2.5 flex items-center gap-2.5';
-  el.style.top=(18+Math.random()*18)+'%';
-  el.style.left=(52+ (Math.random()-0.5)*18)+'%';
-  el.style.transform='translate(-50%,0) scale(0.84)';
-  el.style.opacity='0';
-  el.style.transition='transform .7s cubic-bezier(.16,1,.3,1),opacity .5s';
-  el.style.boxShadow='0 16px 40px rgba(0,0,0,.45)';
-  el.innerHTML=`<span class="w-8 h-8 rounded-xl bg-[#33E06B]/15 border border-[#33E06B]/20 flex items-center justify-center text-xs">◈</span><div class="leading-tight"><div class="text-xs font-semibold whitespace-nowrap">${d.title}</div><div class="text-[11px] text-muted font-mono">${d.meta}</div></div><span class="ml-1 bg-[#33E06B] text-[#0B0F14] text-[10px] font-bold px-2 py-1 rounded-full">${d.badge}</span>`;
-  leadStack.appendChild(el);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    el.style.opacity='1';el.style.transform='translate(-50%,0) scale(1)';
-  }));
-  setTimeout(()=>{el.style.opacity='0';el.style.transform='translate(-50%,-8px) scale(0.96)';setTimeout(()=>el.remove(),600)},3200);
-}
-setInterval(spawnLead,3800);
-setTimeout(spawnLead,900);
-
-/* 3D tilt for dashboard + who cards (mouse) */
+/* ---------- наклон карточки ленты ---------- */
 const tiltCard=document.getElementById('tiltCard');
-if(tiltCard && !prefersReduced && window.innerWidth>1024){
+if(tiltCard && !reduced && matchMedia('(pointer:fine)').matches){
   tiltCard.addEventListener('mousemove',e=>{
-    const rect=tiltCard.getBoundingClientRect();
-    const x=(e.clientX-rect.left)/rect.width-0.5;
-    const y=(e.clientY-rect.top)/rect.height-0.5;
-    tiltCard.style.transform=`perspective(900px) rotateY(${x*5}deg) rotateX(${-y*5}deg)`;
+    const r=tiltCard.getBoundingClientRect();
+    const rx=((e.clientY-r.top)/r.height-.5)*-3;
+    const ry=((e.clientX-r.left)/r.width-.5)*3;
+    tiltCard.style.transform='perspective(1200px) rotateX('+rx+'deg) rotateY('+ry+'deg)';
   });
-  tiltCard.addEventListener('mouseleave',()=>{tiltCard.style.transform='perspective(900px) rotateY(0) rotateX(0)'});
+  tiltCard.addEventListener('mouseleave',()=>{tiltCard.style.transform='none'});
 }
-document.querySelectorAll('[data-tilt]').forEach(card=>{
-  if(prefersReduced || innerWidth<1024) return;
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-0.5;
-    const y=(e.clientY-r.top)/r.height-0.5;
-    card.style.transform=`perspective(700px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-4px)`;
-  });
-  card.addEventListener('mouseleave',()=>{card.style.transform=''});
-  card.style.transition='transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,border-color .25s';
-});
 
-/* magnetic buttons */
-document.querySelectorAll('.btn-mag').forEach(btn=>{
-  if(prefersReduced) return;
-  btn.addEventListener('mousemove',e=>{
-    const r=btn.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-0.5;
-    const y=(e.clientY-r.top)/r.height-0.5;
-    btn.style.transform=`translate(${x*8}px,${y*5}px)`;
-  });
-  btn.addEventListener('mouseleave',()=>{btn.style.transform=''});
-});
-
-/* accordion */
+/* ---------- аккордеон ---------- */
 document.querySelectorAll('.acc-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    const acc=btn.closest('.acc');
-    const panel=acc.querySelector('.acc-panel');
-    const isOpen=acc.classList.contains('open');
-    document.querySelectorAll('.acc.open').forEach(a=>{
-      if(a!==acc){a.classList.remove('open');a.querySelector('.acc-panel').style.maxHeight='0';a.querySelector('.acc-panel').style.opacity='0'}
-    });
-    if(isOpen){acc.classList.remove('open');panel.style.maxHeight='0';panel.style.opacity='0'}
-    else{acc.classList.add('open');panel.style.maxHeight=panel.scrollHeight+'px';panel.style.opacity='1'}
+    const acc=btn.parentElement;
+    const open=acc.classList.contains('open');
+    document.querySelectorAll('.acc').forEach(a=>a.classList.remove('open'));
+    if(!open)acc.classList.add('open');
   });
 });
-
-/* parallax gridLayer on mouse */
-const gridLayer=document.getElementById('gridLayer');
-const stage=document.getElementById('radarStage');
-if(stage && gridLayer && !prefersReduced && innerWidth>1024){
-  stage.addEventListener('mousemove',e=>{
-    const r=stage.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-0.5;
-    const y=(e.clientY-r.top)/r.height-0.5;
-    gridLayer.style.transform=`translate(${x*10}px,${y*10}px)`;
-  });
-  stage.addEventListener('mouseleave',()=>{gridLayer.style.transform=''});
-  gridLayer.style.transition='transform .45s cubic-bezier(.16,1,.3,1)';
-}
+document.querySelector('.acc')?.classList.add('open');
 </script>
 </body>
 </html>
